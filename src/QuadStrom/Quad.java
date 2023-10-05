@@ -1,14 +1,13 @@
 package QuadStrom;
 
 import Objekty.Nehnutelnost;
-import Objekty.Podorys;
 import Objekty.Suradnica;
 import Ostatne.IPodorys;
 import Ostatne.Konstanty;
 
-import java.util.ArrayList;
+import java.util.*;
 
-public class Quad<T extends IPodorys>
+public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 {
     private static final int POCET_PODOBLASTI = 4;
     private static final int SV = 0;
@@ -66,32 +65,6 @@ public class Quad<T extends IPodorys>
         }
 
         return pocetPodstrom;
-    }
-
-    public ArrayList<T> vyhladajNehnutelnosti(Suradnica suradnica)
-    {
-        Quad<T> curOblast = this;
-        ArrayList<T> nehnutelnosti = new ArrayList<>();
-        
-        while (true)
-        {
-            for (T element : curOblast.data)
-            {
-                if (!(element instanceof Nehnutelnost))
-                {
-                    continue;
-                }
-
-                if (element.jeVnutri(suradnica))
-                {
-                    nehnutelnosti.add(element);
-                }
-            }
-
-            break;
-        }
-
-        return nehnutelnosti;
     }
 
     public void vloz(T pridavany)
@@ -202,5 +175,52 @@ public class Quad<T extends IPodorys>
     public Suradnica getSurVpravoHore()
     {
         return this.surVpravoHore;
+    }
+
+    @Override
+    public Iterator<Quad<T>> iterator()
+    {
+        return new PreOrderIterator(this);
+    }
+
+    private class PreOrderIterator implements Iterator<Quad<T>>
+    {
+        private Queue<Quad<T>> front;
+
+        public PreOrderIterator(Quad<T> koren)
+        {
+            this.front = new LinkedList<>();
+            this.naplnFront(koren, front);
+        }
+
+        private void naplnFront(Quad<T> oblast, Queue<Quad<T>> front)
+        {
+            front.add(oblast);
+
+            if (oblast.jeRozdelena())
+            {
+                for (Quad<T> podoblast : oblast.podoblasti)
+                {
+                    this.naplnFront(podoblast, front);
+                }
+            }
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return this.front.peek() != null;
+        }
+
+        @Override
+        public Quad<T> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+
+            return this.front.remove();
+        }
     }
 }
