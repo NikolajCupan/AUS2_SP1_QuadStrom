@@ -10,15 +10,24 @@ import java.util.ArrayList;
 
 public class Quad<T extends IPodorys>
 {
+    private static final int POCET_PODOBLASTI = 4;
+    private static final int SV = 0;
+    private static final int SZ = 1;
+    private static final int JV = 2;
+    private static final int JZ = 3;
+
     private Suradnica surVlavoDole;
     private Suradnica surVpravoHore;
 
     private ArrayList<T> data;
 
-    private Quad<T> SZ;
-    private Quad<T> SV;
-    private Quad<T> JV;
-    private Quad<T> JZ;
+    // Oblasti su v nasledujucom poradi:
+    //                                   x  y  i
+    // -> Severo-vychod (vlavo hore)  -> -  +  0
+    // -> Severo-zapad  (vpravo hore) -> +  +  1
+    // -> Juho-zapad    (vpravo dole) -> +  -  2
+    // -> Juho-vychod   (vlavo dole)  -> -  -  3
+    private Quad<T>[] podoblasti;
 
     public Quad()
     {
@@ -26,6 +35,7 @@ public class Quad<T extends IPodorys>
         this.surVpravoHore = new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX);
 
         this.data = new ArrayList<>();
+        this.podoblasti = new Quad[POCET_PODOBLASTI];
     }
 
     public Quad(Suradnica surVlavoDole, Suradnica surVpravoHore)
@@ -34,11 +44,7 @@ public class Quad<T extends IPodorys>
         this.surVpravoHore = surVpravoHore;
 
         this.data = new ArrayList<>();
-
-        this.SZ = null;
-        this.SV = null;
-        this.JV = null;
-        this.JZ = null;
+        this.podoblasti = new Quad[POCET_PODOBLASTI];
     }
 
     public int getPocetElementov()
@@ -53,10 +59,10 @@ public class Quad<T extends IPodorys>
 
         if (oblast.jeRozdelena())
         {
-            pocetPodstrom += getPocetElementovPodstrom(oblast.SZ);
-            pocetPodstrom += getPocetElementovPodstrom(oblast.SV);
-            pocetPodstrom += getPocetElementovPodstrom(oblast.JV);
-            pocetPodstrom += getPocetElementovPodstrom(oblast.JZ);
+            for (Quad<T> podoblast : oblast.podoblasti)
+            {
+                pocetPodstrom += getPocetElementovPodstrom(podoblast);
+            }
         }
 
         return pocetPodstrom;
@@ -99,30 +105,29 @@ public class Quad<T extends IPodorys>
                 curOblast.rozdel();
             }
 
-            if (curOblast.SZ.jeVOblasti(pridavany))
+            boolean vPodoblasti = false;
+            for (Quad<T> podoblast : curOblast.podoblasti)
             {
-                curOblast = curOblast.SZ;
+                // Podorys sa moze nachadzat v maximalne 1 podoblasti
+                if (podoblast.jeVOblasti(pridavany))
+                {
+                    curOblast = podoblast;
+                    vPodoblasti = true;
+                }
             }
-            else if (curOblast.SV.jeVOblasti(pridavany))
+
+            // Ziadna podoblast nevyhovuje
+            if (!vPodoblasti)
             {
-                curOblast = curOblast.SV;
-            }
-            else if (curOblast.JV.jeVOblasti(pridavany))
-            {
-                curOblast = curOblast.JV;
-            }
-            else if (curOblast.JZ.jeVOblasti(pridavany))
-            {
-                curOblast = curOblast.JZ;
-            }
-            else if (curOblast.jeVOblasti(pridavany))
-            {
-                curOblast.vlozDoOblasti(pridavany);
-                break;
-            }
-            else
-            {
-                throw new RuntimeException("Neplatny vkladany element!");
+                if (curOblast.jeVOblasti(pridavany))
+                {
+                    curOblast.data.add(pridavany);
+                    break;
+                }
+                else
+                {
+                    throw new RuntimeException("Neplatny vkladany element!");
+                }
             }
         }
     }
@@ -164,24 +169,24 @@ public class Quad<T extends IPodorys>
 
         Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
         Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
-        this.SZ = new Quad<>(SZvlavoDole, SZvpravoHore);
+        this.podoblasti[SV] = new Quad<>(SZvlavoDole, SZvpravoHore);
 
         Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
         Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
-        this.SV = new Quad<>(SVvlavoDole, SVvpravoHore);
+        this.podoblasti[SZ] = new Quad<>(SVvlavoDole, SVvpravoHore);
 
         Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
-        this.JV = new Quad<>(JVvlavoDole, JVvpravoHore);
+        this.podoblasti[JV] = new Quad<>(JVvlavoDole, JVvpravoHore);
 
         Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
-        this.JZ = new Quad<>(JZvlavoDole, JZvpravoHore);
+        this.podoblasti[JZ] = new Quad<>(JZvlavoDole, JZvpravoHore);
     }
 
     private boolean jeRozdelena()
     {
-        if (this.SZ == null && this.SV == null && this.JV == null && this.JZ == null)
+        if (this.podoblasti[SV] == null && this.podoblasti[SZ] == null && this.podoblasti[JV] == null && this.podoblasti[JZ] == null)
         {
             return false;
         }

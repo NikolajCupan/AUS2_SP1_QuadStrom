@@ -27,6 +27,7 @@ public class Aplikacia
         quad.vloz(nehnutelnost2);
         quad.vloz(parcela);
         quad.vloz(parcela2);
+        System.out.println(quad.getPocetElementov());
         int x = 100;
     }
 }
