@@ -2,6 +2,8 @@ package Objekty;
 
 import Ostatne.Konstanty;
 
+// Dlzka: <-180; 180> => X suradnica
+// Sirka: < -90;  90> => Y suradnica
 public class Suradnica
 {
     public static final char VYCHOD = 'V';
@@ -9,70 +11,70 @@ public class Suradnica
     public static final char SEVER = 'S';
     public static final char JUH = 'J';
 
-    private double poziciaDlzky;
-    private double poziciaSirky;
+    private double x;
+    private double y;
     private char dlzka;
     private char sirka;
 
-    public Suradnica(double poziciaDlzky, double poziciaSirky)
+    public Suradnica(double x, double y)
     {
         // kontrola, ci su zadane udaje validne
-        this.validujDlzku(poziciaDlzky);
-        this.validujSirku(poziciaSirky);
+        this.validujX(x);
+        this.validujY(y);
 
-        this.poziciaDlzky = poziciaDlzky;
-        this.poziciaSirky = poziciaSirky;
-        this.dlzka = (poziciaDlzky < 0) ? ZAPAD : VYCHOD;
-        this.sirka = (poziciaSirky < 0) ? JUH : SEVER;
+        this.x = x;
+        this.y = y;
+        this.dlzka = (x < 0) ? ZAPAD : VYCHOD;
+        this.sirka = (y < 0) ? JUH : SEVER;
     }
 
     public Suradnica()
     {
-        this.poziciaDlzky = 0;
-        this.poziciaSirky = 0;
+        this.x = 0;
+        this.y = 0;
         this.dlzka = VYCHOD;
         this.sirka = SEVER;
     }
 
-    private void validujDlzku(double poziciaDlzky)
+    private void validujX(double x)
     {
-        if (poziciaDlzky < Konstanty.DLZKA_MIN || poziciaDlzky > Konstanty.DLZKA_MAX)
+        if (x < Konstanty.X_MIN || x > Konstanty.X_MAX)
         {
-            throw new IllegalArgumentException("Nespravna pozicia dlzky, musi byt z rozsahu <-180; 180>!");
+            throw new IllegalArgumentException("Nespravna pozicia x (dlzka), musi byt z rozsahu <" + Konstanty.X_MIN + ", " + Konstanty.X_MAX + ">!");
         }
     }
 
-    private void validujSirku(double poziciaSirky)
+    private void validujY(double y)
     {
-        if (poziciaSirky < Konstanty.SIRKA_MIN || poziciaSirky > Konstanty.SIRKA_MAX)
+        if (y < Konstanty.Y_MIN || y > Konstanty.Y_MAX)
         {
-            throw new IllegalArgumentException("Nespravna pozicia sirky, musi byt z rozsahu <-90; 90>!");
+            throw new IllegalArgumentException("Nespravna pozicia y (sirka), musi byt z rozsahu <" + Konstanty.Y_MIN + ", " + Konstanty.Y_MAX + ">!");
         }
     }
 
-    public double getPoziciaDlzky()
+    public double getX()
     {
-        return this.poziciaDlzky;
+        return this.x;
     }
 
-    public double getPoziciaSirky()
+    public double getY()
     {
-        return this.poziciaSirky;
+        return this.y;
     }
 
-    public void setPoziciaDlzky(double poziciaDlzky)
+    public void setX(double x)
     {
-        this.validujDlzku(poziciaDlzky);
+        this.validujX(x);
 
-        this.poziciaDlzky = poziciaDlzky;
-        this.dlzka = (poziciaDlzky < 0) ? ZAPAD : VYCHOD;
+        this.x = x;
+        this.dlzka = (x < 0) ? ZAPAD : VYCHOD;
     }
 
-    public void setPoziciaSirky(double poziciaSirky)
+    public void setY(double y)
     {
-        this.validujSirku(poziciaSirky);
+        this.validujY(y);
 
-        this.poziciaSirky = poziciaSirky;
-        this.sirka = (poziciaSirky < 0) ? JUH : SEVER;
+        this.y = y;
+        this.sirka = (y < 0) ? JUH : SEVER;
     }
 }

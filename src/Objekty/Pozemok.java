@@ -11,19 +11,19 @@ public class Pozemok
         this.surVlavoDole = new Suradnica();
         this.surVpravoHore = new Suradnica();
 
-        this.surVlavoDole.setPoziciaDlzky(Math.min(suradnica1.getPoziciaDlzky(), suradnica2.getPoziciaDlzky()));
-        this.surVlavoDole.setPoziciaSirky(Math.min(suradnica1.getPoziciaSirky(), suradnica2.getPoziciaSirky()));
+        this.surVlavoDole.setX(Math.min(suradnica1.getX(), suradnica2.getX()));
+        this.surVlavoDole.setY(Math.min(suradnica1.getY(), suradnica2.getY()));
 
-        this.surVpravoHore.setPoziciaDlzky(Math.max(suradnica1.getPoziciaDlzky(), suradnica2.getPoziciaDlzky()));
-        this.surVpravoHore.setPoziciaSirky(Math.max(suradnica1.getPoziciaSirky(), suradnica2.getPoziciaSirky()));
+        this.surVpravoHore.setX(Math.max(suradnica1.getX(), suradnica2.getX()));
+        this.surVpravoHore.setY(Math.max(suradnica1.getY(), suradnica2.getY()));
     }
 
     protected boolean pozemkySaPrekryvaju(Pozemok pozemok)
     {
-        if (this.surVlavoDole.getPoziciaDlzky() > pozemok.getSurVpravoHore().getPoziciaDlzky() ||
-            this.surVlavoDole.getPoziciaSirky() > pozemok.getSurVpravoHore().getPoziciaSirky() ||
-            pozemok.getSurVlavoDole().getPoziciaDlzky() > this.surVpravoHore.getPoziciaDlzky() ||
-            pozemok.getSurVlavoDole().getPoziciaSirky() > this.surVpravoHore.getPoziciaSirky())
+        if (this.surVlavoDole.getX() > pozemok.getSurVpravoHore().getX() ||
+            this.surVlavoDole.getY() > pozemok.getSurVpravoHore().getY() ||
+            pozemok.getSurVlavoDole().getX() > this.surVpravoHore.getX() ||
+            pozemok.getSurVlavoDole().getY() > this.surVpravoHore.getY())
         {
             return false;
         }

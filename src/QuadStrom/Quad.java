@@ -10,15 +10,15 @@ public class Quad<T>
 
     private T data;
 
-    private Quad SZ;
-    private Quad SV;
-    private Quad JV;
-    private Quad JZ;
+    private Quad<T> SZ;
+    private Quad<T> SV;
+    private Quad<T> JV;
+    private Quad<T> JZ;
 
     public Quad()
     {
-        this.surVlavoDole = new Suradnica(Konstanty.DLZKA_MIN, Konstanty.SIRKA_MIN);
-        this.surVpravoHore = new Suradnica(Konstanty.DLZKA_MAX, Konstanty.SIRKA_MAX);
+        this.surVlavoDole = new Suradnica(Konstanty.X_MIN, Konstanty.Y_MIN);
+        this.surVpravoHore = new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX);
 
         this.data = null;
 
@@ -49,26 +49,26 @@ public class Quad<T>
     {
         if (this.SZ != null || this.SV != null || this.JV != null || this.JZ != null)
         {
-            throw new RuntimeException("Oblast uz je rozdelena!");
+            throw new RuntimeException("Oblast je uz rozdelena!");
         }
 
-        double stredDlzka = (this.surVlavoDole.getPoziciaDlzky() + this.surVpravoHore.getPoziciaDlzky()) / 2;
-        double stredSirka = (this.surVlavoDole.getPoziciaSirky() + this.surVpravoHore.getPoziciaSirky()) / 2;
+        double stredX = (this.surVlavoDole.getX() + this.surVpravoHore.getX()) / 2;
+        double stredY = (this.surVlavoDole.getY() + this.surVpravoHore.getY()) / 2;
 
-        Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getPoziciaDlzky(), stredSirka);
-        Suradnica SZvpravoHore = new Suradnica(stredDlzka, this.surVpravoHore.getPoziciaSirky());
-        this.SZ = new Quad<T>(SZvlavoDole, SZvpravoHore);
+        Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
+        Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
+        this.SZ = new Quad<>(SZvlavoDole, SZvpravoHore);
 
-        Suradnica SVvlavoDole = new Suradnica(stredDlzka, stredSirka);
-        Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getPoziciaDlzky(), this.surVpravoHore.getPoziciaSirky());
-        this.SV = new Quad<T>(SVvlavoDole, SVvpravoHore);
+        Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
+        Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
+        this.SV = new Quad<>(SVvlavoDole, SVvpravoHore);
 
-        Suradnica JVvlavoDole = new Suradnica(stredDlzka, this.surVlavoDole.getPoziciaSirky());
-        Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getPoziciaDlzky(), stredSirka);
-        this.JV = new Quad<T>(JVvlavoDole, JVvpravoHore);
+        Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
+        Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
+        this.JV = new Quad<>(JVvlavoDole, JVvpravoHore);
 
-        Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getPoziciaDlzky(), this.surVpravoHore.getPoziciaSirky());
-        Suradnica JZvpravoHore = new Suradnica(stredDlzka, stredSirka);
-        this.JZ = new Quad<T>(JZvlavoDole, JZvpravoHore);
+        Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVpravoHore.getY());
+        Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
+        this.JZ = new Quad<>(JZvlavoDole, JZvpravoHore);
     }
 }

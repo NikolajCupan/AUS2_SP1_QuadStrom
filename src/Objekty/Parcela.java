@@ -11,7 +11,7 @@ public class Parcela extends Pozemok
     {
         this.cisloParcely = cisloParcely;
         this.popis = popis;
-        this.nehnutelnosti = new ArrayList<Nehnutelnost>();
+        this.nehnutelnosti = new ArrayList<>();
         this.nastavSuradnice(suradnica1, suradnica2);
     }
 

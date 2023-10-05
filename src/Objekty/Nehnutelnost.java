@@ -11,7 +11,7 @@ public class Nehnutelnost extends Pozemok
     {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
-        this.parcely = new ArrayList<Parcela>();
+        this.parcely = new ArrayList<>();
         this.nastavSuradnice(suradnica1, suradnica2);
     }
 
