@@ -1,14 +1,17 @@
 package QuadStrom;
 
 import Objekty.Suradnica;
+import Ostatne.IUzol;
 import Ostatne.Konstanty;
 
-public class Quad<T>
+import java.util.ArrayList;
+
+public class Quad<T extends IUzol>
 {
     private Suradnica surVlavoDole;
     private Suradnica surVpravoHore;
 
-    private T data;
+    private ArrayList<T> data;
 
     private Quad<T> SZ;
     private Quad<T> SV;
@@ -20,9 +23,7 @@ public class Quad<T>
         this.surVlavoDole = new Suradnica(Konstanty.X_MIN, Konstanty.Y_MIN);
         this.surVpravoHore = new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX);
 
-        this.data = null;
-
-        this.rozdel();
+        this.data = new ArrayList<>();
     }
 
     public Quad(Suradnica surVlavoDole, Suradnica surVpravoHore)
@@ -30,12 +31,69 @@ public class Quad<T>
         this.surVlavoDole = surVlavoDole;
         this.surVpravoHore = surVpravoHore;
 
-        this.data = null;
+        this.data = new ArrayList<>();
 
         this.SZ = null;
         this.SV = null;
         this.JV = null;
         this.JZ = null;
+    }
+
+    public void vloz(T pridavany)
+    {
+        Quad<T> curOblast = this;
+
+        while (true)
+        {
+            if (!curOblast.jeRozdelena())
+            {
+                curOblast.rozdel();
+            }
+
+            if (curOblast.SZ.jeVOblasti(pridavany))
+            {
+                curOblast = curOblast.SZ;
+            }
+            else if (curOblast.SV.jeVOblasti(pridavany))
+            {
+                curOblast = curOblast.SV;
+            }
+            else if (curOblast.JV.jeVOblasti(pridavany))
+            {
+                curOblast = curOblast.JV;
+            }
+            else if (curOblast.JZ.jeVOblasti(pridavany))
+            {
+                curOblast = curOblast.JZ;
+            }
+            else if (curOblast.jeVOblasti(pridavany))
+            {
+                curOblast.vlozDoOblasti(pridavany);
+                break;
+            }
+            else
+            {
+                throw new RuntimeException("Neplatny vkladany element!");
+            }
+        }
+    }
+
+    private void vlozDoOblasti(T pridavany)
+    {
+        this.data.add(pridavany);
+    }
+
+    private boolean jeVOblasti(T vnutorny)
+    {
+        if (vnutorny.getSurVlavoDole().getX() >= this.surVlavoDole.getX() &&
+            vnutorny.getSurVlavoDole().getY() >= this.surVlavoDole.getY() &&
+            vnutorny.getSurVpravoHore().getX() <= this.surVpravoHore.getX() &&
+            vnutorny.getSurVpravoHore().getY() <= this.surVpravoHore.getY())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     // Metoda rozdeli dany usek na 4 rovnako velke oblasti
@@ -47,7 +105,7 @@ public class Quad<T>
     //    -> JZ:  {-180; -90}, {  0;  0}
     private void rozdel()
     {
-        if (this.SZ != null || this.SV != null || this.JV != null || this.JZ != null)
+        if (this.jeRozdelena())
         {
             throw new RuntimeException("Oblast je uz rozdelena!");
         }
@@ -67,8 +125,28 @@ public class Quad<T>
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
         this.JV = new Quad<>(JVvlavoDole, JVvpravoHore);
 
-        Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVpravoHore.getY());
+        Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
         this.JZ = new Quad<>(JZvlavoDole, JZvpravoHore);
+    }
+
+    private boolean jeRozdelena()
+    {
+        if (this.SZ == null && this.SV == null && this.JV == null && this.JZ == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Suradnica getSurVlavoDole()
+    {
+        return this.surVlavoDole;
+    }
+
+    public Suradnica getSurVpravoHore()
+    {
+        return this.surVpravoHore;
     }
 }

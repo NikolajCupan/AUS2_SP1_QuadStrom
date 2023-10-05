@@ -1,6 +1,8 @@
 package Objekty;
 
-public class Pozemok
+import Ostatne.IUzol;
+
+public class Pozemok implements IUzol
 {
     protected String popis;
     protected Suradnica surVlavoDole;
@@ -31,12 +33,12 @@ public class Pozemok
         return true;
     }
 
-    protected Suradnica getSurVlavoDole()
+    public Suradnica getSurVlavoDole()
     {
         return this.surVlavoDole;
     }
 
-    protected Suradnica getSurVpravoHore()
+    public Suradnica getSurVpravoHore()
     {
         return this.surVpravoHore;
     }
