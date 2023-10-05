@@ -2,7 +2,7 @@ package Objekty;
 
 import java.util.ArrayList;
 
-public class Parcela extends Pozemok
+public class Parcela extends Podorys
 {
     private int cisloParcely;
     private ArrayList<Nehnutelnost> nehnutelnosti;
@@ -19,7 +19,7 @@ public class Parcela extends Pozemok
     // Ak pridanie zlyha (na parcele nelezi dana nehnutelnost), vyhodi sa vynimka
     public void skusPridatNehnutelnost(Nehnutelnost nehnutelnost)
     {
-        if (!this.pozemkySaPrekryvaju(nehnutelnost))
+        if (!this.podorysySaPrekryvaju(nehnutelnost))
         {
             throw new RuntimeException("Na parcele nelezi dana nehnutelnost!");
         }

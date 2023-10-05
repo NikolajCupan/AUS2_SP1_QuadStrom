@@ -1,12 +1,14 @@
 package QuadStrom;
 
+import Objekty.Nehnutelnost;
+import Objekty.Podorys;
 import Objekty.Suradnica;
-import Ostatne.IUzol;
+import Ostatne.IPodorys;
 import Ostatne.Konstanty;
 
 import java.util.ArrayList;
 
-public class Quad<T extends IUzol>
+public class Quad<T extends IPodorys>
 {
     private Suradnica surVlavoDole;
     private Suradnica surVpravoHore;
@@ -37,6 +39,53 @@ public class Quad<T extends IUzol>
         this.SV = null;
         this.JV = null;
         this.JZ = null;
+    }
+
+    public int getPocetElementov()
+    {
+        return getPocetElementovPodstrom(this);
+    }
+
+    private int getPocetElementovPodstrom(Quad<T> oblast)
+    {
+        int pocetPodstrom = 0;
+        pocetPodstrom += oblast.data.size();
+
+        if (oblast.jeRozdelena())
+        {
+            pocetPodstrom += getPocetElementovPodstrom(oblast.SZ);
+            pocetPodstrom += getPocetElementovPodstrom(oblast.SV);
+            pocetPodstrom += getPocetElementovPodstrom(oblast.JV);
+            pocetPodstrom += getPocetElementovPodstrom(oblast.JZ);
+        }
+
+        return pocetPodstrom;
+    }
+
+    public ArrayList<T> vyhladajNehnutelnosti(Suradnica suradnica)
+    {
+        Quad<T> curOblast = this;
+        ArrayList<T> nehnutelnosti = new ArrayList<>();
+        
+        while (true)
+        {
+            for (T element : curOblast.data)
+            {
+                if (!(element instanceof Nehnutelnost))
+                {
+                    continue;
+                }
+
+                if (element.jeVnutri(suradnica))
+                {
+                    nehnutelnosti.add(element);
+                }
+            }
+
+            break;
+        }
+
+        return nehnutelnosti;
     }
 
     public void vloz(T pridavany)
@@ -96,7 +145,7 @@ public class Quad<T extends IUzol>
         return false;
     }
 
-    // Metoda rozdeli dany usek na 4 rovnako velke oblasti
+    // Metoda rozdeli danu oblast na 4 rovnako velke oblasti
     // Priklad:
     // -> zaklad: {-180; -90}, {180; 90}
     //    -> SZ:  {-180;   0}, {  0; 90}

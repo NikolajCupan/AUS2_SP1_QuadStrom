@@ -1,8 +1,8 @@
 package Objekty;
 
-import Ostatne.IUzol;
+import Ostatne.IPodorys;
 
-public class Pozemok implements IUzol
+public class Podorys implements IPodorys
 {
     protected String popis;
     protected Suradnica surVlavoDole;
@@ -20,12 +20,12 @@ public class Pozemok implements IUzol
         this.surVpravoHore.setY(Math.max(suradnica1.getY(), suradnica2.getY()));
     }
 
-    protected boolean pozemkySaPrekryvaju(Pozemok pozemok)
+    protected boolean podorysySaPrekryvaju(Podorys podorys)
     {
-        if (this.surVlavoDole.getX() > pozemok.getSurVpravoHore().getX() ||
-            this.surVlavoDole.getY() > pozemok.getSurVpravoHore().getY() ||
-            pozemok.getSurVlavoDole().getX() > this.surVpravoHore.getX() ||
-            pozemok.getSurVlavoDole().getY() > this.surVpravoHore.getY())
+        if (this.surVlavoDole.getX() > podorys.getSurVpravoHore().getX() ||
+            this.surVlavoDole.getY() > podorys.getSurVpravoHore().getY() ||
+            podorys.getSurVlavoDole().getX() > this.surVpravoHore.getX() ||
+            podorys.getSurVlavoDole().getY() > this.surVpravoHore.getY())
         {
             return false;
         }
@@ -33,11 +33,21 @@ public class Pozemok implements IUzol
         return true;
     }
 
+    // Metoda vrati true ak sa dana suradnica nachadza v oblasti podorysu
+    @Override
+    public boolean jeVnutri(Suradnica suradnica)
+    {
+        return suradnica.getX() >= this.surVlavoDole.getX() && suradnica.getY() >= this.surVlavoDole.getY() &&
+                suradnica.getX() <= this.surVpravoHore.getX() && suradnica.getY() <= this.surVpravoHore.getY();
+    }
+
+    @Override
     public Suradnica getSurVlavoDole()
     {
         return this.surVlavoDole;
     }
 
+    @Override
     public Suradnica getSurVpravoHore()
     {
         return this.surVpravoHore;
