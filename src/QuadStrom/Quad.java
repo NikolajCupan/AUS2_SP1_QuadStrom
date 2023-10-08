@@ -1,6 +1,7 @@
 package QuadStrom;
 
 import Objekty.Nehnutelnost;
+import Objekty.Parcela;
 import Objekty.Suradnica;
 import Ostatne.IPodorys;
 import Ostatne.Konstanty;
@@ -49,21 +50,26 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         this.podoblasti = new Quad[POCET_PODOBLASTI];
     }
 
-    public ArrayList<T> vyhladajNehnutelnosti(Suradnica suradnica)
+    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(Suradnica suradnica)
     {
-        return this.vyhladatNehnutelnostiPodstrom(this, suradnica);
+        return (ArrayList<Nehnutelnost>)this.vyhladatPodorysyPodstrom(this, suradnica, new Nehnutelnost());
     }
 
-    public ArrayList<T> vyhladatNehnutelnostiPodstrom(Quad<T> oblast, Suradnica suradnica)
+    public ArrayList<Parcela> vyhladajParcely(Suradnica suradnica)
     {
-        ArrayList<T> nehnutelnosti = new ArrayList<>();
+        return (ArrayList<Parcela>)this.vyhladatPodorysyPodstrom(this, suradnica, new Parcela());
+    }
+
+    public ArrayList<T> vyhladatPodorysyPodstrom(Quad<T> oblast, Suradnica suradnica, Object hladanyTyp)
+    {
+        ArrayList<T> podorysy = new ArrayList<>();
 
         // Kazdy podorys v danej oblasti je kandidatom
         for (T podorys : oblast.data)
         {
-            if (podorys instanceof Nehnutelnost && podorys.jeSuradnicaVPodoryse(suradnica))
+            if (podorys.getClass().equals(hladanyTyp.getClass()) && podorys.jeSuradnicaVPodoryse(suradnica))
             {
-                nehnutelnosti.add(podorys);
+                podorysy.add(podorys);
             }
         }
 
@@ -74,12 +80,12 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
             {
                 if (podoblast.jeSuradnicaVOblasti(suradnica))
                 {
-                    nehnutelnosti.addAll(this.vyhladatNehnutelnostiPodstrom(podoblast, suradnica));
+                    podorysy.addAll(this.vyhladatPodorysyPodstrom(podoblast, suradnica, hladanyTyp));
                 }
             }
         }
 
-        return nehnutelnosti;
+        return podorysy;
     }
 
     public int getPocetElementov()

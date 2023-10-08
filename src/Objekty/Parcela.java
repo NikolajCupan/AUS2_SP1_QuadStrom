@@ -8,6 +8,8 @@ public class Parcela extends Podorys
     // Zoznam nehnutelnosti, ktore lezia na danej parcele
     private ArrayList<Nehnutelnost> nehnutelnosti;
 
+    public Parcela() {}
+
     public Parcela(int cisloParcely, String popis, Suradnica suradnica1, Suradnica suradnica2)
     {
         this.cisloParcely = cisloParcely;

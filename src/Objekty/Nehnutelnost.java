@@ -8,6 +8,8 @@ public class Nehnutelnost extends Podorys
     // Zoznam parciel, na ktorych lezi dana nehnutelnost
     private ArrayList<Parcela> parcely;
 
+    public Nehnutelnost() {}
+
     public Nehnutelnost(int supisneCislo, String popis, Suradnica suradnica1, Suradnica suradnica2)
     {
         this.supisneCislo = supisneCislo;
