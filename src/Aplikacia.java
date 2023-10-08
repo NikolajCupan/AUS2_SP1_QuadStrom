@@ -10,7 +10,7 @@ public class Aplikacia
 {
     public void vykonavaj()
     {
-        Quad<Podorys> quad = new Quad<>();
+        Quad quad = new Quad();
         Nehnutelnost nehnutelnost = new Nehnutelnost(1, "Dom",
                                                      new Suradnica(-89, -44),
                                                      new Suradnica(10, 10));

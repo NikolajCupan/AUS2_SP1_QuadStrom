@@ -1,14 +1,13 @@
 package QuadStrom;
 
-import Objekty.Nehnutelnost;
-import Objekty.Parcela;
+import Objekty.Podorys;
 import Objekty.Suradnica;
 import Ostatne.IPodorys;
 import Ostatne.Konstanty;
 
 import java.util.*;
 
-public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
+public class Quad implements Iterable<Quad>
 {
     // SZ | SV    0 | 1
     // -- . --    - . -
@@ -22,7 +21,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
     private Suradnica surVlavoDole;
     private Suradnica surVpravoHore;
 
-    private ArrayList<T> data;
+    private ArrayList<Podorys> data;
 
     // Oblasti su v nasledujucom poradi:
     //                                   x  y  i
@@ -30,7 +29,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
     // -> Severo-vychod (vpravo hore) -> +  +  1
     // -> Juho-vychod   (vpravo dole) -> +  -  2
     // -> Juho-zapad    (vlavo dole)  -> -  -  3
-    private Quad<T>[] podoblasti;
+    private final Quad[] podoblasti;
 
     public Quad()
     {
@@ -50,19 +49,19 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         this.podoblasti = new Quad[POCET_PODOBLASTI];
     }
 
-    public <U> ArrayList<U> vyhladajObjekty(Suradnica suradnica, U hladanyTyp)
+    public <U extends IPodorys> ArrayList<U> vyhladajObjekty(Suradnica suradnica, U hladanyTyp)
     {
-        // Array Podorysov pretypunem na Array U
+        // Array podorysov pretypunem na Array U
         // U je potomkom Podorysu, cize to moze byt Nehnutelnost alebo Parcela
         return (ArrayList<U>)this.vyhladatPodorysyPodstrom(this, suradnica, hladanyTyp);
     }
 
-    public ArrayList<T> vyhladatPodorysyPodstrom(Quad<T> oblast, Suradnica suradnica, Object hladanyTyp)
+    private ArrayList<Podorys> vyhladatPodorysyPodstrom(Quad oblast, Suradnica suradnica, Object hladanyTyp)
     {
-        ArrayList<T> podorysy = new ArrayList<>();
+        ArrayList<Podorys> podorysy = new ArrayList<>();
 
         // Kazdy podorys v danej oblasti je kandidatom
-        for (T podorys : oblast.data)
+        for (Podorys podorys : oblast.data)
         {
             if (podorys.getClass().equals(hladanyTyp.getClass()) && podorys.jeSuradnicaVPodoryse(suradnica))
             {
@@ -73,7 +72,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         // Oblast nemusi byt rozdelena
         if (oblast.jeRozdelena())
         {
-            for (Quad<T> podoblast : oblast.podoblasti)
+            for (Quad podoblast : oblast.podoblasti)
             {
                 if (podoblast.jeSuradnicaVOblasti(suradnica))
                 {
@@ -90,14 +89,14 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         return getPocetElementovPodstrom(this);
     }
 
-    private int getPocetElementovPodstrom(Quad<T> oblast)
+    private int getPocetElementovPodstrom(Quad oblast)
     {
         int pocetPodstrom = 0;
         pocetPodstrom += oblast.data.size();
 
         if (oblast.jeRozdelena())
         {
-            for (Quad<T> podoblast : oblast.podoblasti)
+            for (Quad podoblast : oblast.podoblasti)
             {
                 pocetPodstrom += getPocetElementovPodstrom(podoblast);
             }
@@ -106,9 +105,9 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         return pocetPodstrom;
     }
 
-    public void vloz(T pridavany)
+    public void vloz(Podorys pridavany)
     {
-        Quad<T> curOblast = this;
+        Quad curOblast = this;
 
         while (true)
         {
@@ -118,7 +117,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
             }
 
             boolean vPodoblasti = false;
-            for (Quad<T> podoblast : curOblast.podoblasti)
+            for (Quad podoblast : curOblast.podoblasti)
             {
                 // Podorys sa moze nachadzat v maximalne 1 podoblasti
                 if (podoblast.jePodorysVOblasti(pridavany))
@@ -146,7 +145,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
     }
 
     // Metoda vrati true ak sa dana suradnica nachadza v oblasti
-    public boolean jeSuradnicaVOblasti(Suradnica suradnica)
+    private boolean jeSuradnicaVOblasti(Suradnica suradnica)
     {
         return suradnica.getX() >= this.surVlavoDole.getX() && suradnica.getY() >= this.surVlavoDole.getY() &&
                suradnica.getX() <= this.surVpravoHore.getX() && suradnica.getY() <= this.surVpravoHore.getY();
@@ -154,7 +153,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 
     // Metoda vrati true ak sa dany podorys nachadza vo vnutri oblasti
     // Cely obdlznik, ktory podorys vytvara musi byt v oblasti
-    private boolean jePodorysVOblasti(T vnutorny)
+    private boolean jePodorysVOblasti(Podorys vnutorny)
     {
         if (vnutorny.getSurVlavoDole().getX() >= this.surVlavoDole.getX() &&
             vnutorny.getSurVlavoDole().getY() >= this.surVlavoDole.getY() &&
@@ -186,19 +185,19 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 
         Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
         Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
-        this.podoblasti[SZ] = new Quad<>(SZvlavoDole, SZvpravoHore);
+        this.podoblasti[SZ] = new Quad(SZvlavoDole, SZvpravoHore);
 
         Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
         Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
-        this.podoblasti[SV] = new Quad<>(SVvlavoDole, SVvpravoHore);
+        this.podoblasti[SV] = new Quad(SVvlavoDole, SVvpravoHore);
 
         Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
-        this.podoblasti[JV] = new Quad<>(JVvlavoDole, JVvpravoHore);
+        this.podoblasti[JV] = new Quad(JVvlavoDole, JVvpravoHore);
 
         Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
-        this.podoblasti[JZ] = new Quad<>(JZvlavoDole, JZvpravoHore);
+        this.podoblasti[JZ] = new Quad(JZvlavoDole, JZvpravoHore);
     }
 
     private boolean jeRozdelena()
@@ -212,28 +211,28 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
     }
 
     @Override
-    public Iterator<Quad<T>> iterator()
+    public Iterator<Quad> iterator()
     {
         return new PreOrderIterator(this);
     }
 
-    private class PreOrderIterator implements Iterator<Quad<T>>
+    private class PreOrderIterator implements Iterator<Quad>
     {
-        private Queue<Quad<T>> front;
+        private Queue<Quad> front;
 
-        public PreOrderIterator(Quad<T> koren)
+        public PreOrderIterator(Quad koren)
         {
             this.front = new LinkedList<>();
             this.naplnFront(koren, front);
         }
 
-        private void naplnFront(Quad<T> oblast, Queue<Quad<T>> front)
+        private void naplnFront(Quad oblast, Queue<Quad> front)
         {
             front.add(oblast);
 
             if (oblast.jeRozdelena())
             {
-                for (Quad<T> podoblast : oblast.podoblasti)
+                for (Quad podoblast : oblast.podoblasti)
                 {
                     this.naplnFront(podoblast, front);
                 }
@@ -247,7 +246,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         }
 
         @Override
-        public Quad<T> next()
+        public Quad next()
         {
             if (!this.hasNext())
             {
