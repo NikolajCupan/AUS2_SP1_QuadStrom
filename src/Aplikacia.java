@@ -36,8 +36,8 @@ public class Aplikacia
         quad.vloz(parcela);
         quad.vloz(parcela2);
 
-        ArrayList<Nehnutelnost> n = quad.vyhladajNehnutelnosti(new Suradnica(0, 0));
-        ArrayList<Parcela> p = quad.vyhladajParcely(new Suradnica(0, 0));
+        ArrayList<Nehnutelnost> n = quad.vyhladajObjekty(new Suradnica(0, 0), new Nehnutelnost());
+        ArrayList<Parcela> p = quad.vyhladajObjekty(new Suradnica(0, 0), new Parcela());
 
         int x = 100;
     }

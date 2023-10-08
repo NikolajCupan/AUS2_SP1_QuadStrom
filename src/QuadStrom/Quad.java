@@ -50,14 +50,11 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         this.podoblasti = new Quad[POCET_PODOBLASTI];
     }
 
-    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(Suradnica suradnica)
+    public <U> ArrayList<U> vyhladajObjekty(Suradnica suradnica, U hladanyTyp)
     {
-        return (ArrayList<Nehnutelnost>)this.vyhladatPodorysyPodstrom(this, suradnica, new Nehnutelnost());
-    }
-
-    public ArrayList<Parcela> vyhladajParcely(Suradnica suradnica)
-    {
-        return (ArrayList<Parcela>)this.vyhladatPodorysyPodstrom(this, suradnica, new Parcela());
+        // Array Podorysov pretypunem na Array U
+        // U je potomkom Podorysu, cize to moze byt Nehnutelnost alebo Parcela
+        return (ArrayList<U>)this.vyhladatPodorysyPodstrom(this, suradnica, hladanyTyp);
     }
 
     public ArrayList<T> vyhladatPodorysyPodstrom(Quad<T> oblast, Suradnica suradnica, Object hladanyTyp)
@@ -212,16 +209,6 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
         }
 
         return true;
-    }
-
-    public Suradnica getSurVlavoDole()
-    {
-        return this.surVlavoDole;
-    }
-
-    public Suradnica getSurVpravoHore()
-    {
-        return this.surVpravoHore;
     }
 
     @Override
