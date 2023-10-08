@@ -9,9 +9,12 @@ import java.util.*;
 
 public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 {
+    // SZ | SV    0 | 1
+    // -- . --    - . -
+    // JZ | JV    3 | 2
     private static final int POCET_PODOBLASTI = 4;
-    private static final int SV = 0;
-    private static final int SZ = 1;
+    private static final int SZ = 0;
+    private static final int SV = 1;
     private static final int JV = 2;
     private static final int JZ = 3;
 
@@ -22,10 +25,10 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 
     // Oblasti su v nasledujucom poradi:
     //                                   x  y  i
-    // -> Severo-vychod (vlavo hore)  -> -  +  0
-    // -> Severo-zapad  (vpravo hore) -> +  +  1
-    // -> Juho-zapad    (vpravo dole) -> +  -  2
-    // -> Juho-vychod   (vlavo dole)  -> -  -  3
+    // -> Severo-zapad  (vlavo hore)  -> -  +  0
+    // -> Severo-vychod (vpravo hore) -> +  +  1
+    // -> Juho-vychod   (vpravo dole) -> +  -  2
+    // -> Juho-zapad    (vlavo dole)  -> -  -  3
     private Quad<T>[] podoblasti;
 
     public Quad()
@@ -119,6 +122,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
                 {
                     curOblast = podoblast;
                     vPodoblasti = true;
+                    break;
                 }
             }
 
@@ -179,11 +183,11 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 
         Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
         Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
-        this.podoblasti[SV] = new Quad<>(SZvlavoDole, SZvpravoHore);
+        this.podoblasti[SZ] = new Quad<>(SZvlavoDole, SZvpravoHore);
 
         Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
         Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
-        this.podoblasti[SZ] = new Quad<>(SVvlavoDole, SVvpravoHore);
+        this.podoblasti[SV] = new Quad<>(SVvlavoDole, SVvpravoHore);
 
         Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
@@ -196,7 +200,7 @@ public class Quad<T extends IPodorys> implements Iterable<Quad<T>>
 
     private boolean jeRozdelena()
     {
-        if (this.podoblasti[SV] == null && this.podoblasti[SZ] == null && this.podoblasti[JV] == null && this.podoblasti[JZ] == null)
+        if (this.podoblasti[SZ] == null && this.podoblasti[SV] == null && this.podoblasti[JV] == null && this.podoblasti[JZ] == null)
         {
             return false;
         }

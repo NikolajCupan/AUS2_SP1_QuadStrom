@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Nehnutelnost extends Podorys
 {
     private int supisneCislo;
+    // Zoznam parciel, na ktorych lezi dana nehnutelnost
     private ArrayList<Parcela> parcely;
 
     public Nehnutelnost(int supisneCislo, String popis, Suradnica suradnica1, Suradnica suradnica2)

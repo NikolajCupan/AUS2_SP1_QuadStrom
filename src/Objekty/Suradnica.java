@@ -3,7 +3,12 @@ package Objekty;
 import Ostatne.Konstanty;
 
 // Dlzka: <-180; 180> => X suradnica
+//     -> <-180;   0) => Z (zapad)
+//     -> <   0; 180> => V (vychod)
+//
 // Sirka: < -90;  90> => Y suradnica
+//     -> < -90;   0) => J (juh)
+//     -> <   0;  90> => S (sever)
 public class Suradnica
 {
     public static final char VYCHOD = 'V';

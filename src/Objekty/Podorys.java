@@ -46,9 +46,12 @@ public class Podorys implements IPodorys
     }
 
     // Metoda vrati true ak sa dana suradnica nachadza na podoryse
+    @Override
     public boolean jeSuradnicaVPodoryse(Suradnica suradnica)
     {
-        return suradnica.getX() >= this.surVlavoDole.getX() && suradnica.getY() >= this.surVlavoDole.getY() &&
-                suradnica.getX() <= this.surVpravoHore.getX() && suradnica.getY() <= this.surVpravoHore.getY();
+        return suradnica.getX() >= this.surVlavoDole.getX() &&
+               suradnica.getY() >= this.surVlavoDole.getY() &&
+               suradnica.getX() <= this.surVpravoHore.getX() &&
+               suradnica.getY() <= this.surVpravoHore.getY();
     }
 }
