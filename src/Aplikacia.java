@@ -13,9 +13,15 @@ public class Aplikacia
         Quad<Podorys> quad = new Quad<>();
         Nehnutelnost nehnutelnost = new Nehnutelnost(1, "Dom",
                                                      new Suradnica(-89, -44),
-                                                     new Suradnica(-1, -1));
+                                                     new Suradnica(10, 10));
         Nehnutelnost nehnutelnost2 = new Nehnutelnost(1, "Dom",
                                                       new Suradnica(-179, -89),
+                                                      new Suradnica(179, 89));
+        Nehnutelnost nehnutelnost3 = new Nehnutelnost(1, "Dom",
+                                                      new Suradnica(-180, 0),
+                                                      new Suradnica(0, 90));
+        Nehnutelnost nehnutelnost4 = new Nehnutelnost(1, "Dom",
+                                                      new Suradnica(0, 0),
                                                       new Suradnica(179, 89));
         Parcela parcela = new Parcela(1, "Parcela",
                                       new Suradnica(-89, -44),
@@ -25,9 +31,13 @@ public class Aplikacia
                                        new Suradnica(179, 89));
         quad.vloz(nehnutelnost);
         quad.vloz(nehnutelnost2);
-        quad.vloz(parcela);
-        quad.vloz(parcela2);
-        System.out.println(quad.getPocetElementov());
+        quad.vloz(nehnutelnost3);
+        quad.vloz(nehnutelnost4);
+        //quad.vloz(parcela);
+        //quad.vloz(parcela2);
+
+        ArrayList<Podorys> n = quad.vyhladajNehnutelnosti(new Suradnica(0, 0));
+
         int x = 100;
     }
 }

@@ -33,14 +33,6 @@ public class Podorys implements IPodorys
         return true;
     }
 
-    // Metoda vrati true ak sa dana suradnica nachadza v oblasti podorysu
-    @Override
-    public boolean jeVnutri(Suradnica suradnica)
-    {
-        return suradnica.getX() >= this.surVlavoDole.getX() && suradnica.getY() >= this.surVlavoDole.getY() &&
-                suradnica.getX() <= this.surVpravoHore.getX() && suradnica.getY() <= this.surVpravoHore.getY();
-    }
-
     @Override
     public Suradnica getSurVlavoDole()
     {
@@ -51,5 +43,12 @@ public class Podorys implements IPodorys
     public Suradnica getSurVpravoHore()
     {
         return this.surVpravoHore;
+    }
+
+    // Metoda vrati true ak sa dana suradnica nachadza na podoryse
+    public boolean jeSuradnicaVPodoryse(Suradnica suradnica)
+    {
+        return suradnica.getX() >= this.surVlavoDole.getX() && suradnica.getY() >= this.surVlavoDole.getY() &&
+                suradnica.getX() <= this.surVpravoHore.getX() && suradnica.getY() <= this.surVpravoHore.getY();
     }
 }
