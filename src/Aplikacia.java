@@ -1,16 +1,18 @@
 import Objekty.Nehnutelnost;
-import Objekty.Parcela;
-import Objekty.Podorys;
+import Objekty.Polygon;
 import Objekty.Suradnica;
-import QuadStrom.Quad;
-
-import java.util.ArrayList;
+import Ostatne.IPolygon;
+import Ostatne.Konstanty;
+import QuadStrom.QuadStrom;
 
 public class Aplikacia
 {
     public void vykonavaj()
     {
-        Quad quad = new Quad();
+        QuadStrom<Polygon> strom = new QuadStrom<Polygon>(new Suradnica(Konstanty.X_MIN, Konstanty.Y_MIN),
+                                                          new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX));
+        strom.quad.foo(new Nehnutelnost());
+        /*
         Nehnutelnost nehnutelnost = new Nehnutelnost(1, "Dom",
                                                      new Suradnica(-89, -44),
                                                      new Suradnica(10, 10));
@@ -38,6 +40,7 @@ public class Aplikacia
 
         ArrayList<Nehnutelnost> n = quad.vyhladajObjekty(new Suradnica(0, 0), new Nehnutelnost());
         ArrayList<Parcela> p = quad.vyhladajObjekty(new Suradnica(0, 0), new Parcela());
+        */
 
         int x = 100;
     }

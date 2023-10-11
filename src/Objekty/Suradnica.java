@@ -1,14 +1,12 @@
 package Objekty;
 
-import Ostatne.Konstanty;
-
-// Dlzka: <-180; 180> => X suradnica
-//     -> <-180;   0) => Z (zapad)
-//     -> <   0; 180> => V (vychod)
+// Dlzka:              => X suradnica
+//     -> <-inf;    0) => Z (zapad)
+//     -> <   0; +inf) => V (vychod)
 //
-// Sirka: < -90;  90> => Y suradnica
-//     -> < -90;   0) => J (juh)
-//     -> <   0;  90> => S (sever)
+// Sirka:                => Y suradnica
+//     -> < -inf;     0) => J (juh)
+//     -> <    0;  +inf> => S (sever)
 public class Suradnica
 {
     public static final char VYCHOD = 'V';
@@ -23,10 +21,6 @@ public class Suradnica
 
     public Suradnica(double x, double y)
     {
-        // kontrola, ci su zadane udaje validne
-        this.validujX(x);
-        this.validujY(y);
-
         this.x = x;
         this.y = y;
         this.dlzka = (x < 0) ? ZAPAD : VYCHOD;
@@ -41,22 +35,6 @@ public class Suradnica
         this.sirka = SEVER;
     }
 
-    private void validujX(double x)
-    {
-        if (x < Konstanty.X_MIN || x > Konstanty.X_MAX)
-        {
-            throw new IllegalArgumentException("Nespravna pozicia x (dlzka), musi byt z rozsahu <" + Konstanty.X_MIN + ", " + Konstanty.X_MAX + ">!");
-        }
-    }
-
-    private void validujY(double y)
-    {
-        if (y < Konstanty.Y_MIN || y > Konstanty.Y_MAX)
-        {
-            throw new IllegalArgumentException("Nespravna pozicia y (sirka), musi byt z rozsahu <" + Konstanty.Y_MIN + ", " + Konstanty.Y_MAX + ">!");
-        }
-    }
-
     public double getX()
     {
         return this.x;
@@ -69,16 +47,12 @@ public class Suradnica
 
     public void setX(double x)
     {
-        this.validujX(x);
-
         this.x = x;
         this.dlzka = (x < 0) ? ZAPAD : VYCHOD;
     }
 
     public void setY(double y)
     {
-        this.validujY(y);
-
         this.y = y;
         this.sirka = (y < 0) ? JUH : SEVER;
     }
