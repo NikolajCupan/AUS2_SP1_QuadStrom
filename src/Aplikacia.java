@@ -37,7 +37,8 @@ public class Aplikacia
         strom.vloz(nehnutelnost4);
         strom.vloz(parcela);
         strom.vloz(parcela2);
-        ArrayList<Polygon> p = strom.vyhladaj(1, 1);
+        ArrayList<Nehnutelnost> p = strom.vyhladaj(1, 1, Nehnutelnost.class);
+        ArrayList<Parcela> pp = strom.vyhladaj(1, 1, Parcela.class);
         int z = strom.getPocetElementov();
 
         int x = 100;

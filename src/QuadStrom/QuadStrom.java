@@ -80,7 +80,7 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    public ArrayList<T> vyhladaj(double x, double y)
+    public <U> ArrayList<U> vyhladaj(double x, double y, Class<U> typ)
     {
         ArrayList<T> polygony = new ArrayList<>();
         Quad<T> curQuad = this.quad;
@@ -89,7 +89,7 @@ public class QuadStrom<T extends IPolygon>
         {
             for (T element : curQuad.getData())
             {
-                if (element.leziVnutri(x, y))
+                if (typ.isInstance(element) && element.leziVnutri(x, y))
                 {
                     polygony.add(element);
                 }
@@ -114,6 +114,6 @@ public class QuadStrom<T extends IPolygon>
             }
         }
 
-        return polygony;
+        return (ArrayList<U>)polygony;
     }
 }

@@ -33,40 +33,6 @@ public class Quad<T extends IPolygon> extends Polygon
         this.podquady = new Quad[POCET_PODQUADOV];
     }
 
-    /*
-    private ArrayList<T> vyhladaj(Quad oblast, Suradnica suradnica)
-    {
-        ArrayList<T> prvky = new ArrayList<>();
-
-        // Kazdy podorys v danej oblasti je kandidatom
-        for (T prvok : oblast.data)
-        {
-
-        }
-        for (T prvok : oblast.data)
-        {
-            if (prvok.leziVnutri(suradnica))
-            {
-                podorysy.add(prvok);
-            }
-        }
-
-        // Oblast nemusi byt rozdelena
-        if (oblast.jeRozdelena())
-        {
-            for (Quad podoblast : oblast.podoblasti)
-            {
-                if (podoblast.jeSuradnicaVOblasti(suradnica))
-                {
-                    podorysy.addAll(this.vyhladaj(podoblast, suradnica, hladanyTyp));
-                }
-            }
-        }
-
-        return podorysy;
-    }
-    */
-
     // Metoda rozdeli dany quad na 4 rovnako velke oblasti
     // Priklad:
     // -> zaklad: {-180; -90}, {180; 90}
