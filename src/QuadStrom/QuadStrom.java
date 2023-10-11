@@ -7,15 +7,15 @@ import Ostatne.Konstanty;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import static Ostatne.Konstanty.SZ;
-
 public class QuadStrom<T extends IPolygon>
 {
     public Quad<T> quad;
 
-    public QuadStrom(Suradnica surVlavoDole, Suradnica surVpavoHore)
+    public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
-        this.quad = new Quad<T>(surVlavoDole, surVpavoHore);
+        Suradnica suradnica1 = new Suradnica(vlavoDoleX, vlavoDoleY);
+        Suradnica suradnica2 = new Suradnica(vpravoHoreX, vpravoHoreY);
+        this.quad = new Quad<T>(suradnica1, suradnica2);
     }
 
     public int getPocetElementov()
@@ -80,7 +80,7 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    public ArrayList<T> vyhladaj(Suradnica suradnica)
+    public ArrayList<T> vyhladaj(double x, double y)
     {
         ArrayList<T> polygony = new ArrayList<>();
         Quad<T> curQuad = this.quad;
@@ -89,7 +89,7 @@ public class QuadStrom<T extends IPolygon>
         {
             for (T element : curQuad.getData())
             {
-                if (element.leziVnutri(suradnica))
+                if (element.leziVnutri(x, y))
                 {
                     polygony.add(element);
                 }
@@ -101,7 +101,7 @@ public class QuadStrom<T extends IPolygon>
                 // Suradnica moze lezat maximalne v 1 podquade
                 for (Quad<T> podQuad : curQuad.getPodQuady())
                 {
-                    if (podQuad.leziVnutri(suradnica))
+                    if (podQuad.leziVnutri(x, y))
                     {
                         curQuad = podQuad;
                         break;

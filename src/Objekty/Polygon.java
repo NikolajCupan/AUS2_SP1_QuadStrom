@@ -21,22 +21,22 @@ public class Polygon implements IPolygon
 
     // Metoda vrati true ak sa dana suradnica lezi vo vnutri polygonu
     @Override
-    public boolean leziVnutri(Suradnica suradnica)
+    public boolean leziVnutri(double x, double y)
     {
-        return suradnica.getX() >= this.surVlavoDole.getX() &&
-               suradnica.getY() >= this.surVlavoDole.getY() &&
-               suradnica.getX() <= this.surVpravoHore.getX() &&
-               suradnica.getY() <= this.surVpravoHore.getY();
+        return x >= this.surVlavoDole.getX() &&
+               y >= this.surVlavoDole.getY() &&
+               x <= this.surVpravoHore.getX() &&
+               y <= this.surVpravoHore.getY();
     }
 
     // Cely obsah polygonu musi lezat vo vnutri
     @Override
     public boolean leziVnutri(IPolygon vnutorny)
     {
-        if (vnutorny.getSurVlavoDole().getX() >= this.surVlavoDole.getX() &&
-            vnutorny.getSurVlavoDole().getY() >= this.surVlavoDole.getY() &&
-            vnutorny.getSurVpravoHore().getX() <= this.surVpravoHore.getX() &&
-            vnutorny.getSurVpravoHore().getY() <= this.surVpravoHore.getY())
+        if (vnutorny.getVlavoDoleX() >= this.surVlavoDole.getX() &&
+            vnutorny.getVlavoDoleY() >= this.surVlavoDole.getY() &&
+            vnutorny.getVpravoHoreX() <= this.surVpravoHore.getX() &&
+            vnutorny.getVpravoHoreY() <= this.surVpravoHore.getY())
         {
             return true;
         }
@@ -47,10 +47,10 @@ public class Polygon implements IPolygon
     @Override
     public boolean prekryva(IPolygon polygon)
     {
-        if (this.surVlavoDole.getX() > polygon.getSurVpravoHore().getX() ||
-            this.surVlavoDole.getY() > polygon.getSurVpravoHore().getY() ||
-            polygon.getSurVlavoDole().getX() > this.surVpravoHore.getX() ||
-            polygon.getSurVlavoDole().getY() > this.surVpravoHore.getY())
+        if (this.surVlavoDole.getX() > polygon.getVpravoHoreX() ||
+            this.surVlavoDole.getY() > polygon.getVpravoHoreY() ||
+            polygon.getVlavoDoleX() > this.surVpravoHore.getX() ||
+            polygon.getVlavoDoleY() > this.surVpravoHore.getY())
         {
             return false;
         }
@@ -59,14 +59,26 @@ public class Polygon implements IPolygon
     }
 
     @Override
-    public Suradnica getSurVlavoDole()
+    public double getVlavoDoleX()
     {
-        return this.surVlavoDole;
+        return this.surVlavoDole.getX();
     }
 
     @Override
-    public Suradnica getSurVpravoHore()
+    public double getVlavoDoleY()
     {
-        return this.surVpravoHore;
+        return this.surVlavoDole.getY();
+    }
+
+    @Override
+    public double getVpravoHoreX()
+    {
+        return this.surVpravoHore.getX();
+    }
+
+    @Override
+    public double getVpravoHoreY()
+    {
+        return this.surVpravoHore.getY();
     }
 }

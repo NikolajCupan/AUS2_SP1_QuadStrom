@@ -12,8 +12,7 @@ public class Aplikacia
 {
     public void vykonavaj()
     {
-        QuadStrom<Polygon> strom = new QuadStrom<Polygon>(new Suradnica(Konstanty.X_MIN, Konstanty.Y_MIN),
-                                                          new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX));
+        QuadStrom<Polygon> strom = new QuadStrom<Polygon>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
         Nehnutelnost nehnutelnost = new Nehnutelnost(1, "Dom",
                                                      new Suradnica(-89, -44),
                                                      new Suradnica(10, 10));
@@ -38,7 +37,7 @@ public class Aplikacia
         strom.vloz(nehnutelnost4);
         strom.vloz(parcela);
         strom.vloz(parcela2);
-        ArrayList<Polygon> p = strom.vyhladaj(new Suradnica(1, 1));
+        ArrayList<Polygon> p = strom.vyhladaj(1, 1);
         int z = strom.getPocetElementov();
 
         int x = 100;

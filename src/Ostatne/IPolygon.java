@@ -7,9 +7,11 @@ import Objekty.Suradnica;
 // -> prava horna
 public interface IPolygon
 {
-    boolean leziVnutri(Suradnica suradnica);
+    boolean leziVnutri(double x, double y);
     boolean leziVnutri(IPolygon polygon);
     boolean prekryva(IPolygon polygon);
-    Suradnica getSurVlavoDole();
-    Suradnica getSurVpravoHore();
+    double getVlavoDoleX();
+    double getVlavoDoleY();
+    double getVpravoHoreX();
+    double getVpravoHoreY();
 }

@@ -6,7 +6,6 @@ import Ostatne.IPolygon;
 import Ostatne.Konstanty;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Quad<T extends IPolygon> extends Polygon
 {
