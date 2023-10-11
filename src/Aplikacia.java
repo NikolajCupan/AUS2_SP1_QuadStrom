@@ -1,9 +1,12 @@
 import Objekty.Nehnutelnost;
+import Objekty.Parcela;
 import Objekty.Polygon;
 import Objekty.Suradnica;
 import Ostatne.IPolygon;
 import Ostatne.Konstanty;
 import QuadStrom.QuadStrom;
+
+import java.util.ArrayList;
 
 public class Aplikacia
 {
@@ -11,8 +14,6 @@ public class Aplikacia
     {
         QuadStrom<Polygon> strom = new QuadStrom<Polygon>(new Suradnica(Konstanty.X_MIN, Konstanty.Y_MIN),
                                                           new Suradnica(Konstanty.X_MAX, Konstanty.Y_MAX));
-        strom.quad.foo(new Nehnutelnost());
-        /*
         Nehnutelnost nehnutelnost = new Nehnutelnost(1, "Dom",
                                                      new Suradnica(-89, -44),
                                                      new Suradnica(10, 10));
@@ -31,16 +32,14 @@ public class Aplikacia
         Parcela parcela2 = new Parcela(1, "Parcela2",
                                        new Suradnica(-179, -89),
                                        new Suradnica(179, 89));
-        quad.vloz(nehnutelnost);
-        quad.vloz(nehnutelnost2);
-        quad.vloz(nehnutelnost3);
-        quad.vloz(nehnutelnost4);
-        quad.vloz(parcela);
-        quad.vloz(parcela2);
-
-        ArrayList<Nehnutelnost> n = quad.vyhladajObjekty(new Suradnica(0, 0), new Nehnutelnost());
-        ArrayList<Parcela> p = quad.vyhladajObjekty(new Suradnica(0, 0), new Parcela());
-        */
+        strom.vloz(nehnutelnost);
+        strom.vloz(nehnutelnost2);
+        strom.vloz(nehnutelnost3);
+        strom.vloz(nehnutelnost4);
+        strom.vloz(parcela);
+        strom.vloz(parcela2);
+        ArrayList<Polygon> p = strom.vyhladaj(new Suradnica(1, 1));
+        int z = strom.getPocetElementov();
 
         int x = 100;
     }

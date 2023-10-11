@@ -31,7 +31,7 @@ public class Polygon implements IPolygon
 
     // Cely obsah polygonu musi lezat vo vnutri
     @Override
-    public boolean leziVnutri(Polygon vnutorny)
+    public boolean leziVnutri(IPolygon vnutorny)
     {
         if (vnutorny.getSurVlavoDole().getX() >= this.surVlavoDole.getX() &&
             vnutorny.getSurVlavoDole().getY() >= this.surVlavoDole.getY() &&
@@ -45,7 +45,7 @@ public class Polygon implements IPolygon
     }
 
     @Override
-    public boolean prekryva(Polygon polygon)
+    public boolean prekryva(IPolygon polygon)
     {
         if (this.surVlavoDole.getX() > polygon.getSurVpravoHore().getX() ||
             this.surVlavoDole.getY() > polygon.getSurVpravoHore().getY() ||

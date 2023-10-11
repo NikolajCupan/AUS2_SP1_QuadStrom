@@ -1,6 +1,5 @@
 package Ostatne;
 
-import Objekty.Polygon;
 import Objekty.Suradnica;
 
 // Polygon je definovany pomocou dvoch suradnic
@@ -9,8 +8,8 @@ import Objekty.Suradnica;
 public interface IPolygon
 {
     boolean leziVnutri(Suradnica suradnica);
-    boolean leziVnutri(Polygon polygon);
-    boolean prekryva(Polygon polygon);
+    boolean leziVnutri(IPolygon polygon);
+    boolean prekryva(IPolygon polygon);
     Suradnica getSurVlavoDole();
     Suradnica getSurVpravoHore();
 }

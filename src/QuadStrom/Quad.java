@@ -2,19 +2,18 @@ package QuadStrom;
 
 import Objekty.Polygon;
 import Objekty.Suradnica;
+import Ostatne.IPolygon;
+import Ostatne.Konstanty;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
-public class Quad<T> extends Polygon
+public class Quad<T extends IPolygon> extends Polygon
 {
     // SZ | SV    0 | 1
     // -- . --    - . -
     // JZ | JV    3 | 2
     private static final int POCET_PODQUADOV = 4;
-    private static final int SZ = 0;
-    private static final int SV = 1;
-    private static final int JV = 2;
-    private static final int JZ = 3;
 
     private ArrayList<T> data;
 
@@ -68,65 +67,6 @@ public class Quad<T> extends Polygon
         return podorysy;
     }
     */
-    public int getPocetElementov()
-    {
-        return getPocetElementovPodstrom(this);
-    }
-
-    private int getPocetElementovPodstrom(Quad oblast)
-    {
-        int pocetPodstrom = 0;
-        pocetPodstrom += oblast.data.size();
-
-        if (oblast.jeRozdeleny())
-        {
-            for (Quad podoblast : oblast.podquady)
-            {
-                pocetPodstrom += getPocetElementovPodstrom(podoblast);
-            }
-        }
-
-        return pocetPodstrom;
-    }
-
-    public void vloz(T pridavany)
-    {
-        Quad<T> curQuad = this;
-
-        while (true)
-        {
-            if (!curQuad.jeRozdeleny())
-            {
-                curQuad.rozdel();
-            }
-
-            boolean vPodquade = false;
-            for (Quad<T> podquad : curQuad.podquady)
-            {
-                // Polygon sa moze nachadzat v maximalne 1 podquade
-                if (podquad.leziVnutri(pridavany))
-                {
-                    curQuad = podquad;
-                    vPodquade = true;
-                    break;
-                }
-            }
-
-            // Ziadny podquad nevyhovuje
-            if (!vPodquade)
-            {
-                if (curQuad.leziVnutri(pridavany))
-                {
-                    curQuad.data.add(pridavany);
-                    break;
-                }
-                else
-                {
-                    throw new RuntimeException("Neplatny vkladany element!");
-                }
-            }
-        }
-    }
 
     // Metoda rozdeli dany quad na 4 rovnako velke oblasti
     // Priklad:
@@ -135,7 +75,7 @@ public class Quad<T> extends Polygon
     //    -> SV:  {   0;   0}, {180; 90}
     //    -> JV:  {   0; -90}, {180;  0}
     //    -> JZ:  {-180; -90}, {  0;  0}
-    private void rozdel()
+    public void rozdel()
     {
         if (this.jeRozdeleny())
         {
@@ -147,26 +87,41 @@ public class Quad<T> extends Polygon
 
         Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
         Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
-        this.podquady[SZ] = new Quad<T>(SZvlavoDole, SZvpravoHore);
+        this.podquady[Konstanty.SZ] = new Quad<T>(SZvlavoDole, SZvpravoHore);
 
         Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
         Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
-        this.podquady[SV] = new Quad<T>(SVvlavoDole, SVvpravoHore);
+        this.podquady[Konstanty.SV] = new Quad<T>(SVvlavoDole, SVvpravoHore);
 
         Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
-        this.podquady[JV] = new Quad<T>(JVvlavoDole, JVvpravoHore);
+        this.podquady[Konstanty.JV] = new Quad<T>(JVvlavoDole, JVvpravoHore);
 
         Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
-        this.podquady[JZ] = new Quad<T>(JZvlavoDole, JZvpravoHore);
+        this.podquady[Konstanty.JZ] = new Quad<T>(JZvlavoDole, JZvpravoHore);
     }
 
-    private boolean jeRozdeleny()
+    public boolean jeRozdeleny()
     {
-        return this.podquady[SZ] != null ||
-               this.podquady[SV] != null ||
-               this.podquady[JV] != null ||
-               this.podquady[JZ] != null;
+        return this.podquady[Konstanty.SZ] != null ||
+               this.podquady[Konstanty.SV] != null ||
+               this.podquady[Konstanty.JV] != null ||
+               this.podquady[Konstanty.JZ] != null;
+    }
+
+    public Quad<T>[] getPodQuady()
+    {
+        return this.podquady;
+    }
+
+    public Quad<T> getPodQuad(int index)
+    {
+        return this.podquady[index];
+    }
+
+    public ArrayList<T> getData()
+    {
+        return this.data;
     }
 }
