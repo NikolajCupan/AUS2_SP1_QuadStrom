@@ -7,7 +7,7 @@ public class Polygon implements IPolygon
     protected Suradnica surVlavoDole;
     protected Suradnica surVpravoHore;
 
-    protected void nastavSuradnice(Suradnica suradnica1, Suradnica suradnica2)
+    public void nastavSuradnice(Suradnica suradnica1, Suradnica suradnica2)
     {
         this.surVlavoDole = new Suradnica();
         this.surVpravoHore = new Suradnica();

@@ -1,5 +1,6 @@
 package QuadStrom;
 
+import Objekty.Polygon;
 import Objekty.Suradnica;
 import Ostatne.IPolygon;
 import Ostatne.Konstanty;
@@ -9,7 +10,7 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
-    public Quad<T> quad;
+    private Quad<T> quad;
 
     public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
@@ -80,9 +81,10 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    public <U> ArrayList<U> vyhladaj(double x, double y, Class<U> typ)
+    // Vyhladavanie podla suradnice
+    public <U extends IPolygon> ArrayList<U> vyhladaj(double x, double y, Class<U> typ)
     {
-        ArrayList<T> polygony = new ArrayList<>();
+        ArrayList<T> najdene = new ArrayList<>();
         Quad<T> curQuad = this.quad;
 
         while (true)
@@ -91,7 +93,7 @@ public class QuadStrom<T extends IPolygon>
             {
                 if (typ.isInstance(element) && element.leziVnutri(x, y))
                 {
-                    polygony.add(element);
+                    najdene.add(element);
                 }
             }
 
@@ -114,6 +116,44 @@ public class QuadStrom<T extends IPolygon>
             }
         }
 
-        return (ArrayList<U>)polygony;
+        return (ArrayList<U>)najdene;
+    }
+
+    // Vyhladavenie podla polygonu
+    public <U extends IPolygon> ArrayList<U> vyhladaj(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, Class<U> typ)
+    {
+        Polygon prehladavanaOblast = new Polygon();
+        prehladavanaOblast.nastavSuradnice(new Suradnica(vlavoDoleX, vlavoDoleY),
+                                new Suradnica(vpravoHoreX, vpravoHoreY));
+
+        ArrayList<T> najdene = new ArrayList<>();
+        Stack<Quad<T>> zasobnik = new Stack<>();
+        zasobnik.push(this.quad);
+
+        while (!zasobnik.isEmpty())
+        {
+            Quad<T> curQuad = zasobnik.pop();
+            for (T element : curQuad.getData())
+            {
+                if (typ.isInstance(element) && element.prekryva(prehladavanaOblast))
+                {
+                    najdene.add(element);
+                }
+            }
+
+            // Quad nemusi byt rozdeleny
+            if (curQuad.jeRozdeleny())
+            {
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    if (podQuad.prekryva(prehladavanaOblast))
+                    {
+                        zasobnik.push(podQuad);
+                    }
+                }
+            }
+        }
+
+        return (ArrayList<U>)najdene;
     }
 }

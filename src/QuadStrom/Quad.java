@@ -14,7 +14,7 @@ public class Quad<T extends IPolygon> extends Polygon
     // JZ | JV    3 | 2
     private static final int POCET_PODQUADOV = 4;
 
-    private ArrayList<T> data;
+    private final ArrayList<T> data;
 
     // Quady su v nasledujucom poradi:
     //                                   x  y  i
