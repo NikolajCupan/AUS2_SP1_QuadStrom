@@ -52,8 +52,18 @@ public class Operacie
         }
     }
 
-    public static void vymazParcelu(QuadStrom<Polygon> strom, Parcela vymazavana, double x, double y, double hladanyKluc)
+    public static void vymazParcelu(QuadStrom<Polygon> strom, double x, double y, double hladanyKluc)
     {
+        Parcela vymazana = strom.vymaz(x, y, hladanyKluc, Parcela.class);
 
+        if (vymazana == null)
+        {
+            return;
+        }
+
+        for (Nehnutelnost nehnutelnosta : vymazana.getNehnutelnosti())
+        {
+            nehnutelnosta.skusOdobratParcelu(vymazana);
+        }
     }
 }
