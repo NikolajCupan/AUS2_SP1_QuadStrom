@@ -156,4 +156,37 @@ public class QuadStrom<T extends IPolygon>
 
         return (ArrayList<U>)najdene;
     }
+
+    public <U extends IPolygon> U vymaz(double x, double y, double hladanyKluc, Class<U> typ)
+    {
+        Quad<T> curQuad = this.quad;
+
+        while (true)
+        {
+            ArrayList<T> quadData = curQuad.getData();
+
+            for (T element : quadData)
+            {
+                if (typ.isInstance(element) && element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
+                {
+                    quadData.remove(element);
+                    return (U)element;
+                }
+            }
+
+            if (!curQuad.jeRozdeleny())
+            {
+                return null;
+            }
+
+            for (Quad<T> podQuad : curQuad.getPodQuady())
+            {
+                if (podQuad.leziVnutri(x, y))
+                {
+                    curQuad = podQuad;
+                    break;
+                }
+            }
+        }
+    }
 }

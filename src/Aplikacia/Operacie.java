@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Operacie
 {
-    public static void pridajNehnutelnost(QuadStrom<Polygon> strom, Nehnutelnost pridavana)
+    public static void vlozNehnutelnost(QuadStrom<Polygon> strom, Nehnutelnost pridavana)
     {
         strom.vloz(pridavana);
         ArrayList<Parcela> parcely = strom.vyhladaj(pridavana.getVlavoDoleX(), pridavana.getVlavoDoleY(),
@@ -23,7 +23,7 @@ public class Operacie
         }
     }
 
-    public static void pridajParcelu(QuadStrom<Polygon> strom, Parcela pridavana)
+    public static void vlozParcelu(QuadStrom<Polygon> strom, Parcela pridavana)
     {
         strom.vloz(pridavana);
         ArrayList<Nehnutelnost> nehnutelnosti = strom.vyhladaj(pridavana.getVlavoDoleX(), pridavana.getVlavoDoleY(),
@@ -35,5 +35,25 @@ public class Operacie
             nehnutelnost.skusPridatParcelu(pridavana);
             pridavana.skusPridatNehnutelnost(nehnutelnost);
         }
+    }
+
+    public static void vymazNehnutelnost(QuadStrom<Polygon> strom, double x, double y, double hladanyKluc)
+    {
+        Nehnutelnost vymazana = strom.vymaz(x, y, hladanyKluc, Nehnutelnost.class);
+
+        if (vymazana == null)
+        {
+            return;
+        }
+
+        for (Parcela parcela : vymazana.getParcely())
+        {
+            parcela.skusOdobratNehnutelnost(vymazana);
+        }
+    }
+
+    public static void vymazParcelu(QuadStrom<Polygon> strom, Parcela vymazavana, double x, double y, double hladanyKluc)
+    {
+
     }
 }

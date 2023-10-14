@@ -1,6 +1,7 @@
 package Objekty;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Parcela extends Polygon
 {
@@ -8,8 +9,6 @@ public class Parcela extends Polygon
     private String popis;
     // Zoznam nehnutelnosti, ktore lezia na danej parcele
     private ArrayList<Nehnutelnost> nehnutelnosti;
-
-    public Parcela() {}
 
     public Parcela(int cisloParcely, String popis, Suradnica suradnica1, Suradnica suradnica2)
     {
@@ -29,5 +28,26 @@ public class Parcela extends Polygon
         }
 
         this.nehnutelnosti.add(nehnutelnost);
+    }
+
+    public void skusOdobratNehnutelnost(Nehnutelnost nehnutelnost)
+    {
+        if (!this.prekryva(nehnutelnost))
+        {
+            throw new RuntimeException("Na parcele nelezi dana nehnutelnost!");
+        }
+
+        this.nehnutelnosti.remove(nehnutelnost);
+    }
+
+    public ArrayList<Nehnutelnost> getNehnutelnosti()
+    {
+        return this.nehnutelnosti;
+    }
+
+    @Override
+    public double getUnikatnyKluc()
+    {
+        return this.cisloParcely;
     }
 }

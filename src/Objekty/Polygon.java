@@ -81,4 +81,10 @@ public class Polygon implements IPolygon
     {
         return this.surVpravoHore.getY();
     }
+
+    @Override
+    public double getUnikatnyKluc()
+    {
+        throw new RuntimeException("Trieda Polygon nepodporuje metodu getUnikatnyKluc()!");
+    }
 }
