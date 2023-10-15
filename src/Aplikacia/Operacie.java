@@ -9,6 +9,18 @@ import java.util.ArrayList;
 
 public class Operacie
 {
+    public static void vlozPolygon(QuadStrom<Polygon> strom, Polygon pridavany)
+    {
+        if (pridavany instanceof Nehnutelnost)
+        {
+            Operacie.vlozNehnutelnost(strom, (Nehnutelnost)pridavany);
+        }
+        else
+        {
+            Operacie.vlozParcelu(strom, (Parcela)pridavany);
+        }
+    }
+
     public static void vlozNehnutelnost(QuadStrom<Polygon> strom, Nehnutelnost pridavana)
     {
         strom.vloz(pridavana);

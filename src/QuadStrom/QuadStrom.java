@@ -44,6 +44,16 @@ public class QuadStrom<T extends IPolygon>
 
     public void vloz(T pridavany)
     {
+        //this.vlozOld(pridavany);
+        T vytlaceny = this.vlozPlytko(pridavany);
+        while (vytlaceny != null)
+        {
+            vytlaceny = this.vlozPlytko(vytlaceny);
+        }
+    }
+
+    public void vlozOld(T pridavany)
+    {
         Quad<T> curQuad = this.quad;
 
         while (true)
@@ -79,6 +89,66 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
         }
+    }
+
+    private T vlozPlytko(T pridavany)
+    {
+        Quad<T> curQuad = this.quad;
+        T vytlaceny = null;
+
+        while (true)
+        {
+            if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
+            if (!curQuad.jeRozdeleny() && curQuad.getData().size() > 1)
+            {
+                throw new RuntimeException("Quad nie je rozdeleny a ma viac ako 1 element!");
+            }
+
+            if (!curQuad.jeRozdeleny() && curQuad.getData().size() == 1)
+            {
+                curQuad.rozdel();
+
+                if (vytlaceny != null)
+                {
+                    throw new RuntimeException("Presuvany uz je nastaveny!");
+                }
+
+                vytlaceny = curQuad.getData().remove(0);
+            }
+
+            boolean vPodquade = false;
+            for (Quad<T> podquad : curQuad.getPodQuady())
+            {
+                // Polygon sa moze nachadzat v maximalne 1 podquade
+                if (podquad.leziVnutri(pridavany))
+                {
+                    curQuad = podquad;
+                    vPodquade = true;
+                    break;
+                }
+            }
+
+            // Ziadny podquad nevyhovuje
+            if (!vPodquade)
+            {
+                if (curQuad.leziVnutri(pridavany))
+                {
+                    curQuad.getData().add(pridavany);
+                    break;
+                }
+                else
+                {
+                    throw new RuntimeException("Neplatny vkladany element!");
+                }
+            }
+        }
+
+        return vytlaceny;
     }
 
     // Vyhladavanie podla suradnice
