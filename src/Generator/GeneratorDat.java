@@ -6,7 +6,6 @@ import Objekty.Polygon;
 import Objekty.Suradnica;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.abs;
 
@@ -25,7 +24,18 @@ public class GeneratorDat
     public Random random;
     public String znaky = "abcdefghijklmnopqrstuvwxyz";
 
+    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString)
+    {
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString);
+    }
+
     public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, long seed)
+    {
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString);
+        this.random.setSeed(seed);
+    }
+
+    private void nastavPremenne(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString)
     {
         this.curSupisneCislo = startSupisneCislo;
         this.curCisloParcely = startCisloParcely;
@@ -37,20 +47,12 @@ public class GeneratorDat
 
         this.dlzkaString = dlzkaString;
         this.random = new Random();
-        this.random.setSeed(seed);
     }
 
     public Polygon getPolygon()
     {
         int nahoda = abs(random.nextInt() % 2);
-        if (nahoda == 0)
-        {
-            return this.getNehnutelnost();
-        }
-        else
-        {
-            return this.getParcela();
-        }
+        return (nahoda == 0) ? this.getNehnutelnost() : this.getParcela();
     }
 
     public Nehnutelnost getNehnutelnost()
@@ -73,8 +75,8 @@ public class GeneratorDat
 
         String popis = this.randomString();
 
-        Parcela parcela = new Parcela(this.curSupisneCislo, popis, suradnica1, suradnica2);
-        this.curSupisneCislo++;
+        Parcela parcela = new Parcela(this.curCisloParcely, popis, suradnica1, suradnica2);
+        this.curCisloParcely++;
 
         return parcela;
     }

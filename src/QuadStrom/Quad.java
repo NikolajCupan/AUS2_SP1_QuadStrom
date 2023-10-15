@@ -15,6 +15,7 @@ public class Quad<T extends IPolygon> extends Polygon
     private static final int POCET_PODQUADOV = 4;
 
     private final ArrayList<T> data;
+    private final int hlbkaQuadu;
 
     // Quady su v nasledujucom poradi:
     //                                   x  y  i
@@ -24,12 +25,13 @@ public class Quad<T extends IPolygon> extends Polygon
     // -> Juho-zapad    (vlavo dole)  -> -  -  3
     private Quad<T>[] podquady;
 
-    public Quad(Suradnica surVlavoDole, Suradnica surVpravoHore)
+    public Quad(Suradnica surVlavoDole, Suradnica surVpravoHore, int hlbkaQuadu)
     {
         this.surVlavoDole = surVlavoDole;
         this.surVpravoHore = surVpravoHore;
 
         this.data = new ArrayList<>();
+        this.hlbkaQuadu = hlbkaQuadu;
         this.podquady = new Quad[POCET_PODQUADOV];
     }
 
@@ -52,19 +54,19 @@ public class Quad<T extends IPolygon> extends Polygon
 
         Suradnica SZvlavoDole = new Suradnica(this.surVlavoDole.getX(), stredY);
         Suradnica SZvpravoHore = new Suradnica(stredX, this.surVpravoHore.getY());
-        this.podquady[Konstanty.SZ] = new Quad<T>(SZvlavoDole, SZvpravoHore);
+        this.podquady[Konstanty.SZ] = new Quad<T>(SZvlavoDole, SZvpravoHore, this.hlbkaQuadu + 1);
 
         Suradnica SVvlavoDole = new Suradnica(stredX, stredY);
         Suradnica SVvpravoHore = new Suradnica(this.surVpravoHore.getX(), this.surVpravoHore.getY());
-        this.podquady[Konstanty.SV] = new Quad<T>(SVvlavoDole, SVvpravoHore);
+        this.podquady[Konstanty.SV] = new Quad<T>(SVvlavoDole, SVvpravoHore, this.hlbkaQuadu + 1);
 
         Suradnica JVvlavoDole = new Suradnica(stredX, this.surVlavoDole.getY());
         Suradnica JVvpravoHore = new Suradnica(this.surVpravoHore.getX(), stredY);
-        this.podquady[Konstanty.JV] = new Quad<T>(JVvlavoDole, JVvpravoHore);
+        this.podquady[Konstanty.JV] = new Quad<T>(JVvlavoDole, JVvpravoHore, this.hlbkaQuadu + 1);
 
         Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
-        this.podquady[Konstanty.JZ] = new Quad<T>(JZvlavoDole, JZvpravoHore);
+        this.podquady[Konstanty.JZ] = new Quad<T>(JZvlavoDole, JZvpravoHore, this.hlbkaQuadu + 1);
     }
 
     public void vymazPodquady()
@@ -101,5 +103,10 @@ public class Quad<T extends IPolygon> extends Polygon
     public ArrayList<T> getData()
     {
         return this.data;
+    }
+
+    public int getHlbkaQuady()
+    {
+        return this.hlbkaQuadu;
     }
 }

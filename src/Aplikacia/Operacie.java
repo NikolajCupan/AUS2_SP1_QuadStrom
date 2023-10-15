@@ -83,13 +83,21 @@ public class Operacie
 
     public static void skontrolujStrukturu(QuadStrom<Polygon> strom)
     {
-        Stack<Quad<Polygon>> zasobnik = new Stack<Quad<Polygon>>();
+        Stack<Quad<Polygon>> zasobnik = new Stack<>();
         zasobnik.push(strom.getQuad());
 
-        int spracovane = 0;
+        int spracovaneElementy = 0;
+        int maxHlbka = -1;
+
         while (!zasobnik.isEmpty())
         {
             Quad<Polygon> curQuad = zasobnik.pop();
+
+            int hlbka = curQuad.getHlbkaQuady();
+            if (hlbka > maxHlbka)
+            {
+                maxHlbka = hlbka;
+            }
 
             if (curQuad.jeRozdeleny())
             {
@@ -99,18 +107,18 @@ public class Operacie
                 }
             }
 
-            System.out.println("{" + curQuad.getVlavoDoleX() + ", " + curQuad.getVlavoDoleY() + "}, {" + curQuad.getVpravoHoreX() + ", " + curQuad.getVpravoHoreY() + "}");
+            Operacie.vypis(hlbka,"{" + curQuad.getVlavoDoleX() + ", " + curQuad.getVlavoDoleY() + "}, {" + curQuad.getVpravoHoreX() + ", " + curQuad.getVpravoHoreY() + "}", false);
             if (curQuad.getData().isEmpty())
             {
-                System.out.println("Quad je prazdny!");
+                Operacie.vypis(hlbka, "Quad je prazdny!", true);
             }
 
             for (Polygon polygon : curQuad.getData())
             {
-                spracovane++;
+                spracovaneElementy++;
                 if (curQuad.leziVnutri(polygon))
                 {
-                    System.out.println("OK: {" + polygon.getVlavoDoleX() + ", " + polygon.getVlavoDoleY() + "}, {" + polygon.getVpravoHoreX() + ", " + polygon.getVpravoHoreY() + "}");
+                    Operacie.vypis(hlbka, "OK: {" + polygon.getVlavoDoleX() + ", " + polygon.getVlavoDoleY() + "}, {" + polygon.getVpravoHoreX() + ", " + polygon.getVpravoHoreY() + "}", true);
                 }
                 else
                 {
@@ -120,13 +128,30 @@ public class Operacie
         }
 
         int pocet = strom.getPocetElementov();
-        if (pocet == spracovane)
+        if (pocet == spracovaneElementy)
         {
-            System.out.println("OK: " + pocet + " = " + spracovane);
+            System.out.println("OK: " + pocet + " = " + spracovaneElementy);
         }
         else
         {
             throw new RuntimeException("Chyba!");
         }
+
+        System.out.println("Maximalna hlbka v strome: " + maxHlbka);
+    }
+
+    private static void vypis(int hlbka, String text, boolean medzera)
+    {
+        for (int i = 0; i < hlbka * 5; i++)
+        {
+            System.out.print(' ');
+        }
+
+        if (medzera)
+        {
+            System.out.print("-> ");
+        }
+
+        System.out.println(hlbka + ":   " + text);
     }
 }

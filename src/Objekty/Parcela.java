@@ -1,7 +1,6 @@
 package Objekty;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Parcela extends Polygon
 {

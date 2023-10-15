@@ -10,13 +10,14 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
+    private static final int MAX_HLBKA = 10;
     private Quad<T> quad;
 
     public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
         Suradnica suradnica1 = new Suradnica(vlavoDoleX, vlavoDoleY);
         Suradnica suradnica2 = new Suradnica(vpravoHoreX, vpravoHoreY);
-        this.quad = new Quad<T>(suradnica1, suradnica2);
+        this.quad = new Quad<T>(suradnica1, suradnica2, 0);
     }
 
     public int getPocetElementov()
@@ -54,6 +55,12 @@ public class QuadStrom<T extends IPolygon>
 
         while (true)
         {
+            if (curQuad.getHlbkaQuady() >= MAX_HLBKA)
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
             if (!curQuad.jeRozdeleny())
             {
                 curQuad.rozdel();
@@ -93,6 +100,12 @@ public class QuadStrom<T extends IPolygon>
 
         while (true)
         {
+            if (curQuad.getHlbkaQuady() >= MAX_HLBKA)
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
             if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
             {
                 // Nie je nutne ist nizsie
@@ -208,7 +221,7 @@ public class QuadStrom<T extends IPolygon>
     {
         Polygon prehladavanaOblast = new Polygon();
         prehladavanaOblast.nastavSuradnice(new Suradnica(vlavoDoleX, vlavoDoleY),
-                                new Suradnica(vpravoHoreX, vpravoHoreY));
+                                           new Suradnica(vpravoHoreX, vpravoHoreY));
 
         ArrayList<T> najdene = new ArrayList<>();
         Stack<Quad<T>> zasobnik = new Stack<>();
