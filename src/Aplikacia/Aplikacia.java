@@ -23,22 +23,27 @@ public class Aplikacia
 
     public void vykonavaj()
     {
-//        GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10, 1250);
-//
-//        for (int i = 0; i < 20; i++)
-//        {
-//            Polygon p = g.getPolygon();
-//            Operacie.vlozPolygon(this.strom, p);
-//
-//            if (i % 1000 == 0)
-//            {
-//                System.out.println(i);
-//            }
-//        }
-        for (int i = 0; i < 25000; i++)
+        /*
+        GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10, 1250);
+
+        for (int i = 0; i < 20; i++)
         {
-            Operacie.vlozNehnutelnost(this.strom, new Nehnutelnost(1, "a", new Suradnica(-100, 100), new Suradnica(-99.99, 99.99)));
+            Polygon p = g.getPolygon();
+            Operacie.vlozPolygon(this.strom, p);
+
+            if (i % 1000 == 0)
+            {
+                System.out.println(i);
+            }
         }
+        */
+
+        Nehnutelnost n1 = new Nehnutelnost(1, "abc", new Suradnica(-99, 1), new Suradnica(-1, 99));
+        Nehnutelnost n2 = new Nehnutelnost(1, "abc", new Suradnica(-99, 1), new Suradnica(-1, 99));
+        //Nehnutelnost n2 = new Nehnutelnost(1, "abc", new Suradnica(-74, 51), new Suradnica(-51, 74));
+
+        this.strom.vloz(n1);
+        this.strom.vloz(n2);
 
         int h = this.strom.getPocetElementov();
         System.out.println("Pocet elementov: " + h);

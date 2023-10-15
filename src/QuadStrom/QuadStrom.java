@@ -44,12 +44,7 @@ public class QuadStrom<T extends IPolygon>
 
     public void vloz(T pridavany)
     {
-        //this.vlozOld(pridavany);
-        T vytlaceny = this.vlozPlytko(pridavany);
-        while (vytlaceny != null)
-        {
-            vytlaceny = this.vlozPlytko(vytlaceny);
-        }
+        this.vlozPlytko(pridavany);
     }
 
     public void vlozOld(T pridavany)
@@ -91,15 +86,15 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    private T vlozPlytko(T pridavany)
+    private void vlozPlytko(T pridavany)
     {
         Quad<T> curQuad = this.quad;
-        T vytlaceny = null;
 
         while (true)
         {
             if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
             {
+                // Nie je nutne ist nizsie
                 curQuad.getData().add(pridavany);
                 break;
             }
@@ -109,16 +104,13 @@ public class QuadStrom<T extends IPolygon>
                 throw new RuntimeException("Quad nie je rozdeleny a ma viac ako 1 element!");
             }
 
+            boolean doPodquadu = true;
             if (!curQuad.jeRozdeleny() && curQuad.getData().size() == 1)
             {
                 curQuad.rozdel();
 
-                if (vytlaceny != null)
-                {
-                    throw new RuntimeException("Presuvany uz je nastaveny!");
-                }
-
-                vytlaceny = curQuad.getData().remove(0);
+                // Vytlaceny element hned vlozim
+                doPodquadu = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
             }
 
             boolean vPodquade = false;
@@ -138,6 +130,12 @@ public class QuadStrom<T extends IPolygon>
             {
                 if (curQuad.leziVnutri(pridavany))
                 {
+                    // Ak nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
+                    if (!doPodquadu)
+                    {
+                        curQuad.vymazPodquady();
+                    }
+
                     curQuad.getData().add(pridavany);
                     break;
                 }
@@ -147,8 +145,25 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
         }
+    }
 
-        return vytlaceny;
+    // True  -> element bol vlozeny do podquadu
+    // False -> element bol vlozeny do quadu
+    private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
+    {
+        // Quad bol rozdeleny pred zavolanim tejto metody
+        for (Quad<T> podQuad : quad.getPodQuady())
+        {
+            if (podQuad.leziVnutri(vytlaceny))
+            {
+                podQuad.getData().add(vytlaceny);
+                return true;
+            }
+        }
+
+        // Vytlaceny element sa nezmesti do ziadneho podquadu
+        quad.getData().add(vytlaceny);
+        return false;
     }
 
     // Vyhladavanie podla suradnice

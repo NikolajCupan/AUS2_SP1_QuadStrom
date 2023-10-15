@@ -22,7 +22,7 @@ public class Quad<T extends IPolygon> extends Polygon
     // -> Severo-vychod (vpravo hore) -> +  +  1
     // -> Juho-vychod   (vpravo dole) -> +  -  2
     // -> Juho-zapad    (vlavo dole)  -> -  -  3
-    private final Quad<T>[] podquady;
+    private Quad<T>[] podquady;
 
     public Quad(Suradnica surVlavoDole, Suradnica surVpravoHore)
     {
@@ -65,6 +65,19 @@ public class Quad<T extends IPolygon> extends Polygon
         Suradnica JZvlavoDole = new Suradnica(this.surVlavoDole.getX(), this.surVlavoDole.getY());
         Suradnica JZvpravoHore = new Suradnica(stredX, stredY);
         this.podquady[Konstanty.JZ] = new Quad<T>(JZvlavoDole, JZvpravoHore);
+    }
+
+    public void vymazPodquady()
+    {
+        for (Quad<T> podquad : this.podquady)
+        {
+            if (!podquad.getData().isEmpty() || podquad.jeRozdeleny())
+            {
+                throw new RuntimeException("Nie je mozne zmazat quad, ktory obsahuje data!");
+            }
+        }
+
+        this.podquady = new Quad[POCET_PODQUADOV];
     }
 
     public boolean jeRozdeleny()
