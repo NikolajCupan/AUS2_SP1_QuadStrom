@@ -4,8 +4,10 @@ import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 import Objekty.Polygon;
 import QuadStrom.QuadStrom;
+import QuadStrom.Quad;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Operacie
 {
@@ -76,6 +78,55 @@ public class Operacie
         for (Nehnutelnost nehnutelnosta : vymazana.getNehnutelnosti())
         {
             nehnutelnosta.skusOdobratParcelu(vymazana);
+        }
+    }
+
+    public static void skontrolujStrukturu(QuadStrom<Polygon> strom)
+    {
+        Stack<Quad<Polygon>> zasobnik = new Stack<Quad<Polygon>>();
+        zasobnik.push(strom.getQuad());
+
+        int spracovane = 0;
+        while (!zasobnik.isEmpty())
+        {
+            Quad<Polygon> curQuad = zasobnik.pop();
+
+            if (curQuad.jeRozdeleny())
+            {
+                for (Quad<Polygon> podquad : curQuad.getPodQuady())
+                {
+                    zasobnik.push(podquad);
+                }
+            }
+
+            System.out.println("{" + curQuad.getVlavoDoleX() + ", " + curQuad.getVlavoDoleY() + "}, {" + curQuad.getVpravoHoreX() + ", " + curQuad.getVpravoHoreY() + "}");
+            if (curQuad.getData().isEmpty())
+            {
+                System.out.println("Quad je prazdny!");
+            }
+
+            for (Polygon polygon : curQuad.getData())
+            {
+                spracovane++;
+                if (curQuad.leziVnutri(polygon))
+                {
+                    System.out.println("OK: {" + polygon.getVlavoDoleX() + ", " + polygon.getVlavoDoleY() + "}, {" + polygon.getVpravoHoreX() + ", " + polygon.getVpravoHoreY() + "}");
+                }
+                else
+                {
+                    throw new RuntimeException("Chyba!");
+                }
+            }
+        }
+
+        int pocet = strom.getPocetElementov();
+        if (pocet == spracovane)
+        {
+            System.out.println("OK: " + pocet + " = " + spracovane);
+        }
+        else
+        {
+            throw new RuntimeException("Chyba!");
         }
     }
 }

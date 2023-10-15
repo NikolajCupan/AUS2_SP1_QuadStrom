@@ -23,29 +23,18 @@ public class Aplikacia
 
     public void vykonavaj()
     {
-        /*
-        GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10, 1250);
-
-        for (int i = 0; i < 20; i++)
+        for (int j = 1; j <= 1; j++)
         {
-            Polygon p = g.getPolygon();
-            Operacie.vlozPolygon(this.strom, p);
-
-            if (i % 1000 == 0)
+            this.strom = new QuadStrom<Polygon>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
+            System.out.println(j);
+            GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10, j);
+            for (int i = 1; i <= 10000; i++)
             {
-                System.out.println(i);
+                Polygon p = g.getPolygon();
+                Operacie.vlozPolygon(this.strom, p);
             }
         }
-        */
 
-        Nehnutelnost n1 = new Nehnutelnost(1, "abc", new Suradnica(-99, 1), new Suradnica(-1, 99));
-        Nehnutelnost n2 = new Nehnutelnost(1, "abc", new Suradnica(-99, 1), new Suradnica(-1, 99));
-        //Nehnutelnost n2 = new Nehnutelnost(1, "abc", new Suradnica(-74, 51), new Suradnica(-51, 74));
-
-        this.strom.vloz(n1);
-        this.strom.vloz(n2);
-
-        int h = this.strom.getPocetElementov();
-        System.out.println("Pocet elementov: " + h);
+        Operacie.skontrolujStrukturu(this.strom);
     }
 }

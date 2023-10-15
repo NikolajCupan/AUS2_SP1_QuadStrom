@@ -45,6 +45,7 @@ public class QuadStrom<T extends IPolygon>
     public void vloz(T pridavany)
     {
         this.vlozPlytko(pridavany);
+        //this.vlozOld(pridavany);
     }
 
     public void vlozOld(T pridavany)
@@ -99,39 +100,37 @@ public class QuadStrom<T extends IPolygon>
                 break;
             }
 
-            if (!curQuad.jeRozdeleny() && curQuad.getData().size() > 1)
-            {
-                throw new RuntimeException("Quad nie je rozdeleny a ma viac ako 1 element!");
-            }
-
-            boolean doPodquadu = true;
-            if (!curQuad.jeRozdeleny() && curQuad.getData().size() == 1)
+            boolean podquadyPrazdne = false;
+            if (!curQuad.jeRozdeleny())
             {
                 curQuad.rozdel();
 
-                // Vytlaceny element hned vlozim
-                doPodquadu = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
+                if (curQuad.getData().size() == 1)
+                {
+                    // Vytlaceny element hned vlozim
+                    podquadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
+                }
             }
 
-            boolean vPodquade = false;
+            boolean novyVPodquade = false;
             for (Quad<T> podquad : curQuad.getPodQuady())
             {
                 // Polygon sa moze nachadzat v maximalne 1 podquade
                 if (podquad.leziVnutri(pridavany))
                 {
                     curQuad = podquad;
-                    vPodquade = true;
+                    novyVPodquade = true;
                     break;
                 }
             }
 
             // Ziadny podquad nevyhovuje
-            if (!vPodquade)
+            if (!novyVPodquade)
             {
                 if (curQuad.leziVnutri(pridavany))
                 {
                     // Ak nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
-                    if (!doPodquadu)
+                    if (podquadyPrazdne)
                     {
                         curQuad.vymazPodquady();
                     }
@@ -147,8 +146,8 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    // True  -> element bol vlozeny do podquadu
-    // False -> element bol vlozeny do quadu
+    // False -> element bol vlozeny do podquadu
+    // True  -> element bol vlozeny do quadu
     private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
     {
         // Quad bol rozdeleny pred zavolanim tejto metody
@@ -157,13 +156,13 @@ public class QuadStrom<T extends IPolygon>
             if (podQuad.leziVnutri(vytlaceny))
             {
                 podQuad.getData().add(vytlaceny);
-                return true;
+                return false;
             }
         }
 
         // Vytlaceny element sa nezmesti do ziadneho podquadu
         quad.getData().add(vytlaceny);
-        return false;
+        return true;
     }
 
     // Vyhladavanie podla suradnice
@@ -273,5 +272,10 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
         }
+    }
+
+    public Quad<T> getQuad()
+    {
+        return this.quad;
     }
 }
