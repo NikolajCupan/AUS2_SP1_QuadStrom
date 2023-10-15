@@ -20,10 +20,13 @@ public class Aplikacia
         {
             this.strom = new QuadStrom<Polygon>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
             GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10);
-            for (int i = 1; i <= 5000; i++)
+            for (int i = 1; i <= 25000; i++)
             {
                 Polygon p = g.getPolygon();
                 Operacie.vlozPolygon(this.strom, p);
+
+                if (i % 2500 == 0)
+                    System.out.println(i);
             }
         }
 

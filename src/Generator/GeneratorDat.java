@@ -11,6 +11,8 @@ import static java.lang.Math.abs;
 
 public class GeneratorDat
 {
+    public static final double FAKTOR = 100.0;
+
     public int curSupisneCislo;
     public int curCisloParcely;
 
@@ -57,8 +59,9 @@ public class GeneratorDat
 
     public Nehnutelnost getNehnutelnost()
     {
-        Suradnica suradnica1 = new Suradnica(this.randomDouble(this.minX, this.maxX), this.randomDouble(this.minY, this.maxY));
-        Suradnica suradnica2 = new Suradnica(this.randomDouble(this.minX, this.maxX), this.randomDouble(this.minY, this.maxY));
+        Suradnica suradnica1 = new Suradnica(0, 0);
+        Suradnica suradnica2 = new Suradnica(0, 0);
+        this.nastavSuradnice(suradnica1, suradnica2);
 
         String popis = this.randomString();
 
@@ -70,8 +73,9 @@ public class GeneratorDat
 
     public Parcela getParcela()
     {
-        Suradnica suradnica1 = new Suradnica(this.randomDouble(this.minX, this.maxX), this.randomDouble(this.minY, this.maxY));
-        Suradnica suradnica2 = new Suradnica(this.randomDouble(this.minX, this.maxX), this.randomDouble(this.minY, this.maxY));
+        Suradnica suradnica1 = new Suradnica(0, 0);
+        Suradnica suradnica2 = new Suradnica(0, 0);
+        this.nastavSuradnice(suradnica1, suradnica2);
 
         String popis = this.randomString();
 
@@ -79,6 +83,29 @@ public class GeneratorDat
         this.curCisloParcely++;
 
         return parcela;
+    }
+
+    private void nastavSuradnice(Suradnica surVlavoDole, Suradnica surVpravoHore)
+    {
+        double x1 = this.randomDouble(this.minX, this.maxX);
+        double y1 = this.randomDouble(this.minY, this.maxY);
+        double x2 = this.randomDouble(this.minX, this.maxX);
+        double y2 = this.randomDouble(this.minY, this.maxY);
+
+        double absMinX = Math.abs(x1) < Math.abs(x2) ? x1 : x2;
+        double absMinY = Math.abs(y1) < Math.abs(y2) ? y1 : y2;
+
+        double absMaxX = Math.abs(x1) > Math.abs(x2) ? x1 : x2;
+        double absMaxY = Math.abs(y1) > Math.abs(y2) ? y1 : y2;
+
+        surVlavoDole.setX(absMinX);
+        surVlavoDole.setY(absMinY);
+
+        double vpravoHoreX = absMinX + ((absMaxX - absMinX) / FAKTOR);
+        double vpravoHoreY = absMinY + ((absMaxY - absMinY) / FAKTOR);
+
+        surVpravoHore.setX(vpravoHoreX);
+        surVpravoHore.setY(vpravoHoreY);
     }
 
     private double randomDouble(double min, double max)
