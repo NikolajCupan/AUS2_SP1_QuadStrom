@@ -45,12 +45,6 @@ public class QuadStrom<T extends IPolygon>
 
     public void vloz(T pridavany)
     {
-        this.vlozPlytko(pridavany);
-        //this.vlozOld(pridavany);
-    }
-
-    public void vlozOld(T pridavany)
-    {
         Quad<T> curQuad = this.quad;
 
         while (true)
@@ -94,92 +88,8 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    private void vlozPlytko(T pridavany)
-    {
-        Quad<T> curQuad = this.quad;
-
-        while (true)
-        {
-            if (curQuad.getHlbkaQuady() >= MAX_HLBKA)
-            {
-                curQuad.getData().add(pridavany);
-                break;
-            }
-
-            if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
-            {
-                // Nie je nutne ist nizsie
-                curQuad.getData().add(pridavany);
-                break;
-            }
-
-            boolean podquadyPrazdne = false;
-            if (!curQuad.jeRozdeleny())
-            {
-                curQuad.rozdel();
-
-                if (curQuad.getData().size() == 1)
-                {
-                    // Vytlaceny element hned vlozim
-                    podquadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
-                }
-            }
-
-            boolean novyVPodquade = false;
-            for (Quad<T> podquad : curQuad.getPodQuady())
-            {
-                // Polygon sa moze nachadzat v maximalne 1 podquade
-                if (podquad.leziVnutri(pridavany))
-                {
-                    curQuad = podquad;
-                    novyVPodquade = true;
-                    break;
-                }
-            }
-
-            // Ziadny podquad nevyhovuje
-            if (!novyVPodquade)
-            {
-                if (curQuad.leziVnutri(pridavany))
-                {
-                    // Ak nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
-                    if (podquadyPrazdne)
-                    {
-                        curQuad.vymazPodquady();
-                    }
-
-                    curQuad.getData().add(pridavany);
-                    break;
-                }
-                else
-                {
-                    throw new RuntimeException("Neplatny vkladany element!");
-                }
-            }
-        }
-    }
-
-    // False -> element bol vlozeny do podquadu
-    // True  -> element bol vlozeny do quadu
-    private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
-    {
-        // Quad bol rozdeleny pred zavolanim tejto metody
-        for (Quad<T> podQuad : quad.getPodQuady())
-        {
-            if (podQuad.leziVnutri(vytlaceny))
-            {
-                podQuad.getData().add(vytlaceny);
-                return false;
-            }
-        }
-
-        // Vytlaceny element sa nezmesti do ziadneho podquadu
-        quad.getData().add(vytlaceny);
-        return true;
-    }
-
     // Vyhladavanie podla suradnice
-    public <U extends IPolygon> ArrayList<U> vyhladaj(double x, double y, Class<U> typ)
+    public ArrayList<T> vyhladaj(double x, double y)
     {
         ArrayList<T> najdene = new ArrayList<>();
         Quad<T> curQuad = this.quad;
@@ -188,7 +98,7 @@ public class QuadStrom<T extends IPolygon>
         {
             for (T element : curQuad.getData())
             {
-                if (typ.isInstance(element) && element.leziVnutri(x, y))
+                if (element.leziVnutri(x, y))
                 {
                     najdene.add(element);
                 }
@@ -213,11 +123,11 @@ public class QuadStrom<T extends IPolygon>
             }
         }
 
-        return (ArrayList<U>)najdene;
+        return najdene;
     }
 
     // Vyhladavenie podla polygonu
-    public <U extends IPolygon> ArrayList<U> vyhladaj(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, Class<U> typ)
+    public ArrayList<T> vyhladaj(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
         Polygon prehladavanaOblast = new Polygon();
         prehladavanaOblast.nastavSuradnice(new Suradnica(vlavoDoleX, vlavoDoleY),
@@ -232,7 +142,7 @@ public class QuadStrom<T extends IPolygon>
             Quad<T> curQuad = zasobnik.pop();
             for (T element : curQuad.getData())
             {
-                if (typ.isInstance(element) && element.prekryva(prehladavanaOblast))
+                if (element.prekryva(prehladavanaOblast))
                 {
                     najdene.add(element);
                 }
@@ -251,23 +161,23 @@ public class QuadStrom<T extends IPolygon>
             }
         }
 
-        return (ArrayList<U>)najdene;
+        return najdene;
     }
 
-    public <U extends IPolygon> U vymaz(double x, double y, double hladanyKluc, Class<U> typ)
+    // Vrati zmazany element
+    // V pripade ak sa nenasiel, tak vrati null
+    public T vymaz(double x, double y, double hladanyKluc)
     {
         Quad<T> curQuad = this.quad;
 
         while (true)
         {
-            ArrayList<T> quadData = curQuad.getData();
-
-            for (T element : quadData)
+            for (T element : curQuad.getData())
             {
-                if (typ.isInstance(element) && element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
+                if (element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
                 {
-                    quadData.remove(element);
-                    return (U)element;
+                    curQuad.getData().remove(element);
+                    return element;
                 }
             }
 

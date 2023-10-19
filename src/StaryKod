@@ -1,0 +1,83 @@
+    private void vlozPlytko(T pridavany)
+    {
+        Quad<T> curQuad = this.quad;
+
+        while (true)
+        {
+            if (curQuad.getHlbkaQuady() >= MAX_HLBKA)
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
+            if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
+            {
+                // Nie je nutne ist nizsie
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
+            boolean podquadyPrazdne = false;
+            if (!curQuad.jeRozdeleny())
+            {
+                curQuad.rozdel();
+
+                if (curQuad.getData().size() == 1)
+                {
+                    // Vytlaceny element hned vlozim
+                    podquadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
+                }
+            }
+
+            boolean novyVPodquade = false;
+            for (Quad<T> podquad : curQuad.getPodQuady())
+            {
+                // Polygon sa moze nachadzat v maximalne 1 podquade
+                if (podquad.leziVnutri(pridavany))
+                {
+                    curQuad = podquad;
+                    novyVPodquade = true;
+                    break;
+                }
+            }
+
+            // Ziadny podquad nevyhovuje
+            if (!novyVPodquade)
+            {
+                if (curQuad.leziVnutri(pridavany))
+                {
+                    // Ak nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
+                    if (podquadyPrazdne)
+                    {
+                        curQuad.vymazPodquady();
+                    }
+
+                    curQuad.getData().add(pridavany);
+                    break;
+                }
+                else
+                {
+                    throw new RuntimeException("Neplatny vkladany element!");
+                }
+            }
+        }
+    }
+
+    // False -> element bol vlozeny do podquadu
+    // True  -> element bol vlozeny do quadu
+    private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
+    {
+        // Quad bol rozdeleny pred zavolanim tejto metody
+        for (Quad<T> podQuad : quad.getPodQuady())
+        {
+            if (podQuad.leziVnutri(vytlaceny))
+            {
+                podQuad.getData().add(vytlaceny);
+                return false;
+            }
+        }
+
+        // Vytlaceny element sa nezmesti do ziadneho podquadu
+        quad.getData().add(vytlaceny);
+        return true;
+    }
