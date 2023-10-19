@@ -197,7 +197,7 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    public Quad<T> getQuad()
+    public Quad<T> getRootQuad()
     {
         return this.quad;
     }

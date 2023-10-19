@@ -3,33 +3,26 @@ package Aplikacia;
 import Generator.GeneratorDat;
 import Objekty.Polygon;
 import Ostatne.Konstanty;
-import QuadStrom.QuadStrom;
 
 public class Aplikacia
 {
-    private QuadStrom<Polygon> strom;
+    private final Logika logika;
 
     public Aplikacia()
     {
-        this.strom = new QuadStrom<Polygon>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
+        this.logika = new Logika(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
     }
 
     public void vykonavaj()
     {
-        for (int j = 1; j <= 1; j++)
-        {
-            this.strom = new QuadStrom<Polygon>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
-            GeneratorDat g = new GeneratorDat(1, 1, -100, -100, 100, 100, 10);
-            for (int i = 1; i <= 25000; i++)
-            {
-                Polygon p = g.getPolygon();
-                Operacie.vlozPolygon(this.strom, p);
+        GeneratorDat generatorDat = new GeneratorDat(1, 1, -100, -100, 100, 100, 10, 10000);
 
-                if (i % 2500 == 0)
-                    System.out.println(i);
-            }
+        for (int i = 1; i <= 50000; i++)
+        {
+            Polygon polygon = generatorDat.getPolygon();
+            this.logika.vlozPolygon(polygon);
         }
 
-        Operacie.skontrolujStrukturu(this.strom);
+        this.logika.kontrola();
     }
 }

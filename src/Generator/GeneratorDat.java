@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 
 public class GeneratorDat
 {
-    public static final double FAKTOR = 100.0;
+    public double faktorZmensenia;
 
     public int curSupisneCislo;
     public int curCisloParcely;
@@ -26,19 +26,21 @@ public class GeneratorDat
     public Random random;
     public String znaky = "abcdefghijklmnopqrstuvwxyz";
 
-    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString)
+    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia)
     {
-        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString);
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
     }
 
-    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, long seed)
+    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia, long seed)
     {
-        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString);
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
         this.random.setSeed(seed);
     }
 
-    private void nastavPremenne(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString)
+    private void nastavPremenne(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktor)
     {
+        this.faktorZmensenia = faktor;
+
         this.curSupisneCislo = startSupisneCislo;
         this.curCisloParcely = startCisloParcely;
 
@@ -53,15 +55,14 @@ public class GeneratorDat
 
     public Polygon getPolygon()
     {
-        int nahoda = abs(random.nextInt() % 2);
-        return (nahoda == 0) ? this.getNehnutelnost() : this.getParcela();
+        return (this.random.nextBoolean()) ? this.getNehnutelnost() : this.getParcela();
     }
 
     public Nehnutelnost getNehnutelnost()
     {
         Suradnica suradnica1 = new Suradnica(0, 0);
         Suradnica suradnica2 = new Suradnica(0, 0);
-        this.nastavSuradnice(suradnica1, suradnica2);
+        this.vygenerujSuradnice(suradnica1, suradnica2);
 
         String popis = this.randomString();
 
@@ -75,7 +76,7 @@ public class GeneratorDat
     {
         Suradnica suradnica1 = new Suradnica(0, 0);
         Suradnica suradnica2 = new Suradnica(0, 0);
-        this.nastavSuradnice(suradnica1, suradnica2);
+        this.vygenerujSuradnice(suradnica1, suradnica2);
 
         String popis = this.randomString();
 
@@ -85,27 +86,42 @@ public class GeneratorDat
         return parcela;
     }
 
-    private void nastavSuradnice(Suradnica surVlavoDole, Suradnica surVpravoHore)
+    private void vygenerujSuradnice(Suradnica surVlavoDole, Suradnica surVpravoHore)
     {
         double x1 = this.randomDouble(this.minX, this.maxX);
         double y1 = this.randomDouble(this.minY, this.maxY);
         double x2 = this.randomDouble(this.minX, this.maxX);
         double y2 = this.randomDouble(this.minY, this.maxY);
 
-        double absMinX = Math.abs(x1) < Math.abs(x2) ? x1 : x2;
-        double absMinY = Math.abs(y1) < Math.abs(y2) ? y1 : y2;
+        double minX = Math.min(x1, x2);
+        double minY = Math.min(y1, y2);
 
-        double absMaxX = Math.abs(x1) > Math.abs(x2) ? x1 : x2;
-        double absMaxY = Math.abs(y1) > Math.abs(y2) ? y1 : y2;
+        double maxX = Math.max(x1, x2);
+        double maxY = Math.max(y1, y2);
 
-        surVlavoDole.setX(absMinX);
-        surVlavoDole.setY(absMinY);
+        boolean zmensiDolava = this.random.nextBoolean();
 
-        double vpravoHoreX = absMinX + ((absMaxX - absMinX) / FAKTOR);
-        double vpravoHoreY = absMinY + ((absMaxY - absMinY) / FAKTOR);
+        double vzdialenostX = abs(maxX - minX);
+        double vzdialenostY = abs(maxY - minY);
+        vzdialenostX /= this.faktorZmensenia;
+        vzdialenostY /= this.faktorZmensenia;
 
-        surVpravoHore.setX(vpravoHoreX);
-        surVpravoHore.setY(vpravoHoreY);
+        if (zmensiDolava)
+        {
+            maxX = minX + vzdialenostX;
+            maxY = minY + vzdialenostY;
+        }
+        else
+        {
+            minX = maxX - vzdialenostX;
+            minY = maxY - vzdialenostY;
+        }
+
+        surVlavoDole.setX(minX);
+        surVlavoDole.setY(minY);
+
+        surVpravoHore.setX(maxX);
+        surVpravoHore.setY(maxY);
     }
 
     private double randomDouble(double min, double max)
