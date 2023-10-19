@@ -15,13 +15,13 @@ public class Logika
 
     public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
-        this.inicializujStromy();
+        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
     }
 
-    public void inicializujStromy()
+    public void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
-        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
-        this.parcely = new QuadStrom<Parcela>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
+        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, Konstanty.DEFAULT_MAX_HLBKA);
+        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, Konstanty.DEFAULT_MAX_HLBKA);
     }
 
     public void vlozPolygon(Polygon pridavany)
@@ -89,17 +89,5 @@ public class Logika
         {
             nehnutelnosta.skusOdobratParcelu(vymazana);
         }
-    }
-
-    public void kontrola()
-    {
-        KontrolaStromu.prilisPlytko(this.nehnutelnosti);
-        KontrolaStromu.prilisPlytko(this.parcely);
-
-        KontrolaStromu.prazdnePodstromy(this.nehnutelnosti);
-        KontrolaStromu.prazdnePodstromy(this.parcely);
-
-        KontrolaStromu.kontrolaStromu(this.nehnutelnosti, "Nehnutelnosti.txt");
-        KontrolaStromu.kontrolaStromu(this.parcely, "Parcely.txt");
     }
 }

@@ -9,29 +9,29 @@ import java.util.Random;
 
 import static java.lang.Math.abs;
 
-public class GeneratorDat
+public class Generator
 {
-    public double faktorZmensenia;
+    private double faktorZmensenia;
 
-    public int curSupisneCislo;
-    public int curCisloParcely;
+    private int curSupisneCislo;
+    private int curCisloParcely;
 
-    public double minX;
-    public double minY;
-    public double maxX;
-    public double maxY;
+    private double minX;
+    private double minY;
+    private double maxX;
+    private double maxY;
 
-    public int dlzkaString;
+    private int dlzkaString;
 
-    public Random random;
-    public String znaky = "abcdefghijklmnopqrstuvwxyz";
+    private Random random;
+    private String znaky = "abcdefghijklmnopqrstuvwxyz";
 
-    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia)
+    public Generator(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia)
     {
         this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
     }
 
-    public GeneratorDat(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia, long seed)
+    public Generator(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia, long seed)
     {
         this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
         this.random.setSeed(seed);
@@ -124,10 +124,14 @@ public class GeneratorDat
         surVpravoHore.setY(maxY);
     }
 
-    private double randomDouble(double min, double max)
+    public double randomDouble(double min, double max)
     {
-        double nahoda = abs(random.nextDouble() % 2);
-        return min + nahoda * (max - min);
+        return min + (max - min) * this.random.nextDouble();
+    }
+
+    public int randomInt(int min, int max)
+    {
+        return min + this.random.nextInt(max - min + 1);
     }
 
     private String randomString()
@@ -136,7 +140,7 @@ public class GeneratorDat
 
         for (int i = 0; i < dlzkaString; i++)
         {
-            int index = random.nextInt(znaky.length());
+            int index = this.random.nextInt(znaky.length());
             char randomChar = znaky.charAt(index);
             vysledok.append(randomChar);
         }
