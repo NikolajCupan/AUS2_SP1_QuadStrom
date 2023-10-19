@@ -10,10 +10,15 @@ import java.util.ArrayList;
 
 public class Logika
 {
-    private final QuadStrom<Nehnutelnost> nehnutelnosti;
-    private final QuadStrom<Parcela> parcely;
+    private QuadStrom<Nehnutelnost> nehnutelnosti;
+    private QuadStrom<Parcela> parcely;
 
     public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        this.inicializujStromy();
+    }
+
+    public void inicializujStromy()
     {
         this.nehnutelnosti = new QuadStrom<Nehnutelnost>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
         this.parcely = new QuadStrom<Parcela>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
@@ -88,7 +93,13 @@ public class Logika
 
     public void kontrola()
     {
-        Tester.skontrolujStrukturu(this.nehnutelnosti, "Nehnutelnosti.txt");
-        Tester.skontrolujStrukturu(this.parcely, "Parcely.txt");
+        KontrolaStromu.prilisPlytko(this.nehnutelnosti);
+        KontrolaStromu.prilisPlytko(this.parcely);
+
+        KontrolaStromu.prazdnePodstromy(this.nehnutelnosti);
+        KontrolaStromu.prazdnePodstromy(this.parcely);
+
+        KontrolaStromu.kontrolaStromu(this.nehnutelnosti, "Nehnutelnosti.txt");
+        KontrolaStromu.kontrolaStromu(this.parcely, "Parcely.txt");
     }
 }

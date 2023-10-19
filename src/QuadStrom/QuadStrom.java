@@ -10,7 +10,9 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
-    private int maxHlbka;
+    private static final String TYP_VKLADANIA = "plytko";
+
+    private final int maxHlbka;
     private final Quad<T> quad;
 
     public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
@@ -45,6 +47,18 @@ public class QuadStrom<T extends IPolygon>
     }
 
     public void vloz(T pridavany)
+    {
+        if (TYP_VKLADANIA == "hlboko")
+        {
+            this.vlozHlboko(pridavany);
+        }
+        else
+        {
+            this.vlozPlytko(pridavany);
+        }
+    }
+
+    public void vlozHlboko(T pridavany)
     {
         Quad<T> curQuad = this.quad;
 
@@ -87,6 +101,99 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
         }
+    }
+
+    public void vlozPlytko(T pridavany)
+    {
+        Quad<T> curQuad = this.quad;
+
+        while (true)
+        {
+            if (curQuad.getHlbkaQuadu() >= this.maxHlbka)
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
+            // Dostal som sa na list, ktory je prazdny
+            // Nie je nutne ist hlbsie
+            if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+
+            boolean podquadyPrazdne = true;
+            if (curQuad.jeRozdeleny())
+            {
+                podquadyPrazdne = false;
+            }
+
+            // Dostal som sa na list, ktory nie je prazdny
+            if (!curQuad.jeRozdeleny())
+            {
+                curQuad.rozdel();
+
+                // Ak sa v liste nachadza iba 1 element, tak je mozne,
+                // ze tento bude mozne vlozit hlbsie
+                if (curQuad.getData().size() == 1)
+                {
+                    // Vytlaceny element hned vlozim
+                    podquadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
+                }
+            }
+
+            boolean novyVPodquade = false;
+            for (Quad<T> podquad : curQuad.getPodQuady())
+            {
+                // Polygon sa moze nachadzat v maximalne 1 podquade
+                if (podquad.leziVnutri(pridavany))
+                {
+                    curQuad = podquad;
+                    novyVPodquade = true;
+                    break;
+                }
+            }
+
+            // Ziadny podquad nevyhovuje
+            if (!novyVPodquade)
+            {
+                if (curQuad.leziVnutri(pridavany))
+                {
+                    // Ak vytlaceny element nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
+                    if (podquadyPrazdne)
+                    {
+                        curQuad.vymazPodquady();
+                    }
+
+                    curQuad.getData().add(pridavany);
+                    break;
+                }
+                else
+                {
+                    throw new RuntimeException("Neplatny vkladany element!");
+                }
+            }
+        }
+    }
+
+    // False -> element bol vlozeny do podquadu
+    // True  -> element bol vlozeny do quadu
+    private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
+    {
+        // Quad bol rozdeleny pred zavolanim tejto metody
+        for (Quad<T> podQuad : quad.getPodQuady())
+        {
+            if (podQuad.leziVnutri(vytlaceny))
+            {
+                podQuad.getData().add(vytlaceny);
+                return false;
+            }
+        }
+
+        // Vytlaceny element sa nezmesti do ziadneho podquadu
+        quad.getData().add(vytlaceny);
+        return true;
     }
 
     // Vyhladavanie podla suradnice
@@ -201,5 +308,10 @@ public class QuadStrom<T extends IPolygon>
     public Quad<T> getRootQuad()
     {
         return this.quad;
+    }
+
+    public int getMaxHlbka()
+    {
+        return this.maxHlbka;
     }
 }

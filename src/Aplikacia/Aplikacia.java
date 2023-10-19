@@ -15,19 +15,27 @@ public class Aplikacia
 
     public void vykonavaj()
     {
-        GeneratorDat generatorDat = new GeneratorDat(1, 1, Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, 10, 10);
-
-        for (int i = 1; i <= 20000; i++)
+        for (int j = 157; j <= 10000; j++)
         {
-            Polygon polygon = generatorDat.getPolygon();
-            this.logika.vlozPolygon(polygon);
+            System.out.println(j + ".");
+            GeneratorDat generatorDat = new GeneratorDat(1, 1, Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, 10, j, j);
 
-            if (i % 1000 == 0)
+            for (int i = 1; i <= 10000; i++)
             {
-                System.out.println(i + ".");
-            }
-        }
+                Polygon polygon = generatorDat.getPolygon();
+                this.logika.vlozPolygon(polygon);
 
-        this.logika.kontrola();
+                /*
+                if (i % 1000 == 0)
+                {
+                    System.out.println("     " + i + ".");
+                }
+                */
+            }
+
+            this.logika.kontrola();
+            this.logika.inicializujStromy();
+            System.gc();
+        }
     }
 }
