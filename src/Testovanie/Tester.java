@@ -11,10 +11,10 @@ import java.util.Random;
 
 public class Tester
 {
-    private static final int ZACIATOCNA_VELKOST = 2500;
-    private static final int PRST_VLOZ = 50;
-    private static final int PRST_VYMAZ = 50;
-    private static final int POCET_OPERACII = 100000;
+    private static final int ZACIATOCNA_VELKOST = 10000;
+    private static final int PRST_VLOZ = 40;
+    private static final int PRST_VYMAZ = 60;
+    private static final int POCET_OPERACII = 5000;
 
     private static final double X_GEN_MIN = -1000;
     private static final double Y_GEN_MIN = -1000;

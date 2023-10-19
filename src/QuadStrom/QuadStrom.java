@@ -288,7 +288,7 @@ public class QuadStrom<T extends IPolygon>
                 if (element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
                 {
                     curQuad.getData().remove(element);
-                    this.vymazPrazdnePodquady(cesta);
+                    this.vymazPrazdne(cesta);
                     return element;
                 }
             }
@@ -305,6 +305,66 @@ public class QuadStrom<T extends IPolygon>
                     curQuad = podQuad;
                     break;
                 }
+            }
+        }
+    }
+
+    private void vymazPrazdne(Stack<Quad<T>> cesta)
+    {
+        Quad<T> dno = cesta.pop();
+        if (dno.jeRozdeleny() || dno.getData().size() > 1 || dno.getHlbkaQuadu() == 0)
+        {
+            return;
+        }
+
+        while (!cesta.isEmpty())
+        {
+            Quad<T> vyssi = cesta.pop();
+
+            // Ak je ktorykolvek podquad rozdeleny, tak nie je mozne mazat
+            for (Quad<T> podQuad : vyssi.getPodQuady())
+            {
+                if (podQuad.jeRozdeleny())
+                {
+                    return;
+                }
+            }
+
+            // Pocet elementov, ktore sa nachadzaju v podquadoch
+            int pocetElementovDolne = 0;
+            for (Quad<T> podQuad : vyssi.getPodQuady())
+            {
+                pocetElementovDolne += podQuad.getData().size();
+            }
+
+            // Ak je tento vacsi ako 1, tak nie je mozne mazat
+            if (pocetElementovDolne > 1)
+            {
+                return;
+            }
+
+            // Rovnako nie je mozne mazat ak vyssi quad obsahuje data a zaroven existuje element aj v podquadoch
+            if (!vyssi.getData().isEmpty() && pocetElementovDolne == 1)
+            {
+                return;
+            }
+
+            // Ak som sa dostal az sem, tak mozem vykonat mazanie
+            // V podquadoch sa moze nachadzat prave 1 alebo 0 elementov
+            T vytlacenyElement = null;
+            for (Quad<T> podQuad : vyssi.getPodQuady())
+            {
+                if (!podQuad.getData().isEmpty())
+                {
+                    vytlacenyElement = podQuad.getData().remove(0);
+                    break;
+                }
+            }
+
+            vyssi.vymazPodquady();
+            if (vytlacenyElement != null)
+            {
+                vyssi.getData().add(vytlacenyElement);
             }
         }
     }
