@@ -105,7 +105,7 @@ public class Quad<T extends IPolygon> extends Polygon
         return this.data;
     }
 
-    public int getHlbkaQuady()
+    public int getHlbkaQuadu()
     {
         return this.hlbkaQuadu;
     }

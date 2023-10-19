@@ -19,7 +19,7 @@ public class Polygon implements IPolygon
         this.surVpravoHore.setY(Math.max(suradnica1.getY(), suradnica2.getY()));
     }
 
-    // Metoda vrati true ak sa dana suradnica lezi vo vnutri polygonu
+    // Metoda vrati true ak dana suradnica lezi vo vnutri polygonu
     @Override
     public boolean leziVnutri(double x, double y)
     {

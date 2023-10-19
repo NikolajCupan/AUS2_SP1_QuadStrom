@@ -15,8 +15,8 @@ public class Logika
 
     public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
-        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
-        this.parcely = new QuadStrom<Parcela>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
+        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
+        this.parcely = new QuadStrom<Parcela>(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX, Konstanty.DEFAULT_MAX_HLBKA);
     }
 
     public void vlozPolygon(Polygon pridavany)
@@ -88,7 +88,7 @@ public class Logika
 
     public void kontrola()
     {
-        Tester.skontrolujStrukturu(this.nehnutelnosti, "Parcely.txt");
-        Tester.skontrolujStrukturu(this.parcely, "Nehnutelnosti.txt");
+        Tester.skontrolujStrukturu(this.nehnutelnosti, "Nehnutelnosti.txt");
+        Tester.skontrolujStrukturu(this.parcely, "Parcely.txt");
     }
 }

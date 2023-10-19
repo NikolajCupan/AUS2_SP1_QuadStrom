@@ -10,11 +10,12 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
-    private static final int MAX_HLBKA = 10;
-    private Quad<T> quad;
+    private int maxHlbka;
+    private final Quad<T> quad;
 
-    public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
     {
+        this.maxHlbka = maxHlbka;
         Suradnica suradnica1 = new Suradnica(vlavoDoleX, vlavoDoleY);
         Suradnica suradnica2 = new Suradnica(vpravoHoreX, vpravoHoreY);
         this.quad = new Quad<T>(suradnica1, suradnica2, 0);
@@ -49,7 +50,7 @@ public class QuadStrom<T extends IPolygon>
 
         while (true)
         {
-            if (curQuad.getHlbkaQuady() >= MAX_HLBKA)
+            if (curQuad.getHlbkaQuadu() >= this.maxHlbka)
             {
                 curQuad.getData().add(pridavany);
                 break;

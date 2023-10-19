@@ -27,7 +27,7 @@ public class Tester
             {
                 Quad<T> curQuad = zasobnik.pop();
 
-                int curHlbka = curQuad.getHlbkaQuady();
+                int curHlbka = curQuad.getHlbkaQuadu();
                 if (curHlbka > maxHlbka)
                 {
                     maxHlbka = curHlbka;
