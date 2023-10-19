@@ -8,7 +8,7 @@ public class Main
         //Aplikacia aplikacia = new Aplikacia();
         //aplikacia.vykonavaj();
 
-        Tester tester = new Tester();
-        tester.testuj(10);
+        Tester tester = new Tester(200);
+        tester.testuj(100000);
     }
 }

@@ -11,10 +11,10 @@ import java.util.Random;
 
 public class Tester
 {
-    private static final int ZACIATOCNA_VELKOST = 1000;
-    private static final int PRST_VLOZ = 1;
-    private static final int PRST_VYMAZ = 99;
-    private static final int POCET_OPERACII = 10000;
+    private static final int ZACIATOCNA_VELKOST = 5;
+    private static final int PRST_VLOZ = 10;
+    private static final int PRST_VYMAZ = 90;
+    private static final int POCET_OPERACII = 10;
 
     private static final double X_GEN_MIN = -1000;
     private static final double Y_GEN_MIN = -1000;
@@ -54,9 +54,19 @@ public class Tester
             double faktorZmensenia = this.randomDouble(FAKTOR_ZMENSENIA_MIN, FAKTOR_ZMENSENIA_MAX);
 
             long seedReplikacia = this.random.nextLong();
+
+            seedReplikacia = -911912143798717157L;
+
+            if (i == 8250)
+            {
+                int x = 100;
+            }
+
+            System.out.println("Spusta sa replikacia cislo: " + i + ", seed: " + seedReplikacia);
             this.test(minX, minY, maxX, maxY, faktorZmensenia, seedReplikacia);
         }
     }
+
     public void test(double minX, double minY, double maxX, double maxY, double faktorZmensenia, long seedReplikacia)
     {
         Generator generator = new Generator(1, 1, minX, minY, maxX, maxY, 5, faktorZmensenia, seedReplikacia);
@@ -96,6 +106,7 @@ public class Tester
                     index = this.randomInt(0, zoznam.size() - 1);
                 }
 
+                int velkost = strom.getPocetElementov();
                 Nehnutelnost zmazanaZoznam = zoznam.remove(index);
                 double stredX = (zmazanaZoznam.getVlavoDoleX() + zmazanaZoznam.getVpravoHoreX()) / 2;
                 double stredY = (zmazanaZoznam.getVlavoDoleY() + zmazanaZoznam.getVpravoHoreY()) / 2;
@@ -108,8 +119,8 @@ public class Tester
             }
         }
 
-        //KontrolaStromu.prilisPlytko(strom);
-        //KontrolaStromu.prazdnePodstromy(strom);
+        KontrolaStromu.prilisPlytko(strom);
+        KontrolaStromu.prazdnePodstromy(strom);
         KontrolaStromu.kontrolaStromu(strom, "Nehnutelnosti.txt");
     }
 

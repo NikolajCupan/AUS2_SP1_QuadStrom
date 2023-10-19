@@ -277,14 +277,18 @@ public class QuadStrom<T extends IPolygon>
     public T vymaz(double x, double y, double hladanyKluc)
     {
         Quad<T> curQuad = this.quad;
+        Stack<Quad<T>> cesta = new Stack<>();
 
         while (true)
         {
+            cesta.push(curQuad);
+
             for (T element : curQuad.getData())
             {
                 if (element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
                 {
                     curQuad.getData().remove(element);
+                    this.vymazPrazdnePodquady(cesta);
                     return element;
                 }
             }
@@ -302,6 +306,95 @@ public class QuadStrom<T extends IPolygon>
                     break;
                 }
             }
+        }
+    }
+
+    // Po mazani sa zmazu vsetky quady, ktore uz nemusia existovat
+    private void vymazPrazdnePodquady(Stack<Quad<T>> cesta)
+    {
+        Quad<T> spodny = cesta.pop();
+        if (spodny.jeRozdeleny() || spodny.getData().size() > 1 || spodny.getHlbkaQuadu() == 0)
+        {
+            return;
+        }
+
+        T vytlaceny = null;
+        while (true)
+        {
+            Quad<T> vyssi = cesta.pop();
+
+            int pocetPodstrom = 0;
+            if (vytlaceny != null)
+            {
+                pocetPodstrom++;
+            }
+
+            for (Quad<T> podQuad : vyssi.getPodQuady())
+            {
+                if (podQuad.jeRozdeleny())
+                {
+                    if (vytlaceny != null)
+                    {
+                        spodny.getData().add(vytlaceny);
+                    }
+
+                    return;
+                }
+
+                pocetPodstrom += podQuad.getData().size();
+            }
+
+            if (pocetPodstrom > 1)
+            {
+                if (vytlaceny != null)
+                {
+                    spodny.getData().add(vytlaceny);
+                }
+
+                break;
+            }
+
+            // To ze som sa dostal az sem automaticky znamena, ze mozem zmazat podquady
+            // Dalej si zistim, ci mozem vytlacit element
+            boolean moznoVytlacit = true;
+            if (!vyssi.getData().isEmpty())
+            {
+                moznoVytlacit = false;
+            }
+
+            if (moznoVytlacit)
+            {
+                // Ak som sa dostal az sem tak plati, ze podquady maju spolu bud 1 alebo ziadny element
+                for (Quad<T> podQuad : vyssi.getPodQuady())
+                {
+                    if (podQuad.getData().size() == 1)
+                    {
+                        vytlaceny = podQuad.getData().remove(0);
+                        break;
+                    }
+                }
+            }
+
+            if (pocetPodstrom == 0 && vytlaceny == null)
+            {
+                vyssi.vymazPodquady();
+            }
+            else if (pocetPodstrom == 1 && vytlaceny != null)
+            {
+                vyssi.vymazPodquady();
+            }
+
+            if (vyssi.getHlbkaQuadu() == 0)
+            {
+                if (vytlaceny != null)
+                {
+                    vyssi.getData().add((vytlaceny));
+                }
+
+                return;
+            }
+
+            spodny = vyssi;
         }
     }
 
