@@ -313,6 +313,7 @@ public class QuadStrom<T extends IPolygon>
     private void vymazPrazdnePodquady(Stack<Quad<T>> cesta)
     {
         Quad<T> spodny = cesta.pop();
+        // Existuju urcite situacie, kedy urcite nepojde rusit podquady
         if (spodny.jeRozdeleny() || spodny.getData().size() > 1 || spodny.getHlbkaQuadu() == 0)
         {
             return;
@@ -324,6 +325,7 @@ public class QuadStrom<T extends IPolygon>
             Quad<T> vyssi = cesta.pop();
 
             int pocetPodstrom = 0;
+            // Vytlaceny element musim pocitat tiez
             if (vytlaceny != null)
             {
                 pocetPodstrom++;
@@ -333,9 +335,10 @@ public class QuadStrom<T extends IPolygon>
             {
                 if (podQuad.jeRozdeleny())
                 {
+                    // Niektory z podquadov je rozdeleny, urcite nebude mozne rusit dalsie podquady
                     if (vytlaceny != null)
                     {
-                        spodny.getData().add(vytlaceny);
+                        this.vloz(vytlaceny);
                     }
 
                     return;
@@ -348,14 +351,13 @@ public class QuadStrom<T extends IPolygon>
             {
                 if (vytlaceny != null)
                 {
-                    spodny.getData().add(vytlaceny);
+                    this.vloz(vytlaceny);
                 }
 
                 break;
             }
 
-            // To ze som sa dostal az sem automaticky znamena, ze mozem zmazat podquady
-            // Dalej si zistim, ci mozem vytlacit element
+            // Zistim, ci mozem vytlacit element
             boolean moznoVytlacit = true;
             if (!vyssi.getData().isEmpty())
             {
@@ -364,7 +366,8 @@ public class QuadStrom<T extends IPolygon>
 
             if (moznoVytlacit)
             {
-                // Ak som sa dostal az sem tak plati, ze podquady maju spolu bud 1 alebo ziadny element
+                // Ak som sa dostal az sem tak plati, ze podquady maju dokopy bud 1 alebo ziadny element
+                // Tento element, ak existuje, vytlacim
                 for (Quad<T> podQuad : vyssi.getPodQuady())
                 {
                     if (podQuad.getData().size() == 1)
@@ -388,13 +391,11 @@ public class QuadStrom<T extends IPolygon>
             {
                 if (vytlaceny != null)
                 {
-                    vyssi.getData().add((vytlaceny));
+                    this.vloz(vytlaceny);
                 }
 
                 return;
             }
-
-            spodny = vyssi;
         }
     }
 

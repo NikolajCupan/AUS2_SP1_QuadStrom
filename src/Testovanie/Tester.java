@@ -11,10 +11,10 @@ import java.util.Random;
 
 public class Tester
 {
-    private static final int ZACIATOCNA_VELKOST = 5;
-    private static final int PRST_VLOZ = 10;
-    private static final int PRST_VYMAZ = 90;
-    private static final int POCET_OPERACII = 10;
+    private static final int ZACIATOCNA_VELKOST = 2500;
+    private static final int PRST_VLOZ = 50;
+    private static final int PRST_VYMAZ = 50;
+    private static final int POCET_OPERACII = 100000;
 
     private static final double X_GEN_MIN = -1000;
     private static final double Y_GEN_MIN = -1000;
@@ -55,15 +55,10 @@ public class Tester
 
             long seedReplikacia = this.random.nextLong();
 
-            seedReplikacia = -911912143798717157L;
-
-            if (i == 8250)
-            {
-                int x = 100;
-            }
-
             System.out.println("Spusta sa replikacia cislo: " + i + ", seed: " + seedReplikacia);
             this.test(minX, minY, maxX, maxY, faktorZmensenia, seedReplikacia);
+
+            System.gc();
         }
     }
 
