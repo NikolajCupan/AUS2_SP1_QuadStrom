@@ -1,11 +1,17 @@
 package Testovanie;
 
+import Objekty.Polygon;
+import Objekty.Suradnica;
 import Ostatne.Generator;
 import Objekty.Nehnutelnost;
+import Ostatne.IPolygon;
 import Ostatne.Konstanty;
 import QuadStrom.QuadStrom;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Tester
@@ -13,8 +19,13 @@ public class Tester
     private static final String NAZOV_SUBORU = "Testovanie_vystup.txt";
 
     private static final int ZACIATOCNA_VELKOST = 10000;
-    private static final int PRST_VLOZ = 40;
-    private static final int PRST_VYMAZ = 60;
+
+    private static final int PRST_VYHLADAJ_BOD = 50;
+    private static final int PRST_VYHLADAJ_POL = 50;
+
+    private static final int PRST_VYHLADAJ = 40;
+    private static final int PRST_VLOZ = 20;
+    private static final int PRST_VYMAZ = 40;
     private static final int POCET_OPERACII = 5000;
 
     private static final double X_GEN_MIN = -1000;
@@ -76,17 +87,65 @@ public class Tester
             strom.vloz(nehnutelnost);
         }
 
+        if (zoznam.size() != strom.getPocetElementov())
+        {
+            throw new RuntimeException("Prvotna velkost stromu a zoznamu nie je rovnaka!");
+        }
+
         for (int i = 0; i < POCET_OPERACII; i++)
         {
-            int nahoda = this.randomInt(0, PRST_VLOZ + PRST_VYMAZ);
-            if (nahoda < PRST_VLOZ)
+            int nahoda = this.randomInt(0, PRST_VYHLADAJ + PRST_VLOZ + PRST_VYMAZ);
+
+            if (nahoda < PRST_VYHLADAJ)
             {
+                // Vyhladavanie
+                int sposobHladania = this.randomInt(0, PRST_VYHLADAJ_BOD + PRST_VYHLADAJ_POL);
+                ArrayList<Nehnutelnost> najdeneZoznam = new ArrayList<>();
+                ArrayList<Nehnutelnost> najdeneStrom = new ArrayList<>();
+
+                if (sposobHladania < PRST_VYHLADAJ_BOD)
+                {
+                    double x = this.randomDouble(minX, maxX);
+                    double y = this.randomDouble(minY, maxY);
+                    najdeneZoznam = this.vyhladaj(x, y, zoznam);
+                    najdeneStrom = strom.vyhladaj(x, y);
+                }
+                else
+                {
+                    double x1 = this.randomDouble(minX, maxX);
+                    double y1 = this.randomDouble(minY, maxY);
+                    double x2 = this.randomDouble(minX, maxX);
+                    double y2 = this.randomDouble(minY, maxY);
+
+                    double vlavoDoleX = Math.min(x1, x2);
+                    double vlavoDoleY = Math.min(y1, y2);
+                    double vpravoHoreX = Math.max(x1, x2);
+                    double vpravoHoreY = Math.max(y1, y2);
+
+                    najdeneZoznam = this.vyhladaj(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, zoznam);
+                    najdeneStrom = strom.vyhladaj(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+                }
+
+                if (najdeneZoznam.size() != najdeneStrom.size())
+                {
+                    throw new RuntimeException("Pocet najdenych elementov nie je rovnaky!");
+                }
+
+                if (!najdeneZoznam.containsAll(najdeneStrom) || !najdeneStrom.containsAll(najdeneZoznam))
+                {
+                    throw new RuntimeException("Najdene elementy sa nezhoduju!");
+                }
+            }
+            else if (nahoda < (PRST_VYHLADAJ + PRST_VLOZ))
+            {
+                // Vkladanie
                 Nehnutelnost nehnutelnost = generator.getNehnutelnost();
                 zoznam.add(nehnutelnost);
                 strom.vloz(nehnutelnost);
             }
             else
             {
+                // Vymazavanie
                 if (zoznam.isEmpty())
                 {
                     continue;
@@ -120,13 +179,46 @@ public class Tester
         KontrolaStromu.kontrolaStromu(strom, NAZOV_SUBORU);
     }
 
-    public double randomDouble(double min, double max)
+    private double randomDouble(double min, double max)
     {
         return min + (max - min) * this.random.nextDouble();
     }
 
-    public int randomInt(int min, int max)
+    private int randomInt(int min, int max)
     {
         return min + this.random.nextInt(max - min + 1);
+    }
+
+    private ArrayList<Nehnutelnost> vyhladaj(double x, double y, ArrayList<Nehnutelnost> nehnutelnosti)
+    {
+        ArrayList<Nehnutelnost> najdene = new ArrayList<>();
+
+        for (Nehnutelnost nehnutelnost : nehnutelnosti)
+        {
+            if (nehnutelnost.leziVnutri(x, y))
+            {
+                najdene.add(nehnutelnost);
+            }
+        }
+
+        return najdene;
+    }
+
+    private ArrayList<Nehnutelnost> vyhladaj(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, ArrayList<Nehnutelnost> nehnutelnosti)
+    {
+        Polygon prehladavanaOblast = new Polygon();
+        prehladavanaOblast.nastavSuradnice(new Suradnica(vlavoDoleX, vlavoDoleY),
+                                           new Suradnica(vpravoHoreX, vpravoHoreY));
+        ArrayList<Nehnutelnost> najdene = new ArrayList<>();
+
+        for (Nehnutelnost nehnutelnost : nehnutelnosti)
+        {
+            if (nehnutelnost.prekryva(prehladavanaOblast))
+            {
+                najdene.add(nehnutelnost);
+            }
+        }
+
+        return najdene;
     }
 }
