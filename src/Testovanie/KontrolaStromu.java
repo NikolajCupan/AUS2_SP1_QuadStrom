@@ -28,11 +28,13 @@ public class KontrolaStromu
                 }
             }
 
+            // Element nemoze lezal hlbsie nakolko je obmedzeny maximalnou hlbkou
             if (curQuad.getHlbkaQuadu() >= strom.getMaxHlbka())
             {
                 continue;
             }
 
+            // Jediny element v liste, v tomto pripade nie je nutne davat ho hlbsie
             if (!curQuad.jeRozdeleny() && curQuad.getData().size() <= 1)
             {
                 continue;
@@ -45,6 +47,7 @@ public class KontrolaStromu
                 curQuad.rozdel();
             }
 
+            // Skusim zistit, ci mozem element vlozit hlbsie
             for (T element : curQuad.getData())
             {
                 for (Quad<T> podQuad : curQuad.getPodQuady())
@@ -54,7 +57,6 @@ public class KontrolaStromu
                         throw new RuntimeException("Polygon by mal lezal hlbsie!");
                     }
                 }
-
             }
 
             if (rozdelenie)
@@ -83,6 +85,8 @@ public class KontrolaStromu
                 boolean prazdnyPodstrom = true;
                 for (Quad<T> podQuad : curQuad.getPodQuady())
                 {
+                    // Staci, aby vyhovoval aspon jeden podquad
+                    // Problem nastava ak vsetky podquady su prazdne a nie su rozdelene
                     if (!podQuad.getData().isEmpty() || podQuad.jeRozdeleny())
                     {
                         prazdnyPodstrom = false;
@@ -174,7 +178,7 @@ public class KontrolaStromu
         }
     }
 
-    public static void vypis(PrintWriter printWriter, boolean vypis, int hlbka, String text)
+    private static void vypis(PrintWriter printWriter, boolean vypis, int hlbka, String text)
     {
         if (!vypis)
         {

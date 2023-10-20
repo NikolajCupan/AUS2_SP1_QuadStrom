@@ -106,3 +106,48 @@ for (int j = 157; j <= 10000; j++)
     this.logika.inicializujStromy();
     System.gc();
 }
+
+public void vlozHlboko(T pridavany)
+{
+    Quad<T> curQuad = this.quad;
+
+    while (true)
+    {
+        if (curQuad.getHlbkaQuadu() >= this.maxHlbka)
+        {
+            curQuad.getData().add(pridavany);
+            break;
+        }
+
+        if (!curQuad.jeRozdeleny())
+        {
+            curQuad.rozdel();
+        }
+
+        boolean vPodquade = false;
+        for (Quad<T> podquad : curQuad.getPodQuady())
+        {
+            // Polygon sa moze nachadzat v maximalne 1 podquade
+            if (podquad.leziVnutri(pridavany))
+            {
+                curQuad = podquad;
+                vPodquade = true;
+                break;
+            }
+        }
+
+        // Ziadny podquad nevyhovuje
+        if (!vPodquade)
+        {
+            if (curQuad.leziVnutri(pridavany))
+            {
+                curQuad.getData().add(pridavany);
+                break;
+            }
+            else
+            {
+                throw new RuntimeException("Neplatny vkladany element!");
+            }
+        }
+    }
+}

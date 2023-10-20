@@ -95,11 +95,6 @@ public class Quad<T extends IPolygon> extends Polygon
         return this.podquady;
     }
 
-    public Quad<T> getPodQuad(int index)
-    {
-        return this.podquady[index];
-    }
-
     public ArrayList<T> getData()
     {
         return this.data;

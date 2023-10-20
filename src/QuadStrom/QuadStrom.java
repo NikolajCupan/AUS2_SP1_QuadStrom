@@ -10,8 +10,6 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
-    private static final String TYP_VKLADANIA = "plytko";
-
     private final int maxHlbka;
     private final Quad<T> quad;
 
@@ -36,10 +34,10 @@ public class QuadStrom<T extends IPolygon>
 
             if (curQuad.jeRozdeleny())
             {
-                zasobnik.push(curQuad.getPodQuad(Konstanty.SZ));
-                zasobnik.push(curQuad.getPodQuad(Konstanty.SV));
-                zasobnik.push(curQuad.getPodQuad(Konstanty.JV));
-                zasobnik.push(curQuad.getPodQuad(Konstanty.JZ));
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    zasobnik.push(podQuad);
+                }
             }
         }
 
@@ -47,63 +45,6 @@ public class QuadStrom<T extends IPolygon>
     }
 
     public void vloz(T pridavany)
-    {
-        if (TYP_VKLADANIA == "hlboko")
-        {
-            this.vlozHlboko(pridavany);
-        }
-        else
-        {
-            this.vlozPlytko(pridavany);
-        }
-    }
-
-    public void vlozHlboko(T pridavany)
-    {
-        Quad<T> curQuad = this.quad;
-
-        while (true)
-        {
-            if (curQuad.getHlbkaQuadu() >= this.maxHlbka)
-            {
-                curQuad.getData().add(pridavany);
-                break;
-            }
-
-            if (!curQuad.jeRozdeleny())
-            {
-                curQuad.rozdel();
-            }
-
-            boolean vPodquade = false;
-            for (Quad<T> podquad : curQuad.getPodQuady())
-            {
-                // Polygon sa moze nachadzat v maximalne 1 podquade
-                if (podquad.leziVnutri(pridavany))
-                {
-                    curQuad = podquad;
-                    vPodquade = true;
-                    break;
-                }
-            }
-
-            // Ziadny podquad nevyhovuje
-            if (!vPodquade)
-            {
-                if (curQuad.leziVnutri(pridavany))
-                {
-                    curQuad.getData().add(pridavany);
-                    break;
-                }
-                else
-                {
-                    throw new RuntimeException("Neplatny vkladany element!");
-                }
-            }
-        }
-    }
-
-    public void vlozPlytko(T pridavany)
     {
         Quad<T> curQuad = this.quad;
 
