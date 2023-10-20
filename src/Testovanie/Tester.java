@@ -1,7 +1,6 @@
 package Testovanie;
 
-import Aplikacia.KontrolaStromu;
-import Generator.Generator;
+import Ostatne.Generator;
 import Objekty.Nehnutelnost;
 import Ostatne.Konstanty;
 import QuadStrom.QuadStrom;
@@ -11,6 +10,8 @@ import java.util.Random;
 
 public class Tester
 {
+    private static final String NAZOV_SUBORU = "Testovanie_vystup.txt";
+
     private static final int ZACIATOCNA_VELKOST = 10000;
     private static final int PRST_VLOZ = 40;
     private static final int PRST_VYMAZ = 60;
@@ -24,7 +25,7 @@ public class Tester
     private static final double FAKTOR_ZMENSENIA_MIN = 1;
     private static final double FAKTOR_ZMENSENIA_MAX = 10000;
 
-    private Random random;
+    private final Random random;
 
     public Tester()
     {
@@ -116,7 +117,7 @@ public class Tester
 
         KontrolaStromu.prilisPlytko(strom);
         KontrolaStromu.prazdnePodstromy(strom);
-        KontrolaStromu.kontrolaStromu(strom, "Nehnutelnosti.txt");
+        KontrolaStromu.kontrolaStromu(strom, NAZOV_SUBORU);
     }
 
     public double randomDouble(double min, double max)

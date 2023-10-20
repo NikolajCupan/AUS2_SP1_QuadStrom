@@ -288,7 +288,7 @@ public class QuadStrom<T extends IPolygon>
                 if (element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
                 {
                     curQuad.getData().remove(element);
-                    this.vymazPrazdne(cesta);
+                    this.vymazPrazdneQuady(cesta);
                     return element;
                 }
             }
@@ -309,7 +309,8 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    private void vymazPrazdne(Stack<Quad<T>> cesta)
+    // Po zmazani elementu sa zmazu vsetky quady, ktore uz nemusia existovat
+    private void vymazPrazdneQuady(Stack<Quad<T>> cesta)
     {
         Quad<T> dno = cesta.pop();
         if (dno.jeRozdeleny() || dno.getData().size() > 1 || dno.getHlbkaQuadu() == 0)
@@ -365,96 +366,6 @@ public class QuadStrom<T extends IPolygon>
             if (vytlacenyElement != null)
             {
                 vyssi.getData().add(vytlacenyElement);
-            }
-        }
-    }
-
-    // Po mazani sa zmazu vsetky quady, ktore uz nemusia existovat
-    private void vymazPrazdnePodquady(Stack<Quad<T>> cesta)
-    {
-        Quad<T> spodny = cesta.pop();
-        // Existuju urcite situacie, kedy urcite nepojde rusit podquady
-        if (spodny.jeRozdeleny() || spodny.getData().size() > 1 || spodny.getHlbkaQuadu() == 0)
-        {
-            return;
-        }
-
-        T vytlaceny = null;
-        while (true)
-        {
-            Quad<T> vyssi = cesta.pop();
-
-            int pocetPodstrom = 0;
-            // Vytlaceny element musim pocitat tiez
-            if (vytlaceny != null)
-            {
-                pocetPodstrom++;
-            }
-
-            for (Quad<T> podQuad : vyssi.getPodQuady())
-            {
-                if (podQuad.jeRozdeleny())
-                {
-                    // Niektory z podquadov je rozdeleny, urcite nebude mozne rusit dalsie podquady
-                    if (vytlaceny != null)
-                    {
-                        this.vloz(vytlaceny);
-                    }
-
-                    return;
-                }
-
-                pocetPodstrom += podQuad.getData().size();
-            }
-
-            if (pocetPodstrom > 1)
-            {
-                if (vytlaceny != null)
-                {
-                    this.vloz(vytlaceny);
-                }
-
-                break;
-            }
-
-            // Zistim, ci mozem vytlacit element
-            boolean moznoVytlacit = true;
-            if (!vyssi.getData().isEmpty())
-            {
-                moznoVytlacit = false;
-            }
-
-            if (moznoVytlacit)
-            {
-                // Ak som sa dostal az sem tak plati, ze podquady maju dokopy bud 1 alebo ziadny element
-                // Tento element, ak existuje, vytlacim
-                for (Quad<T> podQuad : vyssi.getPodQuady())
-                {
-                    if (podQuad.getData().size() == 1)
-                    {
-                        vytlaceny = podQuad.getData().remove(0);
-                        break;
-                    }
-                }
-            }
-
-            if (pocetPodstrom == 0 && vytlaceny == null)
-            {
-                vyssi.vymazPodquady();
-            }
-            else if (pocetPodstrom == 1 && vytlaceny != null)
-            {
-                vyssi.vymazPodquady();
-            }
-
-            if (vyssi.getHlbkaQuadu() == 0)
-            {
-                if (vytlaceny != null)
-                {
-                    this.vloz(vytlaceny);
-                }
-
-                return;
             }
         }
     }
