@@ -82,6 +82,12 @@ public class Quad<T extends IPolygon> extends Polygon
         this.podquady = new Quad[POCET_PODQUADOV];
     }
 
+    // Zmaze podquady hoci obsahuju data
+    public void forceVymazPodquady()
+    {
+        this.podquady = new Quad[POCET_PODQUADOV];
+    }
+
     public boolean jeRozdeleny()
     {
         return this.podquady[Konstanty.SZ] != null ||

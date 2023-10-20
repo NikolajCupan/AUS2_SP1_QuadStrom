@@ -102,6 +102,8 @@ public class KontrolaStromu
         }
     }
 
+    // Kontrola, ci elementy by sa nemohli nachadzat hlbsie v strome
+    // Vypis struktury do suboru
     public static <T extends IPolygon> void kontrolaStromu(QuadStrom<T> strom, String nazovSuboru)
     {
         try

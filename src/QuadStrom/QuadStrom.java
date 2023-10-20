@@ -3,7 +3,6 @@ package QuadStrom;
 import Objekty.Polygon;
 import Objekty.Suradnica;
 import Ostatne.IPolygon;
-import Ostatne.Konstanty;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -309,6 +308,93 @@ public class QuadStrom<T extends IPolygon>
                 vyssi.getData().add(vytlacenyElement);
             }
         }
+    }
+
+    // Metoda presunie data z quadov, ktore maju hlbku
+    // vyssiu ako parameter do quadov o hlbke parametra
+    public void presunData(int hlbka)
+    {
+        Stack<Quad<T>> zasobnik = new Stack<>();
+        zasobnik.push(this.getRootQuad());
+
+        while (!zasobnik.isEmpty())
+        {
+            Quad<T> curQuad = zasobnik.pop();
+
+            // Nie je potrebne nic riesit nakolko nie je rozdeleny
+            if (!curQuad.jeRozdeleny())
+            {
+                continue;
+            }
+
+            if (curQuad.getHlbkaQuadu() < hlbka)
+            {
+                // V tomto pripade nie je nutne nic robit,
+                // iba si vlozim podquady do zasobnika
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    zasobnik.push(podQuad);
+                }
+
+                continue;
+            }
+
+            // Nasiel som quad, do ktoreho budem presuvat data z nizsich quadov
+            Stack<Quad<T>> podQuadyZasobnik = new Stack<>();
+            podQuadyZasobnik.push(curQuad);
+            ArrayList<Quad<T>> podQuadyZoznam = new ArrayList<>();
+
+            while (!podQuadyZasobnik.isEmpty())
+            {
+                Quad<T> curPodQuad = podQuadyZasobnik.pop();
+
+                if (curPodQuad.jeRozdeleny())
+                {
+                    for (Quad<T> podQuad : curPodQuad.getPodQuady())
+                    {
+                        podQuadyZasobnik.push(podQuad);
+                        podQuadyZoznam.add(podQuad);
+                    }
+                }
+            }
+
+            // Presuniem data z podquadov
+            for (Quad<T> podQuad : podQuadyZoznam)
+            {
+                curQuad.getData().addAll(podQuad.getData());
+            }
+
+            // V tomto pripade mozem podquady zrusit hoci obsahuju data,
+            // nakolko tieto som si uz presunul vyssie
+            curQuad.forceVymazPodquady();
+        }
+    }
+
+    public int getCurHlbka()
+    {
+        int maxHlbka = 0;
+        Stack<Quad<T>> zasobnik = new Stack<>();
+        zasobnik.push(this.getRootQuad());
+
+        while (!zasobnik.isEmpty())
+        {
+            Quad<T> curQuad = zasobnik.pop();
+
+            if (curQuad.jeRozdeleny())
+            {
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    zasobnik.push(podQuad);
+                }
+            }
+
+            if (maxHlbka < curQuad.getHlbkaQuadu())
+            {
+                maxHlbka = curQuad.getHlbkaQuadu();
+            }
+        }
+
+        return maxHlbka;
     }
 
     public Quad<T> getRootQuad()

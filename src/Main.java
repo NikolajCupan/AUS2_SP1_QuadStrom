@@ -1,14 +1,15 @@
 import Aplikacia.Aplikacia;
-import Testovanie.Tester;
+import Testovanie.TesterVseobecny;
+import Testovanie.TesterZakladneOperacie;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        //Aplikacia aplikacia = new Aplikacia();
-        //aplikacia.vykonavaj();
+        Aplikacia aplikacia = new Aplikacia();
+        aplikacia.vykonavaj();
 
-        Tester tester = new Tester(111142069);
-        tester.testuj(10000);
+        TesterZakladneOperacie testerZakladneOperacie = new TesterZakladneOperacie(111);
+        testerZakladneOperacie.replikacie(10000);
     }
 }

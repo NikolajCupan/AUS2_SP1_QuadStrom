@@ -90,4 +90,14 @@ public class Logika
             nehnutelnosta.skusOdobratParcelu(vymazana);
         }
     }
+
+    public QuadStrom<Nehnutelnost> getNehnutelnostiStrom()
+    {
+        return this.nehnutelnosti;
+    }
+
+    public QuadStrom<Parcela> getParcelyStrom()
+    {
+        return this.parcely;
+    }
 }

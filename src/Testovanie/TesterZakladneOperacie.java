@@ -9,7 +9,7 @@ import QuadStrom.QuadStrom;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Tester
+public class TesterZakladneOperacie
 {
     private static final String NAZOV_SUBORU = "Testovanie_vystup.txt";
 
@@ -37,18 +37,18 @@ public class Tester
 
     private final Random random;
 
-    public Tester()
+    public TesterZakladneOperacie()
     {
         this.random = new Random();
     }
 
-    public Tester(long seed)
+    public TesterZakladneOperacie(long seed)
     {
         this.random = new Random();
         this.random.setSeed(seed);
     }
 
-    public void testuj(int opakovania)
+    public void replikacie(int opakovania)
     {
         for (int i = 0; i < opakovania; i++)
         {
@@ -76,6 +76,7 @@ public class Tester
         }
     }
 
+    // Kontrola operacii vyhladaj, vloz, vymaz
     public void test(double minX, double minY, double maxX, double maxY, double faktorZmensenia, int hlbka, long seedReplikacia)
     {
         Generator generator = new Generator(1, 1, minX, minY, maxX, maxY, 5, faktorZmensenia, seedReplikacia);
