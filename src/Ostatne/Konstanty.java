@@ -2,7 +2,7 @@ package Ostatne;
 
 public class Konstanty
 {
-    public static final int DEFAULT_MAX_HLBKA = 10;
+    public static final int DEFAULT_MAX_HLBKA = 15;
 
     public static final double X_MIN = -100;
     public static final double Y_MIN = -100;

@@ -14,7 +14,7 @@ public class TesterVseobecny
     public TesterVseobecny()
     {
         this.random = new Random();
-        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 10);
+        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 10000);
 
         this.testZdravie();
         //this.testPocetElementov();
@@ -23,7 +23,7 @@ public class TesterVseobecny
 
     public void testPocetElementov()
     {
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 10);
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 15);
 
         int pocetElementov = this.randomInt(0, 1000000);
         for (int i = 0; i < pocetElementov; i++)
@@ -40,15 +40,16 @@ public class TesterVseobecny
 
     public void testZdravie()
     {
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 10);
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 15);
 
-        for (int i = 0; i < 200000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
             strom.vloz(nehnutelnost);
         }
 
-        System.out.println(strom.zdravie());
+        strom.getZdravie();
+
         KontrolaStromu.kontrolaStromu(strom, "Testovanie_vystup.txt");
     }
 

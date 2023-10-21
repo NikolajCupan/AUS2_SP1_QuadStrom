@@ -9,6 +9,12 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon>
 {
+    // V pripade ak quady na hlbke maxHlbka obsahuju menej ako MALO_HLBKA
+    // dat, tak tento je zruseny; naopak v pripade ak quady na hlbke maxHlbka
+    // obsahuju viac ako VELA_HLBKA dat, tak je pridana dalsia uroven
+    private static final int VELA_HLBKA = 20;
+    private static final int MALO_HLBKA = 1;
+
     private final int maxHlbka;
     private final Quad<T> quad;
 
@@ -398,17 +404,36 @@ public class QuadStrom<T extends IPolygon>
         return maxHlbka;
     }
 
-    // Zdravie zavisi od toho, ako su elementy v strome rozlozene
-    // Zdravie je z intervalu <0; 100>, pricom 0 = najlepsie, 100 najhorsie
-    // Pre kazdu uroven:
-    // ZDRAVIE_UROVEN_I = (POCET_UROVEN_I / POCET_SPOLU * 100) / (1 / 4^I)
-    // ZDREVIE_CELKOM = SUMA(ZDRAVIE_UROVEN_I PRE VSETKY UROVNE)
-    // Kazda uroven ma nizsiu vahu nakolko sa tam nachadcha viac quadov => viac miesta pre data
-    public double zdravie()
+    public double getZdravie()
     {
-        int curMaxHlbka = this.getCurHlbka();
-        // Pocet elementov, ktore sa nachadzaju na danej urovni
-        int[] pocetHlbka = new int[curMaxHlbka + 1];
+        return this.transform(this.pomerHlbka(this.maxHlbka));
+    }
+
+    // Transformacia vysledku na interval <0; 1>
+    // 0      => Najhlbsi quad je prilis prazdny
+    // (0; 1) => Najhlbsi quad je vyhovujuco plny
+    // 1      => Najhlbsi quad je prilis plny
+    private double transform(double vstup)
+    {
+        if (vstup <= MALO_HLBKA)
+        {
+            return 0;
+        }
+        else if (vstup >= VELA_HLBKA)
+        {
+            return 1;
+        }
+        else
+        {
+            return vstup * (1.0 / (VELA_HLBKA - MALO_HLBKA + 1));
+        }
+    }
+
+    // Kolko percent zo vsetkych dat sa nachadza v danej hlbke
+    private double pomerHlbka(int hlbka)
+    {
+        int pocetCelkom = this.getPocetElementov();
+        int pocetHlbka = 0;
 
         Stack<Quad<T>> zasobnik = new Stack<>();
         zasobnik.push(this.getRootQuad());
@@ -425,28 +450,13 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
 
-            int hlbkaQuadu = curQuad.getHlbkaQuadu();
-            pocetHlbka[hlbkaQuadu] += curQuad.getData().size();
+            if (curQuad.getHlbkaQuadu() == hlbka)
+            {
+                pocetHlbka += curQuad.getData().size();
+            }
         }
 
-        int pocetElementov = this.getPocetElementov();
-        System.out.println("Elementov: " + pocetElementov);
-
-        double celkoveZdravie = 0;
-        for (int i = 0; i < curMaxHlbka + 1; i++)
-        {
-            // Kolko percent z celkovych elementov sa nachadza na danej urovni1
-            double percentoElementov = (double)pocetHlbka[i] / pocetElementov * 100;
-
-            // Cim je uroven nizsia, tym jej vaha na celkovom zdravi mensia,
-            // nizsia uroven => vacsi pocet quadov na tejto urovni
-            double vaha = 1 / Math.pow(4, i);
-            System.out.println("U: " + i + ", pocet: " + pocetHlbka[i] + ", percento: " + percentoElementov + ", vaha: " + vaha + ", zdravie: " + percentoElementov * vaha);
-
-            celkoveZdravie += percentoElementov * vaha;
-        }
-
-        return celkoveZdravie;
+        return (double)pocetHlbka / pocetCelkom * 100;
     }
 
     public Quad<T> getRootQuad()
