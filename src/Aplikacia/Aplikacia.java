@@ -1,5 +1,6 @@
 package Aplikacia;
 
+import Ostatne.Generator;
 import Ostatne.Konstanty;
 
 public class Aplikacia

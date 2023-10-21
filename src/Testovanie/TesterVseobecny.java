@@ -14,10 +14,11 @@ public class TesterVseobecny
     public TesterVseobecny()
     {
         this.random = new Random();
-        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 100);
+        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 10);
 
-        this.testPocetElementov();
-        this.testPresunData();
+        this.testZdravie();
+        //this.testPocetElementov();
+        //this.testPresunData();
     }
 
     public void testPocetElementov()
@@ -35,6 +36,20 @@ public class TesterVseobecny
         {
             throw new RuntimeException("Pocet elementov v strome sa nezhoduje s ocakavanym poctom!");
         }
+    }
+
+    public void testZdravie()
+    {
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 10);
+
+        for (int i = 0; i < 200000; i++)
+        {
+            Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
+            strom.vloz(nehnutelnost);
+        }
+
+        System.out.println(strom.zdravie());
+        KontrolaStromu.kontrolaStromu(strom, "Testovanie_vystup.txt");
     }
 
     public void testPresunData()

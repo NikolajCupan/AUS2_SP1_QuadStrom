@@ -370,6 +370,7 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
+    // Realna maximalna hlbka v strome
     public int getCurHlbka()
     {
         int maxHlbka = 0;
@@ -395,6 +396,57 @@ public class QuadStrom<T extends IPolygon>
         }
 
         return maxHlbka;
+    }
+
+    // Zdravie zavisi od toho, ako su elementy v strome rozlozene
+    // Zdravie je z intervalu <0; 100>, pricom 0 = najlepsie, 100 najhorsie
+    // Pre kazdu uroven:
+    // ZDRAVIE_UROVEN_I = (POCET_UROVEN_I / POCET_SPOLU * 100) / (1 / 4^I)
+    // ZDREVIE_CELKOM = SUMA(ZDRAVIE_UROVEN_I PRE VSETKY UROVNE)
+    // Kazda uroven ma nizsiu vahu nakolko sa tam nachadcha viac quadov => viac miesta pre data
+    public double zdravie()
+    {
+        int curMaxHlbka = this.getCurHlbka();
+        // Pocet elementov, ktore sa nachadzaju na danej urovni
+        int[] pocetHlbka = new int[curMaxHlbka + 1];
+
+        Stack<Quad<T>> zasobnik = new Stack<>();
+        zasobnik.push(this.getRootQuad());
+
+        while (!zasobnik.isEmpty())
+        {
+            Quad<T> curQuad = zasobnik.pop();
+
+            if (curQuad.jeRozdeleny())
+            {
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    zasobnik.push(podQuad);
+                }
+            }
+
+            int hlbkaQuadu = curQuad.getHlbkaQuadu();
+            pocetHlbka[hlbkaQuadu] += curQuad.getData().size();
+        }
+
+        int pocetElementov = this.getPocetElementov();
+        System.out.println("Elementov: " + pocetElementov);
+
+        double celkoveZdravie = 0;
+        for (int i = 0; i < curMaxHlbka + 1; i++)
+        {
+            // Kolko percent z celkovych elementov sa nachadza na danej urovni1
+            double percentoElementov = (double)pocetHlbka[i] / pocetElementov * 100;
+
+            // Cim je uroven nizsia, tym jej vaha na celkovom zdravi mensia,
+            // nizsia uroven => vacsi pocet quadov na tejto urovni
+            double vaha = 1 / Math.pow(4, i);
+            System.out.println("U: " + i + ", pocet: " + pocetHlbka[i] + ", percento: " + percentoElementov + ", vaha: " + vaha + ", zdravie: " + percentoElementov * vaha);
+
+            celkoveZdravie += percentoElementov * vaha;
+        }
+
+        return celkoveZdravie;
     }
 
     public Quad<T> getRootQuad()
