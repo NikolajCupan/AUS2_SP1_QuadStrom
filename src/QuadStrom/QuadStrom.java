@@ -17,6 +17,7 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     private static final int PRILIS_PLNE = 20;
     private static final int PRILIS_PRAZDNE = 1;
 
+    // Najhlbsia mozna uroven dosiahnutelna v strome, elementy nie je mozne vlozit hlbsie
     private int maxUroven;
     private final Quad<T> rootQuad;
 
@@ -212,7 +213,7 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
     // Metoda vrati zmazany element
     // V pripade ak ziadny zmazany nebol, tak vrati null
-    public T vymaz(double x, double y, double hladanyKluc)
+    public T vymaz(double x, double y, int hladanyKluc)
     {
         Quad<T> curQuad = this.rootQuad;
         Stack<Quad<T>> cesta = new Stack<>();
