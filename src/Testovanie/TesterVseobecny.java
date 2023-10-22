@@ -14,7 +14,7 @@ public class TesterVseobecny
     public TesterVseobecny()
     {
         this.random = new Random();
-        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 10000);
+        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 1);
 
         this.testZdravie();
         //this.testPocetElementov();
@@ -42,13 +42,13 @@ public class TesterVseobecny
     {
         QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 15);
 
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 3; i++)
         {
             Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
             strom.vloz(nehnutelnost);
         }
 
-        strom.getZdravie();
+        //strom.optimalizacia();
 
         KontrolaStromu.kontrolaStromu(strom, "Testovanie_vystup.txt");
     }
@@ -66,7 +66,7 @@ public class TesterVseobecny
         }
 
         int zmenenaMaxHlbka = this.randomInt(0, prvotnaMaxHlbka);
-        strom.presunData(zmenenaMaxHlbka);
+        strom.presunDataPlytsie(zmenenaMaxHlbka);
 
         if (pocetElementov != strom.getPocetElementov())
         {

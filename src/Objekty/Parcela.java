@@ -45,7 +45,7 @@ public class Parcela extends Polygon
     }
 
     @Override
-    public double getUnikatnyKluc()
+    public int getUnikatnyKluc()
     {
         return this.cisloParcely;
     }

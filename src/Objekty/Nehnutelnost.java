@@ -46,7 +46,7 @@ public class Nehnutelnost extends Polygon
     }
 
     @Override
-    public double getUnikatnyKluc()
+    public int getUnikatnyKluc()
     {
         return this.supisneCislo;
     }

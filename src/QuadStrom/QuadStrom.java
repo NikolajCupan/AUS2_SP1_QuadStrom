@@ -10,12 +10,12 @@ import java.util.Stack;
 public class QuadStrom<T extends IPolygon>
 {
     // V pripade ak quady na hlbke maxHlbka obsahuju menej ako MALO_HLBKA
-    // dat, tak tento je zruseny; naopak v pripade ak quady na hlbke maxHlbka
-    // obsahuju viac ako VELA_HLBKA dat, tak je pridana dalsia uroven
+    // percent dat, tak tento je zruseny; naopak v pripade ak quady na hlbke
+    // maxHlbka obsahuju viac ako VELA_HLBKA percent dat, tak je pridana dalsia uroven
     private static final int VELA_HLBKA = 20;
     private static final int MALO_HLBKA = 1;
 
-    private final int maxHlbka;
+    private int maxHlbka;
     private final Quad<T> quad;
 
     public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
@@ -316,9 +316,14 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
+    public void presunDataHLbsie(int hlbka)
+    {
+
+    }
+
     // Metoda presunie data z quadov, ktore maju hlbku
     // vyssiu ako parameter do quadov o hlbke parametra
-    public void presunData(int hlbka)
+    public void presunDataPlytsie(int hlbka)
     {
         Stack<Quad<T>> zasobnik = new Stack<>();
         zasobnik.push(this.getRootQuad());
@@ -404,7 +409,38 @@ public class QuadStrom<T extends IPolygon>
         return maxHlbka;
     }
 
-    public double getZdravie()
+    public void optimalizacia()
+    {
+        while (true)
+        {
+            System.out.println("Aktualny stav:");
+            for (int i = 0; i < this.maxHlbka; i++)
+            {
+                System.out.println(i + " " +this.pomerHlbka(i));
+            }
+
+            double zdravie = this.getZdravie();
+            if (zdravie == 0)
+            {
+                System.out.println("Najhlbsia hlbka je zbytocna, nastava zmena maximalnej hlbky z " + this.maxHlbka + " na " + (this.maxHlbka - 1));
+                this.presunDataPlytsie(this.maxHlbka - 1);
+                this.maxHlbka--;
+            }
+            else if (zdravie == 1)
+            {
+                System.out.println("Najhlbsia hlbka je prilis plna, nastava zmena maximalnej hlbky z " + this.maxHlbka + " na " + (this.maxHlbka + 1));
+                this.presunDataPlytsie(this.maxHlbka - 1);
+                this.maxHlbka--;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+    }
+
+    private double getZdravie()
     {
         return this.transform(this.pomerHlbka(this.maxHlbka));
     }

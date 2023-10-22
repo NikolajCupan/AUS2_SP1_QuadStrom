@@ -83,7 +83,7 @@ public class Polygon implements IPolygon
     }
 
     @Override
-    public double getUnikatnyKluc()
+    public int getUnikatnyKluc()
     {
         throw new RuntimeException("Trieda Polygon nepodporuje metodu getUnikatnyKluc()!");
     }

@@ -61,7 +61,7 @@ public class Logika
         }
     }
 
-    public void vymazNehnutelnost(double x, double y, double hladanyKluc)
+    public void vymazNehnutelnost(double x, double y, int hladanyKluc)
     {
         Nehnutelnost vymazana = this.nehnutelnosti.vymaz(x, y, hladanyKluc);
 
@@ -76,7 +76,7 @@ public class Logika
         }
     }
 
-    public void vymazParcelu(double x, double y, double hladanyKluc)
+    public void vymazParcelu(double x, double y, int hladanyKluc)
     {
         Parcela vymazana = this.parcely.vymaz(x, y, hladanyKluc);
 
