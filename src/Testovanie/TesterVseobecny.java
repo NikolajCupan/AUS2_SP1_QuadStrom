@@ -66,14 +66,14 @@ public class TesterVseobecny
         }
 
         int zmenenaMaxHlbka = this.randomInt(0, prvotnaMaxHlbka);
-        strom.presunDataPlytsie(zmenenaMaxHlbka);
+        strom.presunPlytsie(zmenenaMaxHlbka);
 
         if (pocetElementov != strom.getPocetElementov())
         {
             throw new RuntimeException("Po zmene hlbky doslo k strate dat!");
         }
 
-        if (strom.getCurHlbka() > zmenenaMaxHlbka)
+        if (strom.getNajhlbsiaUroven() > zmenenaMaxHlbka)
         {
             throw new RuntimeException("Hlbka stromu je vyssia ako bolo nastavene!");
         }

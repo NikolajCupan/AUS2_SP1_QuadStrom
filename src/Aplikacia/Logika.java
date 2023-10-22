@@ -3,7 +3,6 @@ package Aplikacia;
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 import Objekty.Polygon;
-import Ostatne.Konstanty;
 import QuadStrom.QuadStrom;
 
 import java.util.ArrayList;

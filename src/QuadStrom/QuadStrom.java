@@ -5,45 +5,36 @@ import Objekty.Suradnica;
 import Ostatne.IPolygon;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 
-public class QuadStrom<T extends IPolygon>
+public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 {
-    // V pripade ak quady na hlbke maxHlbka obsahuju menej ako MALO_HLBKA
-    // percent dat, tak tento je zruseny; naopak v pripade ak quady na hlbke
-    // maxHlbka obsahuju viac ako VELA_HLBKA percent dat, tak je pridana dalsia uroven
-    private static final int VELA_HLBKA = 20;
-    private static final int MALO_HLBKA = 1;
+    // V pripade ak quady na urovni najhlbsiaUroven obsahuju menej ako PRILIS_PRAZDNE
+    // percent dat, tak tato uroven je zrusena; naopak v pripade ak quady na urovni
+    // najhlbsiaUroven obsahuju viac ako PRILIS_PLNE percent dat, tak je pridana dalsia uroven
+    private static final int PRILIS_PLNE = 20;
+    private static final int PRILIS_PRAZDNE = 1;
 
-    private int maxHlbka;
-    private final Quad<T> quad;
+    private int maxUroven;
+    private final Quad<T> rootQuad;
 
-    public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
+    public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxUroven)
     {
-        this.maxHlbka = maxHlbka;
+        this.maxUroven = maxUroven;
         Suradnica suradnica1 = new Suradnica(vlavoDoleX, vlavoDoleY);
         Suradnica suradnica2 = new Suradnica(vpravoHoreX, vpravoHoreY);
-        this.quad = new Quad<T>(suradnica1, suradnica2, 0);
+        this.rootQuad = new Quad<T>(suradnica1, suradnica2, 0);
     }
 
     public int getPocetElementov()
     {
         int pocet = 0;
-        Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(this.quad);
 
-        while (!zasobnik.empty())
+        for (Quad<T> quad : this)
         {
-            Quad<T> curQuad = zasobnik.pop();
-            pocet += curQuad.getData().size();
-
-            if (curQuad.jeRozdeleny())
-            {
-                for (Quad<T> podQuad : curQuad.getPodquady())
-                {
-                    zasobnik.push(podQuad);
-                }
-            }
+           pocet += quad.getData().size();
         }
 
         return pocet;
@@ -51,33 +42,31 @@ public class QuadStrom<T extends IPolygon>
 
     public void vloz(T pridavany)
     {
-        Quad<T> curQuad = this.quad;
+        Quad<T> curQuad = this.rootQuad;
 
         while (true)
         {
-            if (curQuad.getHlbkaQuadu() >= this.maxHlbka)
+            // Dosiahnuta maximalna uroveb => nejde sa hlbsie
+            if (curQuad.getUrovenQuadu() >= this.maxUroven)
             {
                 curQuad.getData().add(pridavany);
                 break;
             }
 
-            // Dostal som sa na list, ktory je prazdny
-            // Nie je nutne ist hlbsie
             if (!curQuad.jeRozdeleny() && curQuad.getData().isEmpty())
             {
+                // Dostal som sa na list, ktory je prazdny
+                // Nie je nutne ist hlbsie
                 curQuad.getData().add(pridavany);
                 break;
             }
 
-            boolean podquadyPrazdne = true;
-            if (curQuad.jeRozdeleny())
-            {
-                podquadyPrazdne = false;
-            }
+            // Ak je quad uz teraz rozdeleny, tak nebudem moct zrusit jeho podQuady
+            boolean podQuadyPrazdne = !curQuad.jeRozdeleny();
 
-            // Dostal som sa na list, ktory nie je prazdny
             if (!curQuad.jeRozdeleny())
             {
+                // Dostal som sa na list, ktory nie je prazdny
                 curQuad.rozdel();
 
                 // Ak sa v liste nachadza iba 1 element, tak je mozne,
@@ -85,31 +74,32 @@ public class QuadStrom<T extends IPolygon>
                 if (curQuad.getData().size() == 1)
                 {
                     // Vytlaceny element hned vlozim
-                    podquadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
+                    podQuadyPrazdne = this.vlozVytlaceny(curQuad, curQuad.getData().remove(0));
                 }
             }
 
-            boolean novyVPodquade = false;
-            for (Quad<T> podquad : curQuad.getPodquady())
+            // Zistim, kde bude vlozeny novy element (parameter metody)
+            boolean novyVPodQuade = false;
+            for (Quad<T> podQuad : curQuad.getPodQuady())
             {
-                // Polygon sa moze nachadzat v maximalne 1 podquade
-                if (podquad.leziVnutri(pridavany))
+                // Polygon sa moze nachadzat maximalne v 1 podQuade
+                if (podQuad.leziVnutri(pridavany))
                 {
-                    curQuad = podquad;
-                    novyVPodquade = true;
+                    curQuad = podQuad;
+                    novyVPodQuade = true;
                     break;
                 }
             }
 
-            // Ziadny podquad nevyhovuje
-            if (!novyVPodquade)
+            if (!novyVPodQuade)
             {
+                // Ziadny podquad nevyhovuje
                 if (curQuad.leziVnutri(pridavany))
                 {
-                    // Ak vytlaceny element nebol vlozeny do podquadu, tak nie je nutne, aby tieto existovali
-                    if (podquadyPrazdne)
+                    // Ak vytlaceny element nebol vlozeny do podQuadu, tak nie je nutne, aby tieto existovali
+                    if (podQuadyPrazdne)
                     {
-                        curQuad.vymazPodquady();
+                        curQuad.vymazPodQuady();
                     }
 
                     curQuad.getData().add(pridavany);
@@ -128,7 +118,7 @@ public class QuadStrom<T extends IPolygon>
     private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
     {
         // Quad bol rozdeleny pred zavolanim tejto metody
-        for (Quad<T> podQuad : quad.getPodquady())
+        for (Quad<T> podQuad : quad.getPodQuady())
         {
             if (podQuad.leziVnutri(vytlaceny))
             {
@@ -146,7 +136,7 @@ public class QuadStrom<T extends IPolygon>
     public ArrayList<T> vyhladaj(double x, double y)
     {
         ArrayList<T> najdene = new ArrayList<>();
-        Quad<T> curQuad = this.quad;
+        Quad<T> curQuad = this.rootQuad;
 
         while (true)
         {
@@ -162,7 +152,7 @@ public class QuadStrom<T extends IPolygon>
             if (curQuad.jeRozdeleny())
             {
                 // Suradnica moze lezat maximalne v 1 podquade
-                for (Quad<T> podQuad : curQuad.getPodquady())
+                for (Quad<T> podQuad : curQuad.getPodQuady())
                 {
                     if (podQuad.leziVnutri(x, y))
                     {
@@ -189,11 +179,12 @@ public class QuadStrom<T extends IPolygon>
 
         ArrayList<T> najdene = new ArrayList<>();
         Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(this.quad);
+        zasobnik.push(this.rootQuad);
 
         while (!zasobnik.isEmpty())
         {
             Quad<T> curQuad = zasobnik.pop();
+
             for (T element : curQuad.getData())
             {
                 if (element.prekryva(prehladavanaOblast))
@@ -205,8 +196,9 @@ public class QuadStrom<T extends IPolygon>
             // Quad nemusi byt rozdeleny
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodquady())
+                for (Quad<T> podQuad : curQuad.getPodQuady())
                 {
+                    // Do zasobnika vlozim vsetky quady, ktore sa prekryvaju s prehladavanou oblastou
                     if (podQuad.prekryva(prehladavanaOblast))
                     {
                         zasobnik.push(podQuad);
@@ -218,11 +210,11 @@ public class QuadStrom<T extends IPolygon>
         return najdene;
     }
 
-    // Vrati zmazany element
-    // V pripade ak sa nenasiel, tak vrati null
+    // Metoda vrati zmazany element
+    // V pripade ak ziadny zmazany nebol, tak vrati null
     public T vymaz(double x, double y, double hladanyKluc)
     {
-        Quad<T> curQuad = this.quad;
+        Quad<T> curQuad = this.rootQuad;
         Stack<Quad<T>> cesta = new Stack<>();
 
         while (true)
@@ -241,10 +233,11 @@ public class QuadStrom<T extends IPolygon>
 
             if (!curQuad.jeRozdeleny())
             {
+                // Nie je mozne dalej hladat, dany element neexistuje
                 return null;
             }
 
-            for (Quad<T> podQuad : curQuad.getPodquady())
+            for (Quad<T> podQuad : curQuad.getPodQuady())
             {
                 if (podQuad.leziVnutri(x, y))
                 {
@@ -259,7 +252,7 @@ public class QuadStrom<T extends IPolygon>
     private void vymazPrazdneQuady(Stack<Quad<T>> cesta)
     {
         Quad<T> dno = cesta.pop();
-        if (dno.jeRozdeleny() || dno.getData().size() > 1 || dno.getHlbkaQuadu() == 0)
+        if (dno.jeRozdeleny() || dno.getData().size() > 1 || dno.getUrovenQuadu() == 0)
         {
             return;
         }
@@ -268,8 +261,8 @@ public class QuadStrom<T extends IPolygon>
         {
             Quad<T> vyssi = cesta.pop();
 
-            // Ak je ktorykolvek podquad rozdeleny, tak nie je mozne mazat
-            for (Quad<T> podQuad : vyssi.getPodquady())
+            // Ak je ktorykolvek podQuad rozdeleny, tak nie je mozne mazat
+            for (Quad<T> podQuad : vyssi.getPodQuady())
             {
                 if (podQuad.jeRozdeleny())
                 {
@@ -278,20 +271,20 @@ public class QuadStrom<T extends IPolygon>
             }
 
             // Pocet elementov, ktore sa nachadzaju v podquadoch
-            int pocetElementovDolne = 0;
-            for (Quad<T> podQuad : vyssi.getPodquady())
+            int pocetElementovPodQuady = 0;
+            for (Quad<T> podQuad : vyssi.getPodQuady())
             {
-                pocetElementovDolne += podQuad.getData().size();
+                pocetElementovPodQuady += podQuad.getData().size();
             }
 
-            // Ak je tento vacsi ako 1, tak nie je mozne mazat
-            if (pocetElementovDolne > 1)
+            // Ak je tento pocet vacsi ako 1, tak nie je mozne mazat
+            if (pocetElementovPodQuady > 1)
             {
                 return;
             }
 
             // Rovnako nie je mozne mazat ak vyssi quad obsahuje data a zaroven existuje element aj v podquadoch
-            if (!vyssi.getData().isEmpty() && pocetElementovDolne == 1)
+            if (!vyssi.getData().isEmpty() && pocetElementovPodQuady == 1)
             {
                 return;
             }
@@ -299,7 +292,7 @@ public class QuadStrom<T extends IPolygon>
             // Ak som sa dostal az sem, tak mozem vykonat mazanie
             // V podquadoch sa moze nachadzat prave 1 alebo 0 elementov
             T vytlacenyElement = null;
-            for (Quad<T> podQuad : vyssi.getPodquady())
+            for (Quad<T> podQuad : vyssi.getPodQuady())
             {
                 if (!podQuad.getData().isEmpty())
                 {
@@ -308,7 +301,7 @@ public class QuadStrom<T extends IPolygon>
                 }
             }
 
-            vyssi.vymazPodquady();
+            vyssi.vymazPodQuady();
             if (vytlacenyElement != null)
             {
                 vyssi.getData().add(vytlacenyElement);
@@ -316,14 +309,9 @@ public class QuadStrom<T extends IPolygon>
         }
     }
 
-    public void presunDataHLbsie(int hlbka)
-    {
-
-    }
-
-    // Metoda presunie data z quadov, ktore maju hlbku
-    // vyssiu ako parameter do quadov o hlbke parametra
-    public void presunDataPlytsie(int hlbka)
+    // Metoda presunie data z quadov, ktore maju uroven hlbsiu
+    // ako uroven dana parametrom, do quadov o hlbke parametra
+    public void presunPlytsie(int uroven)
     {
         Stack<Quad<T>> zasobnik = new Stack<>();
         zasobnik.push(this.getRootQuad());
@@ -332,17 +320,17 @@ public class QuadStrom<T extends IPolygon>
         {
             Quad<T> curQuad = zasobnik.pop();
 
-            // Nie je potrebne nic riesit nakolko nie je rozdeleny
             if (!curQuad.jeRozdeleny())
             {
+                // Nie je potrebne nic riesit nakolko quad nie je rozdeleny
                 continue;
             }
 
-            if (curQuad.getHlbkaQuadu() < hlbka)
+            if (curQuad.getUrovenQuadu() < uroven)
             {
                 // V tomto pripade nie je nutne nic robit,
                 // iba si vlozim podquady do zasobnika
-                for (Quad<T> podQuad : curQuad.getPodquady())
+                for (Quad<T> podQuad : curQuad.getPodQuady())
                 {
                     zasobnik.push(podQuad);
                 }
@@ -361,7 +349,7 @@ public class QuadStrom<T extends IPolygon>
 
                 if (curPodQuad.jeRozdeleny())
                 {
-                    for (Quad<T> podQuad : curPodQuad.getPodquady())
+                    for (Quad<T> podQuad : curPodQuad.getPodQuady())
                     {
                         podQuadyZasobnik.push(podQuad);
                         podQuadyZoznam.add(podQuad);
@@ -377,131 +365,77 @@ public class QuadStrom<T extends IPolygon>
 
             // V tomto pripade mozem podquady zrusit hoci obsahuju data,
             // nakolko tieto som si uz presunul vyssie
-            curQuad.forceVymazPodquady();
+            curQuad.forceVymazPodQuady();
         }
     }
 
-    // Realna maximalna hlbka v strome
-    public int getCurHlbka()
+    // Realna nahlbsia uroven v strome
+    public int getNajhlbsiaUroven()
     {
-        int maxHlbka = 0;
-        Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(this.getRootQuad());
+        int najhlbsiaUroven = 0;
 
-        while (!zasobnik.isEmpty())
+        for (Quad<T> quad : this)
         {
-            Quad<T> curQuad = zasobnik.pop();
-
-            if (curQuad.jeRozdeleny())
+            if (najhlbsiaUroven < quad.getUrovenQuadu())
             {
-                for (Quad<T> podQuad : curQuad.getPodquady())
-                {
-                    zasobnik.push(podQuad);
-                }
-            }
-
-            if (maxHlbka < curQuad.getHlbkaQuadu())
-            {
-                maxHlbka = curQuad.getHlbkaQuadu();
+                najhlbsiaUroven = quad.getUrovenQuadu();
             }
         }
 
-        return maxHlbka;
-    }
-
-    public void optimalizacia()
-    {
-        while (true)
-        {
-            System.out.println("Aktualny stav:");
-            for (int i = 0; i < this.maxHlbka; i++)
-            {
-                System.out.println(i + " " +this.pomerHlbka(i));
-            }
-
-            double zdravie = this.getZdravie();
-            if (zdravie == 0)
-            {
-                System.out.println("Najhlbsia hlbka je zbytocna, nastava zmena maximalnej hlbky z " + this.maxHlbka + " na " + (this.maxHlbka - 1));
-                this.presunDataPlytsie(this.maxHlbka - 1);
-                this.maxHlbka--;
-            }
-            else if (zdravie == 1)
-            {
-                System.out.println("Najhlbsia hlbka je prilis plna, nastava zmena maximalnej hlbky z " + this.maxHlbka + " na " + (this.maxHlbka + 1));
-                this.presunDataPlytsie(this.maxHlbka - 1);
-                this.maxHlbka--;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-    }
-
-    private double getZdravie()
-    {
-        return this.transform(this.pomerHlbka(this.maxHlbka));
-    }
-
-    // Transformacia vysledku na interval <0; 1>
-    // 0      => Najhlbsi quad je prilis prazdny
-    // (0; 1) => Najhlbsi quad je vyhovujuco plny
-    // 1      => Najhlbsi quad je prilis plny
-    private double transform(double vstup)
-    {
-        if (vstup <= MALO_HLBKA)
-        {
-            return 0;
-        }
-        else if (vstup >= VELA_HLBKA)
-        {
-            return 1;
-        }
-        else
-        {
-            return vstup * (1.0 / (VELA_HLBKA - MALO_HLBKA + 1));
-        }
-    }
-
-    // Kolko percent zo vsetkych dat sa nachadza v danej hlbke
-    private double pomerHlbka(int hlbka)
-    {
-        int pocetCelkom = this.getPocetElementov();
-        int pocetHlbka = 0;
-
-        Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(this.getRootQuad());
-
-        while (!zasobnik.isEmpty())
-        {
-            Quad<T> curQuad = zasobnik.pop();
-
-            if (curQuad.jeRozdeleny())
-            {
-                for (Quad<T> podQuad : curQuad.getPodquady())
-                {
-                    zasobnik.push(podQuad);
-                }
-            }
-
-            if (curQuad.getHlbkaQuadu() == hlbka)
-            {
-                pocetHlbka += curQuad.getData().size();
-            }
-        }
-
-        return (double)pocetHlbka / pocetCelkom * 100;
+        return najhlbsiaUroven;
     }
 
     public Quad<T> getRootQuad()
     {
-        return this.quad;
+        return this.rootQuad;
     }
 
-    public int getMaxHlbka()
+    public int getMaxUroven()
     {
-        return this.maxHlbka;
+        return this.maxUroven;
+    }
+
+    public Iterator<Quad<T>> iterator()
+    {
+        return new QSIterator();
+    }
+
+    // Pre-order iterator
+    private class QSIterator implements Iterator<Quad<T>>
+    {
+        private final Stack<Quad<T>> quady;
+
+        public QSIterator()
+        {
+            this.quady = new Stack<>();
+            this.quady.push(QuadStrom.this.rootQuad);
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return !this.quady.isEmpty();
+        }
+
+        @Override
+        public Quad<T> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+
+            Quad<T> curQuad = this.quady.pop();
+
+            if (curQuad.jeRozdeleny())
+            {
+                for (Quad<T> podQuad : curQuad.getPodQuady())
+                {
+                    this.quady.push(podQuad);
+                }
+            }
+
+            return curQuad;
+        }
     }
 }

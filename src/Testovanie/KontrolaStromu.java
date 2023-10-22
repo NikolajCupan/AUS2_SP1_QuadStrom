@@ -14,44 +14,31 @@ public class KontrolaStromu
     // Kontroluje, ci elementy v strome by nemohli lezat hlbsie
     public static <T extends IPolygon> void prilisPlytko(QuadStrom<T> strom)
     {
-        Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(strom.getRootQuad());
-
-        while (!zasobnik.isEmpty())
+        for (Quad<T> quad : strom)
         {
-            Quad<T> curQuad = zasobnik.pop();
-
-            if (curQuad.jeRozdeleny())
-            {
-                for (Quad<T> podQuad : curQuad.getPodquady())
-                {
-                    zasobnik.push(podQuad);
-                }
-            }
-
-            // Element nemoze lezal hlbsie nakolko je obmedzeny maximalnou hlbkou
-            if (curQuad.getHlbkaQuadu() >= strom.getMaxHlbka())
+            // Element nemoze lezal hlbsie, nakolko je obmedzeny maximalnou hlbkou
+            if (quad.getUrovenQuadu() >= strom.getMaxUroven())
             {
                 continue;
             }
 
             // Jediny element v liste, v tomto pripade nie je nutne davat ho hlbsie
-            if (!curQuad.jeRozdeleny() && curQuad.getData().size() <= 1)
+            if (!quad.jeRozdeleny() && quad.getData().size() <= 1)
             {
                 continue;
             }
 
             boolean rozdelenie = false;
-            if (!curQuad.jeRozdeleny())
+            if (!quad.jeRozdeleny())
             {
                 rozdelenie = true;
-                curQuad.rozdel();
+                quad.rozdel();
             }
 
             // Skusim zistit, ci mozem element vlozit hlbsie
-            for (T element : curQuad.getData())
+            for (T element : quad.getData())
             {
-                for (Quad<T> podQuad : curQuad.getPodquady())
+                for (Quad<T> podQuad : quad.getPodQuady())
                 {
                     if (podQuad.leziVnutri(element))
                     {
@@ -62,31 +49,21 @@ public class KontrolaStromu
 
             if (rozdelenie)
             {
-                curQuad.vymazPodquady();
+                quad.vymazPodQuady();
             }
         }
     }
 
-    public static <T extends IPolygon> void prazdnePodstromy(QuadStrom<T> strom)
+    public static <T extends IPolygon> void prazdnePodStromy(QuadStrom<T> strom)
     {
-        Stack<Quad<T>> zasobnik = new Stack<>();
-        zasobnik.push(strom.getRootQuad());
-
-        while (!zasobnik.isEmpty())
+        for (Quad<T> quad : strom)
         {
-            Quad<T> curQuad = zasobnik.pop();
-
-            if (curQuad.jeRozdeleny())
+            if (quad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodquady())
-                {
-                    zasobnik.push(podQuad);
-                }
-
                 boolean prazdnyPodstrom = true;
-                for (Quad<T> podQuad : curQuad.getPodquady())
+                for (Quad<T> podQuad : quad.getPodQuady())
                 {
-                    // Staci, aby vyhovoval aspon jeden podquad
+                    // Staci, aby vyhovoval aspon jeden podQuad
                     // Problem nastava ak vsetky podquady su prazdne a nie su rozdelene
                     if (!podQuad.getData().isEmpty() || podQuad.jeRozdeleny())
                     {
@@ -103,53 +80,41 @@ public class KontrolaStromu
         }
     }
 
-    // Kontrola, ci elementy by sa nemohli nachadzat hlbsie v strome
-    // Vypis struktury do suboru
+    // Kontrola, ci elementy by sa nemohli nachadzat hlbsie v strome,
+    // spolu s vypisom struktury do suboru
     public static <T extends IPolygon> void kontrolaStromu(QuadStrom<T> strom, String nazovSuboru)
     {
         try
         {
             PrintWriter printWriter = new PrintWriter(nazovSuboru, StandardCharsets.UTF_8);
 
-            Stack<Quad<T>> zasobnik = new Stack<>();
-            zasobnik.push(strom.getRootQuad());
-
             int spracovaneElementy = 0;
-            int maxHlbka = -1;
+            int najhlbsiaUroven = -1;
 
-            while (!zasobnik.isEmpty())
+            for (Quad<T> quad : strom)
             {
-                Quad<T> curQuad = zasobnik.pop();
-
-                int curHlbka = curQuad.getHlbkaQuadu();
-                if (curHlbka > maxHlbka)
+                int urovenQuadu = quad.getUrovenQuadu();
+                if (urovenQuadu > najhlbsiaUroven)
                 {
-                    maxHlbka = curHlbka;
+                    najhlbsiaUroven = urovenQuadu;
                 }
 
-                if (curQuad.jeRozdeleny())
+                String urovenString = String.format("%3d", urovenQuadu);
+                KontrolaStromu.vypis(printWriter, urovenQuadu, urovenString + ". Quad {" + quad.getVlavoDoleX() + ", " + quad.getVlavoDoleY() + "}," +
+                        " {" + quad.getVpravoHoreX() + ", " + quad.getVpravoHoreY() + "}");
+
+                if (quad.getData().isEmpty())
                 {
-                    for (Quad<T> podquad : curQuad.getPodquady())
-                    {
-                        zasobnik.push(podquad);
-                    }
+                    KontrolaStromu.vypis(printWriter, urovenQuadu, "     Quad neobsahuje ziadne data");
                 }
 
-                String hlbkaVypis = String.format("%3d", curHlbka);
-                KontrolaStromu.vypis(printWriter, true, curHlbka, hlbkaVypis + ". Quad {" + curQuad.getVlavoDoleX() + ", " + curQuad.getVlavoDoleY() + "}," +
-                        " {" + curQuad.getVpravoHoreX() + ", " + curQuad.getVpravoHoreY() + "}");
-                if (curQuad.getData().isEmpty())
-                {
-                    KontrolaStromu.vypis(printWriter, true, curHlbka, "     Quad neobsahuje ziadne data");
-                }
-
-                for (T element : curQuad.getData())
+                for (T element : quad.getData())
                 {
                     spracovaneElementy++;
 
-                    if (curQuad.leziVnutri(element))
+                    if (quad.leziVnutri(element))
                     {
-                        KontrolaStromu.vypis(printWriter, true, curHlbka, "     {" + element.getVlavoDoleX() + ", " + element.getVlavoDoleY() + "}," +
+                        KontrolaStromu.vypis(printWriter, urovenQuadu, "     {" + element.getVlavoDoleX() + ", " + element.getVlavoDoleY() + "}," +
                                 " {" + element.getVpravoHoreX() + ", " + element.getVpravoHoreY() + "}");
                     }
                     else
@@ -171,7 +136,7 @@ public class KontrolaStromu
                 throw new RuntimeException("Pocet elementov sa nezhoduje s realitou!");
             }
 
-            printWriter.println("Maximalna hlbka v strome: " + maxHlbka);
+            printWriter.println("Najhlbsia uroven v strome: " + najhlbsiaUroven);
 
             printWriter.close();
         }
@@ -181,13 +146,8 @@ public class KontrolaStromu
         }
     }
 
-    private static void vypis(PrintWriter printWriter, boolean vypis, int hlbka, String text)
+    private static void vypis(PrintWriter printWriter, int hlbka, String text)
     {
-        if (!vypis)
-        {
-            return;
-        }
-
         for (int i = 0; i < hlbka * 6; i++)
         {
             printWriter.print(' ');

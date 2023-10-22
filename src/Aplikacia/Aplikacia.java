@@ -8,7 +8,7 @@ public class Aplikacia
 
     public Aplikacia()
     {
-        this.logika = new Logika(Konstanty.QS_X_MIN, Konstanty.QS_Y_MIN, Konstanty.QS_X_MAX, Konstanty.QS_Y_MAX, Konstanty.QS_DEFAULT_MAX_HLBKA);
+        this.logika = new Logika(Konstanty.QS_X_MIN, Konstanty.QS_Y_MIN, Konstanty.QS_X_MAX, Konstanty.QS_Y_MAX, Konstanty.QS_DEFAULT_MAX_UROVEN);
     }
 
     public void vykonavaj()
