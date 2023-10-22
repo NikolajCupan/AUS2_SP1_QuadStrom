@@ -13,15 +13,15 @@ public class Logika
     private QuadStrom<Nehnutelnost> nehnutelnosti;
     private QuadStrom<Parcela> parcely;
 
-    public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
     {
-        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
     }
 
-    public void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    public void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
     {
-        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, Konstanty.DEFAULT_MAX_HLBKA);
-        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, Konstanty.DEFAULT_MAX_HLBKA);
+        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
+        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
     }
 
     public void vlozPolygon(Polygon pridavany)
@@ -42,6 +42,7 @@ public class Logika
         ArrayList<Parcela> parcely = this.parcely.vyhladaj(pridavana.getVlavoDoleX(), pridavana.getVlavoDoleY(),
                                                            pridavana.getVpravoHoreX(), pridavana.getVpravoHoreY());
 
+        // Nastavenie vzajomnych referencii
         for (Parcela parcela : parcely)
         {
             parcela.skusPridatNehnutelnost(pridavana);
@@ -54,6 +55,8 @@ public class Logika
         this.parcely.vloz(pridavana);
         ArrayList<Nehnutelnost> nehnutelnosti = this.nehnutelnosti.vyhladaj(pridavana.getVlavoDoleX(), pridavana.getVlavoDoleY(),
                                                                             pridavana.getVpravoHoreX(), pridavana.getVpravoHoreY());
+
+        // Nastavenie vzajomnych referencii
         for (Nehnutelnost nehnutelnost : nehnutelnosti)
         {
             nehnutelnost.skusPridatParcelu(pridavana);

@@ -9,5 +9,5 @@ public interface IPolygon
     double getVlavoDoleY();
     double getVpravoHoreX();
     double getVpravoHoreY();
-    int getUnikatnyKluc();
+    int getKluc();
 }

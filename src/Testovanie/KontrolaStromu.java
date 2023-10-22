@@ -11,6 +11,7 @@ import java.util.Stack;
 
 public class KontrolaStromu
 {
+    // Kontroluje, ci elementy v strome by nemohli lezat hlbsie
     public static <T extends IPolygon> void prilisPlytko(QuadStrom<T> strom)
     {
         Stack<Quad<T>> zasobnik = new Stack<>();
@@ -22,7 +23,7 @@ public class KontrolaStromu
 
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }
@@ -50,7 +51,7 @@ public class KontrolaStromu
             // Skusim zistit, ci mozem element vlozit hlbsie
             for (T element : curQuad.getData())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     if (podQuad.leziVnutri(element))
                     {
@@ -77,13 +78,13 @@ public class KontrolaStromu
 
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }
 
                 boolean prazdnyPodstrom = true;
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     // Staci, aby vyhovoval aspon jeden podquad
                     // Problem nastava ak vsetky podquady su prazdne a nie su rozdelene
@@ -128,7 +129,7 @@ public class KontrolaStromu
 
                 if (curQuad.jeRozdeleny())
                 {
-                    for (Quad<T> podquad : curQuad.getPodQuady())
+                    for (Quad<T> podquad : curQuad.getPodquady())
                     {
                         zasobnik.push(podquad);
                     }

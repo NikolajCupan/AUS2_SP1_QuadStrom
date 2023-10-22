@@ -159,7 +159,7 @@ public class TesterZakladneOperacie
                 Nehnutelnost zmazanaZoznam = zoznam.remove(index);
                 double stredX = (zmazanaZoznam.getVlavoDoleX() + zmazanaZoznam.getVpravoHoreX()) / 2;
                 double stredY = (zmazanaZoznam.getVlavoDoleY() + zmazanaZoznam.getVpravoHoreY()) / 2;
-                Nehnutelnost zmazanaStrom = strom.vymaz(stredX, stredY, zmazanaZoznam.getUnikatnyKluc());
+                Nehnutelnost zmazanaStrom = strom.vymaz(stredX, stredY, zmazanaZoznam.getKluc());
 
                 if (zmazanaZoznam != zmazanaStrom)
                 {

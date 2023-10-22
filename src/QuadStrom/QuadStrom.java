@@ -39,7 +39,7 @@ public class QuadStrom<T extends IPolygon>
 
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }
@@ -90,7 +90,7 @@ public class QuadStrom<T extends IPolygon>
             }
 
             boolean novyVPodquade = false;
-            for (Quad<T> podquad : curQuad.getPodQuady())
+            for (Quad<T> podquad : curQuad.getPodquady())
             {
                 // Polygon sa moze nachadzat v maximalne 1 podquade
                 if (podquad.leziVnutri(pridavany))
@@ -128,7 +128,7 @@ public class QuadStrom<T extends IPolygon>
     private boolean vlozVytlaceny(Quad<T> quad, T vytlaceny)
     {
         // Quad bol rozdeleny pred zavolanim tejto metody
-        for (Quad<T> podQuad : quad.getPodQuady())
+        for (Quad<T> podQuad : quad.getPodquady())
         {
             if (podQuad.leziVnutri(vytlaceny))
             {
@@ -162,7 +162,7 @@ public class QuadStrom<T extends IPolygon>
             if (curQuad.jeRozdeleny())
             {
                 // Suradnica moze lezat maximalne v 1 podquade
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     if (podQuad.leziVnutri(x, y))
                     {
@@ -205,7 +205,7 @@ public class QuadStrom<T extends IPolygon>
             // Quad nemusi byt rozdeleny
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     if (podQuad.prekryva(prehladavanaOblast))
                     {
@@ -231,7 +231,7 @@ public class QuadStrom<T extends IPolygon>
 
             for (T element : curQuad.getData())
             {
-                if (element.leziVnutri(x, y) && element.getUnikatnyKluc() == hladanyKluc)
+                if (element.leziVnutri(x, y) && element.getKluc() == hladanyKluc)
                 {
                     curQuad.getData().remove(element);
                     this.vymazPrazdneQuady(cesta);
@@ -244,7 +244,7 @@ public class QuadStrom<T extends IPolygon>
                 return null;
             }
 
-            for (Quad<T> podQuad : curQuad.getPodQuady())
+            for (Quad<T> podQuad : curQuad.getPodquady())
             {
                 if (podQuad.leziVnutri(x, y))
                 {
@@ -269,7 +269,7 @@ public class QuadStrom<T extends IPolygon>
             Quad<T> vyssi = cesta.pop();
 
             // Ak je ktorykolvek podquad rozdeleny, tak nie je mozne mazat
-            for (Quad<T> podQuad : vyssi.getPodQuady())
+            for (Quad<T> podQuad : vyssi.getPodquady())
             {
                 if (podQuad.jeRozdeleny())
                 {
@@ -279,7 +279,7 @@ public class QuadStrom<T extends IPolygon>
 
             // Pocet elementov, ktore sa nachadzaju v podquadoch
             int pocetElementovDolne = 0;
-            for (Quad<T> podQuad : vyssi.getPodQuady())
+            for (Quad<T> podQuad : vyssi.getPodquady())
             {
                 pocetElementovDolne += podQuad.getData().size();
             }
@@ -299,7 +299,7 @@ public class QuadStrom<T extends IPolygon>
             // Ak som sa dostal az sem, tak mozem vykonat mazanie
             // V podquadoch sa moze nachadzat prave 1 alebo 0 elementov
             T vytlacenyElement = null;
-            for (Quad<T> podQuad : vyssi.getPodQuady())
+            for (Quad<T> podQuad : vyssi.getPodquady())
             {
                 if (!podQuad.getData().isEmpty())
                 {
@@ -342,7 +342,7 @@ public class QuadStrom<T extends IPolygon>
             {
                 // V tomto pripade nie je nutne nic robit,
                 // iba si vlozim podquady do zasobnika
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }
@@ -361,7 +361,7 @@ public class QuadStrom<T extends IPolygon>
 
                 if (curPodQuad.jeRozdeleny())
                 {
-                    for (Quad<T> podQuad : curPodQuad.getPodQuady())
+                    for (Quad<T> podQuad : curPodQuad.getPodquady())
                     {
                         podQuadyZasobnik.push(podQuad);
                         podQuadyZoznam.add(podQuad);
@@ -394,7 +394,7 @@ public class QuadStrom<T extends IPolygon>
 
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }
@@ -480,7 +480,7 @@ public class QuadStrom<T extends IPolygon>
 
             if (curQuad.jeRozdeleny())
             {
-                for (Quad<T> podQuad : curQuad.getPodQuady())
+                for (Quad<T> podQuad : curQuad.getPodquady())
                 {
                     zasobnik.push(podQuad);
                 }

@@ -29,7 +29,7 @@ public class Polygon implements IPolygon
                y <= this.surVpravoHore.getY();
     }
 
-    // Cely obsah polygonu musi lezat vo vnutri
+    // Metoda vrati true ak cely obsah polygonu lezi vo vnutri polygonu
     @Override
     public boolean leziVnutri(IPolygon vnutorny)
     {
@@ -44,6 +44,7 @@ public class Polygon implements IPolygon
         return false;
     }
 
+    // Metoda vrati true ak sa polygony prekryvaju
     @Override
     public boolean prekryva(IPolygon polygon)
     {
@@ -83,8 +84,8 @@ public class Polygon implements IPolygon
     }
 
     @Override
-    public int getUnikatnyKluc()
+    public int getKluc()
     {
-        throw new RuntimeException("Trieda Polygon nepodporuje metodu getUnikatnyKluc()!");
+        throw new RuntimeException("Trieda Polygon nema ziadny kluc!");
     }
 }

@@ -16,43 +16,45 @@ public class Generator
     private int curSupisneCislo;
     private int curCisloParcely;
 
-    private double minX;
-    private double minY;
-    private double maxX;
-    private double maxY;
+    // Hranice generovanych suradnic
+    private double surMinX;
+    private double surMinY;
+    private double surMaxX;
+    private double surMaxY;
 
     private int dlzkaString;
 
     private Random random;
-    private String znaky = "abcdefghijklmnopqrstuvwxyz";
+    private final String znaky = "abcdefghijklmnopqrstuvwxyz";
 
-    public Generator(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia)
+    public Generator(int startSupisneCislo, int startCisloParcely, double surMinX, double surMinY, double surMaxX, double surMaxY, int dlzkaString, double faktorZmensenia)
     {
-        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, surMinX, surMinY, surMaxX, surMaxY, dlzkaString, faktorZmensenia);
     }
 
-    public Generator(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktorZmensenia, long seed)
+    public Generator(int startSupisneCislo, int startCisloParcely, double surMinX, double surMinY, double surMaxX, double surMaxY, int dlzkaString, double faktorZmensenia, long seed)
     {
-        this.nastavPremenne(startSupisneCislo, startCisloParcely, minX, minY, maxX, maxY, dlzkaString, faktorZmensenia);
+        this.nastavPremenne(startSupisneCislo, startCisloParcely, surMinX, surMinY, surMaxX, surMaxY, dlzkaString, faktorZmensenia);
         this.random.setSeed(seed);
     }
 
-    private void nastavPremenne(int startSupisneCislo, int startCisloParcely, double minX, double minY, double maxX, double maxY, int dlzkaString, double faktor)
+    private void nastavPremenne(int startSupisneCislo, int startCisloParcely, double surMinX, double surMinY, double surMaxX, double surMaxY, int dlzkaString, double faktor)
     {
         this.faktorZmensenia = faktor;
 
         this.curSupisneCislo = startSupisneCislo;
         this.curCisloParcely = startCisloParcely;
 
-        this.minX = minX;
-        this.minY = minY;
-        this.maxX = maxX;
-        this.maxY = maxY;
+        this.surMinX = surMinX;
+        this.surMinY = surMinY;
+        this.surMaxX = surMaxX;
+        this.surMaxY = surMaxY;
 
         this.dlzkaString = dlzkaString;
         this.random = new Random();
     }
 
+    // Vrati nehnutelnost alebo parcelu (s rovnakom pravdepodobnostou)
     public Polygon getPolygon()
     {
         return (this.random.nextBoolean()) ? this.getNehnutelnost() : this.getParcela();
@@ -86,19 +88,22 @@ public class Generator
         return parcela;
     }
 
+    // Pomocna metoda na vygenerovanie suradnic,
+    // dlzky jednotlivych rozmerov suradnic su zmensene faktor-krat
     private void vygenerujSuradnice(Suradnica surVlavoDole, Suradnica surVpravoHore)
     {
-        double x1 = this.randomDouble(this.minX, this.maxX);
-        double y1 = this.randomDouble(this.minY, this.maxY);
-        double x2 = this.randomDouble(this.minX, this.maxX);
-        double y2 = this.randomDouble(this.minY, this.maxY);
+        double x1 = this.randomDouble(this.surMinX, this.surMaxX);
+        double y1 = this.randomDouble(this.surMinY, this.surMaxY);
+        double x2 = this.randomDouble(this.surMinX, this.surMaxX);
+        double y2 = this.randomDouble(this.surMinY, this.surMaxY);
 
         double minX = Math.min(x1, x2);
         double minY = Math.min(y1, y2);
-
         double maxX = Math.max(x1, x2);
         double maxY = Math.max(y1, y2);
 
+        // K zmenseniu moze dojst smerom dolava alebo doprava
+        // (s rovnakou pravdepodobnostou)
         boolean zmensiDolava = this.random.nextBoolean();
 
         double vzdialenostX = abs(maxX - minX);
@@ -119,7 +124,6 @@ public class Generator
 
         surVlavoDole.setX(minX);
         surVlavoDole.setY(minY);
-
         surVpravoHore.setX(maxX);
         surVpravoHore.setY(maxY);
     }
@@ -127,11 +131,6 @@ public class Generator
     public double randomDouble(double min, double max)
     {
         return min + (max - min) * this.random.nextDouble();
-    }
-
-    public int randomInt(int min, int max)
-    {
-        return min + this.random.nextInt(max - min + 1);
     }
 
     private String randomString()

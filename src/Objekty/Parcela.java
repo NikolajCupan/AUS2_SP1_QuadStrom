@@ -11,14 +11,15 @@ public class Parcela extends Polygon
 
     public Parcela(int cisloParcely, String popis, Suradnica suradnica1, Suradnica suradnica2)
     {
+        this.nastavSuradnice(suradnica1, suradnica2);
+
         this.cisloParcely = cisloParcely;
         this.popis = popis;
         this.nehnutelnosti = new ArrayList<>();
-        this.nastavSuradnice(suradnica1, suradnica2);
     }
 
-    // Metoda sa pokusi pridat nehnutelnost do zoznamu nehnutelnosti, ktore lezia na parcele
-    // Ak pridanie zlyha (na parcele nelezi dana nehnutelnost), vyhodi sa vynimka
+    // Metoda sa pokusi pridat nehnutelnost do zoznamu nehnutelnosti, ktore lezia na parcele,
+    // ak pridanie zlyha (na parcele nelezi dana nehnutelnost), vyhodi sa vynimka
     public void skusPridatNehnutelnost(Nehnutelnost nehnutelnost)
     {
         if (!this.prekryva(nehnutelnost))
@@ -29,6 +30,8 @@ public class Parcela extends Polygon
         this.nehnutelnosti.add(nehnutelnost);
     }
 
+    // Metoda sa pokusi odobrat nehnutelnost zo zoznamu nehnutelnosti, ktore lezia na parcele
+    // ak odobratie zlyha (na parcele nelezi dana nehnutelnost), vyhodi sa vynimka
     public void skusOdobratNehnutelnost(Nehnutelnost nehnutelnost)
     {
         if (!this.prekryva(nehnutelnost))
@@ -45,7 +48,7 @@ public class Parcela extends Polygon
     }
 
     @Override
-    public int getUnikatnyKluc()
+    public int getKluc()
     {
         return this.cisloParcely;
     }

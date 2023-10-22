@@ -9,9 +9,9 @@ public class Main
         //Aplikacia aplikacia = new Aplikacia();
         //aplikacia.vykonavaj();
 
-        //TesterZakladneOperacie testerZakladneOperacie = new TesterZakladneOperacie(111);
-        //testerZakladneOperacie.replikacie(10000);
+        //TesterZakladneOperacie testerZakladneOperacie = new TesterZakladneOperacie();
+        //testerZakladneOperacie.replikacie(10);
 
-        new TesterVseobecny();
+        //new TesterVseobecny();
     }
 }

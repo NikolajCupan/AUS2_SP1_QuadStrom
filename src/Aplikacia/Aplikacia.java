@@ -1,6 +1,5 @@
 package Aplikacia;
 
-import Ostatne.Generator;
 import Ostatne.Konstanty;
 
 public class Aplikacia
@@ -9,7 +8,7 @@ public class Aplikacia
 
     public Aplikacia()
     {
-        this.logika = new Logika(Konstanty.X_MIN, Konstanty.Y_MIN, Konstanty.X_MAX, Konstanty.Y_MAX);
+        this.logika = new Logika(Konstanty.QS_X_MIN, Konstanty.QS_Y_MIN, Konstanty.QS_X_MAX, Konstanty.QS_Y_MAX, Konstanty.QS_DEFAULT_MAX_HLBKA);
     }
 
     public void vykonavaj()
