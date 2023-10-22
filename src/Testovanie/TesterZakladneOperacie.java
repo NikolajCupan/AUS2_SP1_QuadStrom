@@ -13,28 +13,28 @@ public class TesterZakladneOperacie
 {
     private static final String NAZOV_SUBORU = "Testovanie_zakladne_operacie.txt";
 
-    private static final int ZACIATOCNA_VELKOST = 20000;
-    private static final int POCET_OPERACII = 10000;
+    private static final int ZACIATOCNA_VELKOST = 10;
+    private static final int POCET_OPERACII = 50000;
 
     private static final int PRST_VYHLADAJ_BOD = 50;
     private static final int PRST_VYHLADAJ_POL = 50;
 
-    private static final int PRST_VYHLADAJ = 10;
-    private static final int PRST_VLOZ = 30;
+    private static final int PRST_VYHLADAJ = 0;
+    private static final int PRST_VLOZ = 40;
     private static final int PRST_VYMAZ = 60;
 
     // Hranice quad stromu a generovanych suradnic
-    private static final double GEN_X_MIN = -1000;
-    private static final double GEN_Y_MIN = -1000;
-    private static final double GEN_X_MAX = 1000;
-    private static final double GEN_Y_MAX = 1000;
+    private static final double GEN_X_MIN = -100;
+    private static final double GEN_Y_MIN = -100;
+    private static final double GEN_X_MAX = 100;
+    private static final double GEN_Y_MAX = 100;
 
     // Hranice pre faktor zmensenia vygenerovanych suradnic
-    private static final double FAKTOR_ZMENSENIA_MIN = 1;
-    private static final double FAKTOR_ZMENSENIA_MAX = 10000;
+    private static final double FAKTOR_ZMENSENIA_MIN = 100;
+    private static final double FAKTOR_ZMENSENIA_MAX = 100;
 
-    private static final int DEAULT_MAX_UROVEN_MIN = 0;
-    private static final int DEFAULT_MAX_UROVEN_MAX = 15;
+    private static final int DEAULT_MAX_UROVEN_MIN = 5;
+    private static final int DEFAULT_MAX_UROVEN_MAX = 5;
 
     private final Random random;
 

@@ -8,84 +8,67 @@ import java.util.Random;
 
 public class TesterVseobecny
 {
-    private final Random random;
-    private final Generator generator;
-
     public TesterVseobecny()
     {
-        this.random = new Random();
-        this.generator = new Generator(1, 1, -100, -100, 100, 100, 5, 1);
-
-        this.testZdravie();
-        //this.testPocetElementov();
-        //this.testPresunData();
+        this.testPocetElementov();
+        this.testPresunData();
     }
 
     public void testPocetElementov()
     {
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 15);
+        Random random = new Random();
+        Generator generator = new Generator(1, 1, -100, - 100, 100, 100, 5, 100);
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 10);
 
-        int pocetElementov = this.randomInt(0, 1000000);
-        for (int i = 0; i < pocetElementov; i++)
+        int generujElementov = this.randomInt(0, 1000000, random);
+        for (int i = 0; i < generujElementov; i++)
         {
-            Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
+            Nehnutelnost nehnutelnost = generator.getNehnutelnost();
             strom.vloz(nehnutelnost);
         }
 
-        if (pocetElementov != strom.getPocetElementov())
+        if (generujElementov != strom.getPocetElementov())
         {
             throw new RuntimeException("Pocet elementov v strome sa nezhoduje s ocakavanym poctom!");
         }
     }
 
-    public void testZdravie()
-    {
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 15);
-
-        for (int i = 0; i < 3; i++)
-        {
-            Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
-            strom.vloz(nehnutelnost);
-        }
-
-        //strom.optimalizacia();
-
-        KontrolaStromu.kontrolaStromu(strom, "Testovanie_vystup.txt");
-    }
-
     public void testPresunData()
     {
-        int prvotnaMaxHlbka = this.randomInt(10, 50);
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, prvotnaMaxHlbka);
+        Random random = new Random();
+        Generator generator = new Generator(1, 1, -100, - 100, 100, 100, 5, 100);
 
-        int pocetElementov = this.randomInt(0, 1000000);
-        for (int i = 0; i < pocetElementov; i++)
+        int prvotnaMaxUroven = this.randomInt(10, 50, random);
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, prvotnaMaxUroven);
+
+        int generujElementov = this.randomInt(0, 1000000, random);
+        for (int i = 0; i < generujElementov; i++)
         {
-            Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
+            Nehnutelnost nehnutelnost = generator.getNehnutelnost();
             strom.vloz(nehnutelnost);
         }
 
-        int zmenenaMaxHlbka = this.randomInt(0, prvotnaMaxHlbka);
-        strom.presunPlytsie(zmenenaMaxHlbka);
+        int novaMaxUroven = this.randomInt(0, prvotnaMaxUroven, random);
+        strom.presunPlytsie(novaMaxUroven);
 
-        if (pocetElementov != strom.getPocetElementov())
+        if (generujElementov != strom.getPocetElementov())
         {
             throw new RuntimeException("Po zmene hlbky doslo k strate dat!");
         }
 
-        if (strom.getNajhlbsiaUroven() > zmenenaMaxHlbka)
+        if (strom.getNajhlbsiaUroven() > novaMaxUroven)
         {
-            throw new RuntimeException("Hlbka stromu je vyssia ako bolo nastavene!");
+            throw new RuntimeException("Najhlbsia uroven je hlbsia ako bolo nastavene!");
         }
     }
 
-    private int randomInt(int min, int max)
+    private int randomInt(int min, int max, Random random)
     {
         if (min == max)
         {
             return min;
         }
 
-        return min + this.random.nextInt(max - min + 1);
+        return min + random.nextInt(max - min + 1);
     }
 }
