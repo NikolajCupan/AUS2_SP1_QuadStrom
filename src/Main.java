@@ -1,4 +1,4 @@
-import Testovanie.Tester;
+import GUI.*;
 
 public class Main
 {
@@ -7,7 +7,9 @@ public class Main
         //Aplikacia aplikacia = new Aplikacia();
         //aplikacia.vykonavaj();
 
-        Tester tester = new Tester();
-        tester.replikacie(100);
+        //Tester tester = new Tester();
+        //tester.replikacie(100);
+
+        GUI gui = new GUI();
     }
 }

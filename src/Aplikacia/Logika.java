@@ -12,27 +12,15 @@ public class Logika
     private QuadStrom<Nehnutelnost> nehnutelnosti;
     private QuadStrom<Parcela> parcely;
 
-    public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
+    public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxUroven)
     {
-        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
+        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
     }
 
-    private void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
+    private void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxUroven)
     {
-        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
-        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
-    }
-
-    public void vlozPolygon(Polygon pridavany)
-    {
-        if (pridavany instanceof Nehnutelnost)
-        {
-            this.vlozNehnutelnost((Nehnutelnost)pridavany);
-        }
-        else
-        {
-            this.vlozParcelu((Parcela)pridavany);
-        }
+        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
+        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
     }
 
     public void vlozNehnutelnost(Nehnutelnost pridavana)

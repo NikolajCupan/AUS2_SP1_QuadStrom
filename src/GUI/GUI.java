@@ -1,34 +1,54 @@
 package GUI;
 
+import Aplikacia.Aplikacia;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GUI extends JFrame
 {
-    private JLabel nadpis;
-    private JTextField text;
-    private JButton tlacidlo;
-    private JPanel mainPanel;
+    private final Aplikacia aplikacia;
+    private JPanel panel;
+    private JButton button_nacitajZoSuboru;
+    private JButton button_zacniPrazdny;
 
     public GUI()
     {
-        setContentPane(this.mainPanel);
+        this.aplikacia = new Aplikacia();
+
+        setContentPane(this.panel);
 
         setTitle("Aplikacia - Nikolaj Cupan");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 600);
+        setSize(500, 500);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        this.tlacidlo.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                String meno = GUI.this.text.getText();
-                JOptionPane.showMessageDialog(GUI.this, meno);
-            }
-        });
+        this.button_nacitajZoSuboru.addActionListener(e -> GUI.this.zobrazStartSubor());
+        this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
+    }
+
+    public void zobrazHlavneOkno()
+    {
+        HlavneOkno hlavneOkno = new HlavneOkno();
+        this.zmenObsah(hlavneOkno.getJPanel());
+    }
+
+    private void zobrazStartSubor()
+    {
+        StartSubor startSubor = new StartSubor(this.aplikacia, this);
+        this.zmenObsah(startSubor.getJPanel());
+    }
+
+    private void zobrazStartPrazdne()
+    {
+        StartPrazdne startPrazdne = new StartPrazdne(this.aplikacia, this);
+        this.zmenObsah(startPrazdne.getJPanel());
+    }
+
+    private void zmenObsah(JPanel obsah)
+    {
+        setContentPane(obsah);
+        revalidate();
+        repaint();
     }
 }
