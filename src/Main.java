@@ -8,6 +8,6 @@ public class Main
         //aplikacia.vykonavaj();
 
         Tester tester = new Tester();
-        tester.replikacie(10000);
+        tester.replikacie(100);
     }
 }

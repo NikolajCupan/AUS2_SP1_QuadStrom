@@ -442,7 +442,6 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
         }
         else
         {
-            System.out.println("Optimalizacia: PRILIS_PLNE");
             // V tomto pripade su quady na urovni maxUroven prilis plne,
             // vytvorim si novy root quad s maxHlbka o 2 vacsou a presuniem
             // tam vsetky data
