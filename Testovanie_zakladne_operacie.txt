@@ -1,7 +1,0 @@
-  0. Quad {-3.104941879298906, -54.529181133839934}, {72.42567978454773, 23.691000219669547}
-     Quad neobsahuje ziadne data
-
-
-Statistika:
-Pocet elementov sa zhoduje s realitou: 0 = 0
-Najhlbsia uroven v strome: 0

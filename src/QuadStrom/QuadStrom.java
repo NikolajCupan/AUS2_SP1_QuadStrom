@@ -11,15 +11,23 @@ import java.util.Stack;
 
 public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 {
-    // V pripade ak quady na urovni najhlbsiaUroven obsahuju menej ako PRILIS_PRAZDNE
-    // percent dat, tak tato uroven je zrusena; naopak v pripade ak quady na urovni
-    // najhlbsiaUroven obsahuju viac ako PRILIS_PLNE percent dat, tak je pridana dalsia uroven
-    private static final int PRILIS_PLNE = 20;
-    private static final int PRILIS_PRAZDNE = 1;
+    // Po kazdych OPTIMALIZUJ_NA operacii (vloz a vymaz),
+    // sa vykona pokus o optimalizaciu struktury
+    private static final int OPTIMALIZUJ_NA = 10000;
+    private int pocitadloOperacii = 0;
+
+    // V pripade ak quady na urovni maxUroven obsahuju menej ako PRILIS_PRAZDNE
+    // percent dat, tak su zrusene vsetky urovne az pokym sa nedosiahne aspon
+    // PRILIS_PRAZDNE percent dat na urovni maxUroven
+    // Naopak v pripade ak quady na urovni maxUroven obsahuju viac ako PRILIS_PLNE
+    // percent dat, tak je pridanych dalsich ZVYS_MAX_UROVEN_O urovni
+    private static final double PRILIS_PLNE = 0.20;
+    private static final double PRILIS_PRAZDNE = 0.05;
+    private static final int ZVYS_MAX_UROVEN_O = 5;
 
     // Najhlbsia mozna uroven dosiahnutelna v strome, elementy nie je mozne vlozit hlbsie
     private int maxUroven;
-    private final Quad<T> rootQuad;
+    private Quad<T> rootQuad;
 
     public QuadStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxUroven)
     {
@@ -43,6 +51,9 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
     public void vloz(T pridavany)
     {
+        this.pocitadloOperacii++;
+        this.skusOptimalizovat();
+
         Quad<T> curQuad = this.rootQuad;
 
         while (true)
@@ -215,6 +226,9 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     // V pripade ak ziadny zmazany nebol, tak vrati null
     public T vymaz(double x, double y, int hladanyKluc)
     {
+        this.pocitadloOperacii++;
+        this.skusOptimalizovat();
+
         Quad<T> curQuad = this.rootQuad;
         Stack<Quad<T>> cesta = new Stack<>();
 
@@ -384,6 +398,141 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
         }
 
         return najhlbsiaUroven;
+    }
+
+    private void skusOptimalizovat()
+    {
+        if (this.pocitadloOperacii >= OPTIMALIZUJ_NA)
+        {
+            this.pocitadloOperacii = 0;
+            double[] pomerUroven = this.getPomerUroven();
+            double zdravie = this.getZdravie(pomerUroven[this.maxUroven]);
+
+            if (zdravie == 0.0 || zdravie == 1.0)
+            {
+                this.optimalizuj(pomerUroven, zdravie);
+            }
+        }
+    }
+
+    private void optimalizuj(double[] pomerUroven, double zdravie)
+    {
+        if (zdravie == 0.0)
+        {
+            // V tomto pripade su quady na urovni maxUroven prilis prazdne,
+            // bude sa vykonavat rusenie quadov
+
+            // Spocitavaj pomery dat na jednlitych urovniach (od najhlbsej),
+            // kym sa nedosiahne aspon PRILIS_PRAZDNE percent dat
+            double curPomer = 0.0;
+            int novaMaxUroven = 0;
+            for (int i = this.maxUroven; i >= 0; i--)
+            {
+                curPomer += pomerUroven[i];
+                if (curPomer > PRILIS_PRAZDNE)
+                {
+                    novaMaxUroven = i;
+                    break;
+                }
+            }
+
+            // Presun data plytsie
+            this.presunPlytsie(novaMaxUroven);
+            this.setMaxUroven(novaMaxUroven);
+        }
+        else
+        {
+            System.out.println("Optimalizacia: PRILIS_PLNE");
+            // V tomto pripade su quady na urovni maxUroven prilis plne,
+            // vytvorim si novy root quad s maxHlbka o 2 vacsou a presuniem
+            // tam vsetky data
+
+            Quad<T> oldRootQuad = this.rootQuad;
+            Suradnica surVlavoDole = new Suradnica(oldRootQuad.getVlavoDoleX(), oldRootQuad.getVlavoDoleY());
+            Suradnica surVpravoHore = new Suradnica(oldRootQuad.getVpravoHoreX(), oldRootQuad.getVpravoHoreY());
+            this.rootQuad = new Quad<T>(surVlavoDole, surVpravoHore, 0);
+            this.setMaxUroven(this.maxUroven + ZVYS_MAX_UROVEN_O);
+
+            Stack<Quad<T>> zasobnik = new Stack<>();
+            zasobnik.push(oldRootQuad);
+
+            while (!zasobnik.isEmpty())
+            {
+                Quad<T> curQuad = zasobnik.pop();
+                if (curQuad.jeRozdeleny())
+                {
+                    for (Quad<T> podQuad : curQuad.getPodQuady())
+                    {
+                        zasobnik.push(podQuad);
+                    }
+                }
+
+                for (T element : curQuad.getData())
+                {
+                    this.vloz(element);
+                    // Pocitadlo operacii vynulujem po kazdej operacii, aby nevznikol pokus
+                    // o optimalizaciu pocas prebiehajucej optimalizacie
+                    this.pocitadloOperacii = 0;
+                }
+            }
+        }
+    }
+
+    // Metoda transformuje pomer dat na danej urovni na interval <0; 1>
+    // 0      => quady na urovni maxUroven su prilis prazdne
+    // (0; 1) => quady na urovni maxUroven nie su ani prilis plne, ani prilis prazdne
+    // 1      => quady na urovni maxUroven su prilis plne
+    public double getZdravie(double zdravie)
+    {
+        if (zdravie <= PRILIS_PRAZDNE)
+        {
+            return 0.0;
+        }
+
+        if (zdravie >= PRILIS_PLNE)
+        {
+            return 1.0;
+        }
+
+        double rozsah = PRILIS_PLNE - PRILIS_PRAZDNE;
+        double zdravieShift = zdravie - PRILIS_PRAZDNE;
+
+        return zdravieShift / rozsah;
+    }
+
+    // Metoda vrati kolko percent zo vsetkych dat
+    // sa nachadza na jednotlivych urovniach
+    public double[] getPomerUroven()
+    {
+        int[] pocetUroven = new int[this.maxUroven + 1];
+        double[] pomerUroven = new double[this.maxUroven + 1];
+
+        for (Quad<T> quad : this)
+        {
+            int urovenQuadu = quad.getUrovenQuadu();
+            pocetUroven[urovenQuadu] += quad.getData().size();
+        }
+
+        int pocetCelkom = this.getPocetElementov();
+
+        for (int i = 0; i < this.maxUroven + 1; i++)
+        {
+            pomerUroven[i] = (double)pocetUroven[i] / pocetCelkom;
+        }
+
+        return pomerUroven;
+    }
+
+    public void setMaxUroven(int novaMaxUroven)
+    {
+        int najhlbsiaUroven = this.getNajhlbsiaUroven();
+
+        if (novaMaxUroven < najhlbsiaUroven)
+        {
+            throw new RuntimeException("Existuju data na hlbsich urovniach!");
+        }
+
+        this.maxUroven = novaMaxUroven;
     }
 
     public Quad<T> getRootQuad()

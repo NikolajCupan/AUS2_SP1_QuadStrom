@@ -1,6 +1,4 @@
-import Aplikacia.Aplikacia;
-import Testovanie.TesterVseobecny;
-import Testovanie.TesterZakladneOperacie;
+import Testovanie.Tester;
 
 public class Main
 {
@@ -9,7 +7,7 @@ public class Main
         //Aplikacia aplikacia = new Aplikacia();
         //aplikacia.vykonavaj();
 
-        TesterZakladneOperacie testerZakladneOperacie = new TesterZakladneOperacie();
-        testerZakladneOperacie.replikacie(1);
+        Tester tester = new Tester();
+        tester.replikacie(10000);
     }
 }

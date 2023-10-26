@@ -7,7 +7,6 @@ import QuadStrom.Quad;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Stack;
 
 public class KontrolaStromu
 {
@@ -80,9 +79,9 @@ public class KontrolaStromu
         }
     }
 
-    // Kontrola, ci elementy by sa nemohli nachadzat hlbsie v strome,
+    // Kontrola, ci elementy v quade nie su prilis velke,
     // spolu s vypisom struktury do suboru
-    public static <T extends IPolygon> void kontrolaStromu(QuadStrom<T> strom, String nazovSuboru)
+    public static <T extends IPolygon> void mimoQuad(QuadStrom<T> strom, String nazovSuboru)
     {
         try
         {
