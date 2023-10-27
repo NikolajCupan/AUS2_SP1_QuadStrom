@@ -1,10 +1,8 @@
 package GUI;
 
-import Aplikacia.Aplikacia;
+import Aplikacia.Prezenter;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class StartSubor
 {
@@ -14,11 +12,11 @@ public class StartSubor
     private JTextField input_nazovSuboru;
     private JButton button_potvrd;
 
-    public StartSubor(Aplikacia aplikacia, GUI gui)
+    public StartSubor(Prezenter prezenter, GUI gui)
     {
         this.button_potvrd.addActionListener(e -> {
             String nazovSuboru = StartSubor.this.input_nazovSuboru.getText();
-            boolean uspesneNacitanie = aplikacia.nacitajZoSoboru(nazovSuboru);
+            boolean uspesneNacitanie = prezenter.nacitajZoSoboru(nazovSuboru);
 
             if (nazovSuboru != null && !nazovSuboru.isEmpty())
             {

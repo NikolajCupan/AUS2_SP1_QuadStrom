@@ -146,4 +146,24 @@ public class Generator
 
         return vysledok.toString();
     }
+
+    public void setCurSupisneCislo(int curSupisneCislo)
+    {
+        this.curSupisneCislo = curSupisneCislo;
+    }
+
+    public void setCurCisloParcely(int curCisloParcely)
+    {
+        this.curCisloParcely = curCisloParcely;
+    }
+
+    public void setFaktorZmensenia(double faktorZmensenia)
+    {
+        if (faktorZmensenia < 1.0)
+        {
+            throw new RuntimeException("Faktor zmensenia musi byt rovny alebo vacsi ako 1!");
+        }
+
+        this.faktorZmensenia = faktorZmensenia;
+    }
 }

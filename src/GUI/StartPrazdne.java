@@ -1,6 +1,6 @@
 package GUI;
 
-import Aplikacia.Aplikacia;
+import Aplikacia.Prezenter;
 
 import javax.swing.*;
 
@@ -19,7 +19,7 @@ public class StartPrazdne extends JFrame
     private JLabel maxY;
     private JButton button_potvrdStruktura;
 
-    public StartPrazdne(Aplikacia aplikacia, GUI gui)
+    public StartPrazdne(Prezenter prezenter, GUI gui)
     {
         this.button_potvrdStruktura.addActionListener(e -> {
             try
@@ -30,7 +30,7 @@ public class StartPrazdne extends JFrame
                 double maxY = Double.parseDouble(this.input_maxY.getText());
                 int maxUroven = Integer.parseInt(this.input_maxUroven.getText());
 
-                aplikacia.inicializujLogiku(minX, minY, maxX, maxY, maxUroven);
+                prezenter.inicializujLogiku(minX, minY, maxX, maxY, maxUroven);
                 gui.zobrazHlavneOkno();
             }
             catch (Exception ex)

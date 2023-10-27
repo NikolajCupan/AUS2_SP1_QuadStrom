@@ -1,19 +1,19 @@
 package GUI;
 
-import Aplikacia.Aplikacia;
+import Aplikacia.Prezenter;
 
 import javax.swing.*;
 
 public class GUI extends JFrame
 {
-    private final Aplikacia aplikacia;
+    private final Prezenter prezenter;
     private JPanel panel;
     private JButton button_nacitajZoSuboru;
     private JButton button_zacniPrazdny;
 
     public GUI()
     {
-        this.aplikacia = new Aplikacia();
+        this.prezenter = new Prezenter();
 
         setContentPane(this.panel);
 
@@ -27,21 +27,28 @@ public class GUI extends JFrame
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
     }
 
+    public void zobrazGenerovanie()
+    {
+        Generovanie generovanie = new Generovanie(this.prezenter, this);
+        this.zmenObsah(generovanie.getJPanel());
+    }
+
     public void zobrazHlavneOkno()
     {
-        HlavneOkno hlavneOkno = new HlavneOkno(this.aplikacia, this);
+        HlavneOkno hlavneOkno = new HlavneOkno(this.prezenter, this);
+        hlavneOkno.obnovPocet();
         this.zmenObsah(hlavneOkno.getJPanel());
     }
 
     private void zobrazStartSubor()
     {
-        StartSubor startSubor = new StartSubor(this.aplikacia, this);
+        StartSubor startSubor = new StartSubor(this.prezenter, this);
         this.zmenObsah(startSubor.getJPanel());
     }
 
     private void zobrazStartPrazdne()
     {
-        StartPrazdne startPrazdne = new StartPrazdne(this.aplikacia, this);
+        StartPrazdne startPrazdne = new StartPrazdne(this.prezenter, this);
         this.zmenObsah(startPrazdne.getJPanel());
     }
 
