@@ -2,6 +2,7 @@ package Aplikacia;
 
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
+import Objekty.Polygon;
 import QuadStrom.QuadStrom;
 import QuadStrom.Quad;
 
@@ -80,6 +81,27 @@ public class Logika
             nehnutelnosta.skusOdobratParcelu(vymazana);
         }
     }
+
+    public ArrayList<Polygon> getPolygony()
+    {
+        ArrayList<Polygon> polygony = new ArrayList<>();
+        polygony.addAll(this.getParcely());
+        polygony.addAll(this.getNehnutelnosti());
+        return polygony;
+    }
+
+    public ArrayList<Parcela> getParcely()
+    {
+        ArrayList<Parcela> parcely = new ArrayList<>();
+
+        for (Quad<Parcela> quad : this.parcely)
+        {
+            parcely.addAll(quad.getData());
+        }
+
+        return parcely;
+    }
+
 
     public ArrayList<Nehnutelnost> getNehnutelnosti()
     {

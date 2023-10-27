@@ -14,6 +14,7 @@ public class Generovanie extends JFrame
     private JTextField input_faktorZmensenia;
     private JTextField input_zaciatocneCislo;
     private JButton button_generuj;
+    private JButton button_naHlavne;
 
     public Generovanie(Prezenter prezenter, GUI gui)
     {
@@ -35,6 +36,8 @@ public class Generovanie extends JFrame
                 JOptionPane.showMessageDialog(Generovanie.this, "Neplatné vstupy!");
             }
         });
+
+        this.button_naHlavne.addActionListener(e -> gui.zobrazHlavneOkno());
     }
 
     public JPanel getJPanel()

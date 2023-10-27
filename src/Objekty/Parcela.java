@@ -1,5 +1,6 @@
 package Objekty;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Parcela extends Polygon
@@ -47,9 +48,22 @@ public class Parcela extends Polygon
         return this.nehnutelnosti;
     }
 
+    public String getPopis()
+    {
+        return popis;
+    }
+
     @Override
     public int getKluc()
     {
         return this.cisloParcely;
+    }
+
+    @Override
+    public String toString()
+    {
+        DecimalFormat formatovac = new DecimalFormat("#.##");
+        return "Parcela: " + this.cisloParcely + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
+                "}, {" + formatovac.format(this.getVpravoHoreX()) + ", " + formatovac.format(this.getVpravoHoreY()) + "}";
     }
 }

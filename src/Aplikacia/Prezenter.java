@@ -1,5 +1,6 @@
 package Aplikacia;
 
+import Objekty.Polygon;
 import Objekty.Suradnica;
 import Ostatne.Generator;
 import Objekty.Nehnutelnost;
@@ -64,6 +65,16 @@ public class Prezenter
         this.logika = new Logika(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
     }
 
+    public ArrayList<Polygon> getPolygony()
+    {
+        return this.logika.getPolygony();
+    }
+
+    public ArrayList<Parcela> getParcely()
+    {
+        return this.logika.getParcely();
+    }
+
     public ArrayList<Nehnutelnost> getNehnutelnosti()
     {
         return this.logika.getNehnutelnosti();
@@ -85,12 +96,12 @@ public class Prezenter
             if (typ.equals(Nehnutelnost.class))
             {
                 Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
-                this.logika.getNehnutelnostiStrom().vloz(nehnutelnost);
+                this.logika.vlozNehnutelnost(nehnutelnost);
             }
             else if (typ.equals(Parcela.class))
             {
                 Parcela parcela = this.generator.getParcela();
-                this.logika.getParcelyStrom().vloz(parcela);
+                this.logika.vlozParcelu(parcela);
             }
         }
     }

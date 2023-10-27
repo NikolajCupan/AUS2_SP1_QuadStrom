@@ -4,6 +4,8 @@ import Aplikacia.Prezenter;
 import GUI.Start.StartPrazdne;
 import GUI.Start.StartSubor;
 import Objekty.Nehnutelnost;
+import Objekty.Parcela;
+import Objekty.Polygon;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class GUI extends JFrame
 
         setTitle("Aplikacia - Nikolaj Cupan");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(750, 500);
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -31,10 +33,24 @@ public class GUI extends JFrame
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
     }
 
+    public void zobrazZoznamPolygonov()
+    {
+        ArrayList<Polygon> polygony = this.prezenter.getPolygony();
+        Zoznam<Polygon> zoznam = new Zoznam<Polygon>(this.prezenter, this, polygony);
+        this.zmenObsah(zoznam.getJPanel());
+    }
+
+    public void zobrazZoznamParciel()
+    {
+        ArrayList<Parcela> parcely = this.prezenter.getParcely();
+        Zoznam<Parcela> zoznam = new Zoznam<Parcela>(this.prezenter, this, parcely);
+        this.zmenObsah(zoznam.getJPanel());
+    }
+
     public void zobrazZoznamNehnutelnosti()
     {
         ArrayList<Nehnutelnost> nehnutelnosti = this.prezenter.getNehnutelnosti();
-        Zoznam zoznam = new Zoznam(this.prezenter, this, nehnutelnosti);
+        Zoznam<Nehnutelnost> zoznam = new Zoznam<Nehnutelnost>(this.prezenter, this, nehnutelnosti);
         this.zmenObsah(zoznam.getJPanel());
     }
 
@@ -54,7 +70,14 @@ public class GUI extends JFrame
     {
         HlavneOkno hlavneOkno = new HlavneOkno(this.prezenter, this);
         hlavneOkno.obnovPocet();
+        hlavneOkno.obnovMaxUrovenNehnutelnosti();
+        hlavneOkno.obnovMaxUrovenParcely();
         this.zmenObsah(hlavneOkno.getJPanel());
+    }
+
+    public void zobrazVyberStart()
+    {
+        this.zmenObsah(this.panel);
     }
 
     private void zobrazStartSubor()

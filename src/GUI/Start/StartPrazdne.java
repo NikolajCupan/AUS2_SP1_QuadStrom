@@ -4,6 +4,8 @@ import Aplikacia.Prezenter;
 import GUI.GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StartPrazdne extends JFrame
 {
@@ -19,6 +21,7 @@ public class StartPrazdne extends JFrame
     private JTextField input_maxUroven;
     private JLabel maxY;
     private JButton button_potvrdStruktura;
+    private JButton button_naVyber;
 
     public StartPrazdne(Prezenter prezenter, GUI gui)
     {
@@ -39,6 +42,8 @@ public class StartPrazdne extends JFrame
                 JOptionPane.showMessageDialog(StartPrazdne.this, "Neplatné vstupy!");
             }
         });
+
+        this.button_naVyber.addActionListener(e -> gui.zobrazVyberStart());
     }
 
     public JPanel getJPanel()

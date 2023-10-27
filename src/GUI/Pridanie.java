@@ -5,6 +5,8 @@ import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Pridanie extends JFrame
 {
@@ -17,6 +19,7 @@ public class Pridanie extends JFrame
     private JTextField input_vpravoHoreX;
     private JTextField input_vpravoHoreY;
     private JButton button_potvrdPridanie;
+    private JButton button_naHlavne;
 
     public <T> Pridanie(Class<T> typ, Prezenter prezenter, GUI gui)
     {
@@ -58,6 +61,8 @@ public class Pridanie extends JFrame
                 JOptionPane.showMessageDialog(Pridanie.this, "Neplatné vstupy!");
             }
         });
+
+        this.button_naHlavne.addActionListener(e -> gui.zobrazHlavneOkno());
     }
 
     public JPanel getJPanel()

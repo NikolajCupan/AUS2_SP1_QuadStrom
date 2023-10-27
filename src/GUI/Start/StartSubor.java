@@ -4,6 +4,8 @@ import Aplikacia.Prezenter;
 import GUI.GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StartSubor
 {
@@ -12,6 +14,7 @@ public class StartSubor
     private JLabel nazov;
     private JTextField input_nazovSuboru;
     private JButton button_potvrd;
+    private JButton button_naVyber;
 
     public StartSubor(Prezenter prezenter, GUI gui)
     {
@@ -32,6 +35,8 @@ public class StartSubor
                 }
             }
         });
+
+        this.button_naVyber.addActionListener(e -> gui.zobrazVyberStart());
     }
 
     public JPanel getJPanel()
