@@ -1,5 +1,6 @@
 package Aplikacia;
 
+import Objekty.Suradnica;
 import Ostatne.Generator;
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
@@ -85,6 +86,45 @@ public class Prezenter
                 Parcela parcela = this.generator.getParcela();
                 this.logika.getParcelyStrom().vloz(parcela);
             }
+        }
+    }
+
+    public void vlozNehnutelnost(int supisneCislo, String popis, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        this.skontrolujVstupy(supisneCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+        Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis,
+                                                     new Suradnica(vlavoDoleX, vlavoDoleY),
+                                                     new Suradnica(vpravoHoreX, vpravoHoreY));
+        this.logika.vlozNehnutelnost(nehnutelnost);
+    }
+
+    public void vlozParcelu(int cisloParcely, String popis, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        this.skontrolujVstupy(cisloParcely, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+        Parcela parcela = new Parcela(cisloParcely, popis,
+                                      new Suradnica(vlavoDoleX, vlavoDoleY),
+                                      new Suradnica(vpravoHoreX, vpravoHoreY));
+        this.logika.vlozParcelu(parcela);
+    }
+
+    private void skontrolujVstupy(int cislo, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        if (vlavoDoleX >= vpravoHoreX || vlavoDoleY >= vpravoHoreY)
+        {
+            throw new RuntimeException("Neplatne zadane rozmery elementu!");
+        }
+
+        if (vlavoDoleX < this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX() ||
+            vlavoDoleY < this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY() ||
+            vpravoHoreX > this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX() ||
+            vpravoHoreY > this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY())
+        {
+            throw new RuntimeException("Vkladany element je prilis velky!");
+        }
+
+        if (cislo < 0)
+        {
+            throw new RuntimeException("Cislo elementu nemoze byt zaporne!");
         }
     }
 

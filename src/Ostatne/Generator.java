@@ -149,11 +149,21 @@ public class Generator
 
     public void setCurSupisneCislo(int curSupisneCislo)
     {
+        if (curSupisneCislo < 0)
+        {
+            throw new RuntimeException("Supisne cislo nemoze byt zaporne!");
+        }
+
         this.curSupisneCislo = curSupisneCislo;
     }
 
     public void setCurCisloParcely(int curCisloParcely)
     {
+        if (curCisloParcely < 0)
+        {
+            throw new RuntimeException("Cislo parcely nemoze byt zaporne!");
+        }
+
         this.curCisloParcely = curCisloParcely;
     }
 

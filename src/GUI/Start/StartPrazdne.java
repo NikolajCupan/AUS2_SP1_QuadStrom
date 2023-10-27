@@ -1,6 +1,7 @@
-package GUI;
+package GUI.Start;
 
 import Aplikacia.Prezenter;
+import GUI.GUI;
 
 import javax.swing.*;
 

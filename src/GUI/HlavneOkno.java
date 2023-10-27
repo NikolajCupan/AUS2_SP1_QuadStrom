@@ -1,6 +1,8 @@
 package GUI;
 
 import Aplikacia.Prezenter;
+import Objekty.Nehnutelnost;
+import Objekty.Parcela;
 
 import javax.swing.*;
 
@@ -35,8 +37,9 @@ public class HlavneOkno
         this.maxUroven.setText("Max úroveň (hĺbka): " + this.prezenter.getLogika().getNehnutelnostiStrom().getMaxUroven());
 
         this.button_generujData.addActionListener(e -> gui.zobrazGenerovanie());
-
         this.button_obnovPocet.addActionListener(e -> this.obnovPocet());
+        this.button_pridajNehnutelnost.addActionListener(e -> gui.zobrazPridavanie(Nehnutelnost.class));
+        this.button_pridajParcelu.addActionListener(e -> gui.zobrazPridavanie(Parcela.class));
     }
 
     public void obnovPocet()

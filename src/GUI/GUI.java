@@ -1,6 +1,8 @@
 package GUI;
 
 import Aplikacia.Prezenter;
+import GUI.Start.StartPrazdne;
+import GUI.Start.StartSubor;
 
 import javax.swing.*;
 
@@ -25,6 +27,12 @@ public class GUI extends JFrame
 
         this.button_nacitajZoSuboru.addActionListener(e -> GUI.this.zobrazStartSubor());
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
+    }
+
+    public <T> void zobrazPridavanie(Class<T> typ)
+    {
+        Pridanie pridanie = new Pridanie(typ, this.prezenter,this);
+        this.zmenObsah(pridanie.getJPanel());
     }
 
     public void zobrazGenerovanie()

@@ -1,6 +1,7 @@
-package GUI;
+package GUI.Start;
 
 import Aplikacia.Prezenter;
+import GUI.GUI;
 
 import javax.swing.*;
 
@@ -22,7 +23,7 @@ public class StartSubor
             {
                 if (!uspesneNacitanie)
                 {
-                    JOptionPane.showMessageDialog(StartSubor.this.panel, "Súbor s daným názvom sa nenašiel!");
+                    JOptionPane.showMessageDialog(StartSubor.this.panel, "Súbor s daným názvom sa nenašiel alebo nie je validný!");
                 }
                 else
                 {
