@@ -24,6 +24,7 @@ public class HlavneOkno
     private JButton button_pridajParcelu;
     private JButton button_obnovPocet;
     private JLabel label_pocetElementov;
+    private JButton button_zobrazNehnutelnosti;
 
     public HlavneOkno(Prezenter prezenter, GUI gui)
     {
@@ -40,6 +41,7 @@ public class HlavneOkno
         this.button_obnovPocet.addActionListener(e -> this.obnovPocet());
         this.button_pridajNehnutelnost.addActionListener(e -> gui.zobrazPridavanie(Nehnutelnost.class));
         this.button_pridajParcelu.addActionListener(e -> gui.zobrazPridavanie(Parcela.class));
+        this.button_zobrazNehnutelnosti.addActionListener(e -> gui.zobrazZoznamNehnutelnosti());
     }
 
     public void obnovPocet()
@@ -48,7 +50,7 @@ public class HlavneOkno
         int pocetParcely = prezenter.getLogika().getParcelyStrom().getPocetElementov();
         int pocetSpolu = pocetNehnutelnosti + pocetParcely;
 
-        this.label_pocetElementov.setText("Počet prvkov N/P/S: " + pocetNehnutelnosti + "/" + pocetParcely + "/" + pocetSpolu);
+        this.label_pocetElementov.setText("Počet prvkov (N/P/S): " + pocetNehnutelnosti + "/" + pocetParcely + "/" + pocetSpolu);
     }
 
     public JPanel getJPanel()

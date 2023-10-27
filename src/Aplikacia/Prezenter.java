@@ -8,6 +8,7 @@ import Objekty.Parcela;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.ArrayList;
 
 public class Prezenter
 {
@@ -61,6 +62,11 @@ public class Prezenter
         }
 
         this.logika = new Logika(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
+    }
+
+    public ArrayList<Nehnutelnost> getNehnutelnosti()
+    {
+        return this.logika.getNehnutelnosti();
     }
 
     public <T> void generujData(int zaciatocneCislo, int pocetGenerovanych, double faktorZmensenia, Class<T> typ)

@@ -1,5 +1,6 @@
 package Objekty;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Nehnutelnost extends Polygon
@@ -47,9 +48,22 @@ public class Nehnutelnost extends Polygon
         return this.parcely;
     }
 
+    public String getPopis()
+    {
+        return popis;
+    }
+
     @Override
     public int getKluc()
     {
         return this.supisneCislo;
+    }
+
+    @Override
+    public String toString()
+    {
+        DecimalFormat formatovac = new DecimalFormat("#.##");
+        return "Nehnutelnost: " + this.supisneCislo + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
+               "}, {" + formatovac.format(this.getVpravoHoreX()) + ", " + formatovac.format(this.getVpravoHoreY()) + "}";
     }
 }

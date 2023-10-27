@@ -3,8 +3,10 @@ package GUI;
 import Aplikacia.Prezenter;
 import GUI.Start.StartPrazdne;
 import GUI.Start.StartSubor;
+import Objekty.Nehnutelnost;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class GUI extends JFrame
 {
@@ -27,6 +29,13 @@ public class GUI extends JFrame
 
         this.button_nacitajZoSuboru.addActionListener(e -> GUI.this.zobrazStartSubor());
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
+    }
+
+    public void zobrazZoznamNehnutelnosti()
+    {
+        ArrayList<Nehnutelnost> nehnutelnosti = this.prezenter.getNehnutelnosti();
+        Zoznam zoznam = new Zoznam(this.prezenter, this, nehnutelnosti);
+        this.zmenObsah(zoznam.getJPanel());
     }
 
     public <T> void zobrazPridavanie(Class<T> typ)

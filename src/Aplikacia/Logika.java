@@ -2,8 +2,8 @@ package Aplikacia;
 
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
-import Objekty.Polygon;
 import QuadStrom.QuadStrom;
+import QuadStrom.Quad;
 
 import java.util.ArrayList;
 
@@ -79,6 +79,18 @@ public class Logika
         {
             nehnutelnosta.skusOdobratParcelu(vymazana);
         }
+    }
+
+    public ArrayList<Nehnutelnost> getNehnutelnosti()
+    {
+        ArrayList<Nehnutelnost> nehnutelnosti = new ArrayList<>();
+
+        for (Quad<Nehnutelnost> quad : this.nehnutelnosti)
+        {
+            nehnutelnosti.addAll(quad.getData());
+        }
+
+        return nehnutelnosti;
     }
 
     public QuadStrom<Nehnutelnost> getNehnutelnostiStrom()
