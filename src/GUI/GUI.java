@@ -29,7 +29,7 @@ public class GUI extends JFrame
 
     public void zobrazHlavneOkno()
     {
-        HlavneOkno hlavneOkno = new HlavneOkno();
+        HlavneOkno hlavneOkno = new HlavneOkno(this.aplikacia, this);
         this.zmenObsah(hlavneOkno.getJPanel());
     }
 

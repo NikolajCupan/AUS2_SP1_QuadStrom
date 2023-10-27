@@ -1,5 +1,7 @@
 package Aplikacia;
 
+import Ostatne.Generator;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -7,6 +9,7 @@ import java.io.BufferedReader;
 public class Aplikacia
 {
     private Logika logika;
+    private Generator generator;
 
     public boolean nacitajZoSoboru(String nazovSuboru)
     {
@@ -45,5 +48,10 @@ public class Aplikacia
     public void inicializujLogiku(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxHlbka)
     {
         this.logika = new Logika(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxHlbka);
+    }
+
+    public Logika getLogika()
+    {
+        return this.logika;
     }
 }
