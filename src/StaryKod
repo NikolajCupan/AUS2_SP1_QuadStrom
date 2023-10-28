@@ -92,7 +92,7 @@ for (int j = 157; j <= 10000; j++)
     for (int i = 1; i <= 10000; i++)
     {
         Polygon polygon = generatorDat.getPolygon();
-        this.logika.vlozPolygon(polygon);
+        this.databaza.vlozPolygon(polygon);
 
         /*
         if (i % 1000 == 0)
@@ -102,8 +102,8 @@ for (int j = 157; j <= 10000; j++)
         */
     }
 
-    this.logika.kontrola();
-    this.logika.inicializujStromy();
+    this.databaza.kontrola();
+    this.databaza.inicializujStromy();
     System.gc();
 }
 

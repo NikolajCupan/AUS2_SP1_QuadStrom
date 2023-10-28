@@ -39,10 +39,10 @@ public class HlavneOkno
         this.prezenter = prezenter;
         this.gui = gui;
 
-        this.minX.setText("Min x: " + this.prezenter.getLogika().getNehnutelnostiStrom().getRootQuad().getVlavoDoleX());
-        this.minY.setText("Min y: " + this.prezenter.getLogika().getNehnutelnostiStrom().getRootQuad().getVlavoDoleY());
-        this.maxX.setText("Max x: " + this.prezenter.getLogika().getNehnutelnostiStrom().getRootQuad().getVpravoHoreX());
-        this.maxY.setText("Max y: " + this.prezenter.getLogika().getNehnutelnostiStrom().getRootQuad().getVpravoHoreY());
+        this.minX.setText("Min x: " + this.prezenter.getDatabaza().getNehnutelnostiStrom().getRootQuad().getVlavoDoleX());
+        this.minY.setText("Min y: " + this.prezenter.getDatabaza().getNehnutelnostiStrom().getRootQuad().getVlavoDoleY());
+        this.maxX.setText("Max x: " + this.prezenter.getDatabaza().getNehnutelnostiStrom().getRootQuad().getVpravoHoreX());
+        this.maxY.setText("Max y: " + this.prezenter.getDatabaza().getNehnutelnostiStrom().getRootQuad().getVpravoHoreY());
 
         this.button_generujData.addActionListener(e -> gui.zobrazGenerovanie());
         this.button_obnovPocet.addActionListener(e -> this.obnovPocet());
@@ -60,18 +60,18 @@ public class HlavneOkno
 
     public void obnovMaxUrovenNehnutelnosti()
     {
-        this.maxUrovenNehnutelnosti.setText("Maximálna úroveň (hĺbka), strom nehnuteľností: " + prezenter.getLogika().getNehnutelnostiStrom().getMaxUroven());
+        this.maxUrovenNehnutelnosti.setText("Maximálna úroveň (hĺbka), strom nehnuteľností: " + prezenter.getDatabaza().getNehnutelnostiStrom().getMaxUroven());
     }
 
     public void obnovMaxUrovenParcely()
     {
-        this.maxUrovenParcely.setText("Maximálna úroveň (hĺbka), strom parciel: " + prezenter.getLogika().getParcelyStrom().getMaxUroven());
+        this.maxUrovenParcely.setText("Maximálna úroveň (hĺbka), strom parciel: " + prezenter.getDatabaza().getParcelyStrom().getMaxUroven());
     }
 
     public void obnovPocet()
     {
-        int pocetNehnutelnosti = prezenter.getLogika().getNehnutelnostiStrom().getPocetElementov();
-        int pocetParcely = prezenter.getLogika().getParcelyStrom().getPocetElementov();
+        int pocetNehnutelnosti = prezenter.getDatabaza().getNehnutelnostiStrom().getPocetElementov();
+        int pocetParcely = prezenter.getDatabaza().getParcelyStrom().getPocetElementov();
         int pocetSpolu = pocetNehnutelnosti + pocetParcely;
 
         this.label_pocetElementov.setText("Počet prvkov (N/P/S): " + pocetNehnutelnosti + "/" + pocetParcely + "/" + pocetSpolu);

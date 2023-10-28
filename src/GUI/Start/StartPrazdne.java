@@ -34,7 +34,7 @@ public class StartPrazdne extends JFrame
                 int maxUrovenNehnutelnosti = Integer.parseInt(this.input_maxUrovenNehnutelnosti.getText());
                 int maxUrovenParcely = Integer.parseInt(this.input_maxUrovenParcely.getText());
 
-                prezenter.inicializujLogiku(minX, minY, maxX, maxY, maxUrovenNehnutelnosti, maxUrovenParcely);
+                prezenter.inicializujDatabazu(minX, minY, maxX, maxY, maxUrovenNehnutelnosti, maxUrovenParcely);
                 gui.zobrazHlavneOkno();
             }
             catch (Exception ex)

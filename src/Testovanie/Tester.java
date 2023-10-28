@@ -12,10 +12,10 @@ import java.util.Random;
 public class Tester
 {
     // Hranice quad stromu a generovanych suradnic
-    private static final double GEN_X_MIN = -1000;
-    private static final double GEN_Y_MIN = -1000;
-    private static final double GEN_X_MAX = 1000;
-    private static final double GEN_Y_MAX = 1000;
+    private static final double GEN_X_MIN = -1;
+    private static final double GEN_Y_MIN = -1;
+    private static final double GEN_X_MAX = 1;
+    private static final double GEN_Y_MAX = 1;
 
     // Hranice pre faktor zmensenia vygenerovanych suradnic
     private static final double FAKTOR_ZMENSENIA_MIN = 1;
@@ -77,7 +77,7 @@ public class Tester
         // Vlastne parametre testu
         final String NAZOV_SUBORU = "Test_zakladne_operacie.txt";
 
-        final int ZACIATOCNA_VELKOST = 1000;
+        final int ZACIATOCNA_VELKOST = 5000;
         final int POCET_OPERACII = 50000;
 
         final int PRST_VYHLADAJ_BOD = 50;

@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 public class Prezenter
 {
-    private Logika logika;
+    private Databaza databaza;
     private Generator generator;
 
     public boolean ulozDoSuboru(String nazovSuboruNehnutelnosti, String nazovSuboruParcely)
     {
-        if (!this.zapisDoSuboru(nazovSuboruNehnutelnosti, this.logika.getNehnutelnostiStrom(), Nehnutelnost.class) ||
-            !this.zapisDoSuboru(nazovSuboruParcely, this.logika.getParcelyStrom(), Parcela.class))
+        if (!this.zapisDoSuboru(nazovSuboruNehnutelnosti, this.databaza.getNehnutelnostiStrom(), Nehnutelnost.class) ||
+            !this.zapisDoSuboru(nazovSuboruParcely, this.databaza.getParcelyStrom(), Parcela.class))
         {
             return false;
         }
@@ -32,7 +32,7 @@ public class Prezenter
         return true;
     }
 
-    public <T extends IPolygon> boolean zapisDoSuboru(String nazovSuboru, QuadStrom<T> strom, Class<T> typ)
+    private <T extends IPolygon> boolean zapisDoSuboru(String nazovSuboru, QuadStrom<T> strom, Class<T> typ)
     {
         try
         {
@@ -96,18 +96,18 @@ public class Prezenter
 
         // Ak som sa dostal sem, tak stromy su uspesne vytvorene,
         // teraz ich naplnim datamy zo suborov
-        if (!this.nacitajDataZoSuboru(suborNehnutelnosti, this.logika, Nehnutelnost.class) ||
-            !this.nacitajDataZoSuboru(suborParcely, this.logika, Parcela.class))
+        if (!this.nacitajDataZoSuboru(suborNehnutelnosti, this.databaza, Nehnutelnost.class) ||
+            !this.nacitajDataZoSuboru(suborParcely, this.databaza, Parcela.class))
         {
             // Pri nacitavani samotnych dat nastal problem,
             // data, ktore som nacital vymazem
-            this.logika.resetujStromy();
+            this.databaza.resetujStromy();
         }
 
         return true;
     }
 
-    public boolean nacitajParametreZoSuboru(File suborNehnutelnosti, File suborParcely)
+    private boolean nacitajParametreZoSuboru(File suborNehnutelnosti, File suborParcely)
     {
         try
         {
@@ -139,7 +139,7 @@ public class Prezenter
             int maxUrovenParcely = Integer.parseInt(bCitacParcely.readLine());
 
             // Vytvorim stormy
-            this.inicializujLogiku(vlavoDoleXNehnutelnosti, vlavoDoleYNehnutelnosti, vpravoHoreXNehnutelnosti, vpravoHoreYNehnutelnosti,
+            this.inicializujDatabazu(vlavoDoleXNehnutelnosti, vlavoDoleYNehnutelnosti, vpravoHoreXNehnutelnosti, vpravoHoreYNehnutelnosti,
                                    maxUrovenNehnutelnosti, maxUrovenParcely);
 
             bCitacNehnutelnosti.close();
@@ -157,7 +157,7 @@ public class Prezenter
         }
     }
 
-    public <T extends IPolygon> boolean nacitajDataZoSuboru(File subor, Logika logika, Class<T> typ)
+    private <T extends IPolygon> boolean nacitajDataZoSuboru(File subor, Databaza databaza, Class<T> typ)
     {
         try
         {
@@ -195,12 +195,12 @@ public class Prezenter
                 if (typ.equals(Nehnutelnost.class))
                 {
                     Nehnutelnost nehnutelnost = new Nehnutelnost(cislo, popis, surVlavoDole, surVpravoHore);
-                    this.logika.vlozNehnutelnost(nehnutelnost);
+                    this.databaza.vlozNehnutelnost(nehnutelnost);
                 }
                 else if (typ.equals(Parcela.class))
                 {
                     Parcela parcela = new Parcela(cislo, popis, surVlavoDole, surVpravoHore);
-                    this.logika.vlozParcelu(parcela);
+                    this.databaza.vlozParcelu(parcela);
                 }
             }
 
@@ -212,8 +212,8 @@ public class Prezenter
         }
     }
 
-    public void inicializujLogiku(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
-                                  int maxUrovenNehnutelnosti, int maxUrovenParcely)
+    public void inicializujDatabazu(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
+                                    int maxUrovenNehnutelnosti, int maxUrovenParcely)
     {
         if (maxUrovenNehnutelnosti < 0 || maxUrovenParcely < 0)
         {
@@ -225,7 +225,7 @@ public class Prezenter
             throw new RuntimeException("Neplatne zadane rozmery najvacsieho quadu!");
         }
 
-        this.logika = new Logika(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti, maxUrovenParcely);
+        this.databaza = new Databaza(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti, maxUrovenParcely);
     }
 
     public <T> void generujData(int zaciatocneCislo, int pocetGenerovanych, double faktorZmensenia, Class<T> typ)
@@ -244,12 +244,12 @@ public class Prezenter
             if (typ.equals(Nehnutelnost.class))
             {
                 Nehnutelnost nehnutelnost = this.generator.getNehnutelnost();
-                this.logika.vlozNehnutelnost(nehnutelnost);
+                this.databaza.vlozNehnutelnost(nehnutelnost);
             }
             else if (typ.equals(Parcela.class))
             {
                 Parcela parcela = this.generator.getParcela();
-                this.logika.vlozParcelu(parcela);
+                this.databaza.vlozParcelu(parcela);
             }
         }
     }
@@ -260,7 +260,7 @@ public class Prezenter
         Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis,
                                                      new Suradnica(vlavoDoleX, vlavoDoleY),
                                                      new Suradnica(vpravoHoreX, vpravoHoreY));
-        this.logika.vlozNehnutelnost(nehnutelnost);
+        this.databaza.vlozNehnutelnost(nehnutelnost);
     }
 
     public void vlozParcelu(int cisloParcely, String popis, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
@@ -269,7 +269,7 @@ public class Prezenter
         Parcela parcela = new Parcela(cisloParcely, popis,
                                       new Suradnica(vlavoDoleX, vlavoDoleY),
                                       new Suradnica(vpravoHoreX, vpravoHoreY));
-        this.logika.vlozParcelu(parcela);
+        this.databaza.vlozParcelu(parcela);
     }
 
     public void editujPolygon(Polygon polygon, int noveCislo, String popis, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
@@ -300,12 +300,12 @@ public class Prezenter
             if (polygon instanceof Nehnutelnost)
             {
                 Nehnutelnost novaNehnutelnost = new Nehnutelnost(noveCislo, popis, surVlavoDole, surVpravoHore);
-                this.logika.vlozNehnutelnost(novaNehnutelnost);
+                this.databaza.vlozNehnutelnost(novaNehnutelnost);
             }
             else if (polygon instanceof Parcela)
             {
                 Parcela novaParcela = new Parcela(noveCislo, popis, surVlavoDole, surVpravoHore);
-                this.logika.vlozParcelu(novaParcela);
+                this.databaza.vlozParcelu(novaParcela);
             }
         }
     }
@@ -317,11 +317,11 @@ public class Prezenter
 
         if (polygon instanceof Nehnutelnost nehnutelnost)
         {
-            this.logika.vymazNehnutelnost(stredX, stredY, nehnutelnost.getKluc());
+            this.databaza.vymazNehnutelnost(stredX, stredY, nehnutelnost.getKluc());
         }
         else if (polygon instanceof Parcela parcela)
         {
-            this.logika.vymazParcelu(stredX, stredY, parcela.getKluc());
+            this.databaza.vymazParcelu(stredX, stredY, parcela.getKluc());
         }
     }
 
@@ -331,8 +331,8 @@ public class Prezenter
         this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
 
         ArrayList<Polygon> polygony = new ArrayList<>();
-        polygony.addAll(this.logika.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
-        polygony.addAll(this.logika.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
+        polygony.addAll(this.databaza.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
+        polygony.addAll(this.databaza.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
         return polygony;
     }
 
@@ -341,7 +341,7 @@ public class Prezenter
         int dummyCislo = 0;
         this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
 
-        return this.logika.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+        return this.databaza.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
     }
 
     public ArrayList<Parcela> vyhladajParcely(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
@@ -349,26 +349,26 @@ public class Prezenter
         int dummyCislo = 0;
         this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
 
-        return this.logika.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+        return this.databaza.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
     }
 
 
     public ArrayList<Polygon> vyhladajPolygony(double x, double y)
     {
         ArrayList<Polygon> polygony = new ArrayList<>();
-        polygony.addAll(this.logika.vyhladajNehnutelnosti(x, y));
-        polygony.addAll(this.logika.vyhladajParcely(x, y));
+        polygony.addAll(this.databaza.vyhladajNehnutelnosti(x, y));
+        polygony.addAll(this.databaza.vyhladajParcely(x, y));
         return polygony;
     }
 
     public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(double x, double y)
     {
-        return this.logika.vyhladajNehnutelnosti(x, y);
+        return this.databaza.vyhladajNehnutelnosti(x, y);
     }
 
     public ArrayList<Parcela> vyhladajParcely(double x, double y)
     {
-        return this.logika.vyhladajParcely(x, y);
+        return this.databaza.vyhladajParcely(x, y);
     }
 
     private void skontrolujVstupy(int cislo, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
@@ -378,10 +378,10 @@ public class Prezenter
             throw new RuntimeException("Neplatne zadane rozmery elementu!");
         }
 
-        if (vlavoDoleX < this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX() ||
-            vlavoDoleY < this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY() ||
-            vpravoHoreX > this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX() ||
-            vpravoHoreY > this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY())
+        if (vlavoDoleX < this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX() ||
+            vlavoDoleY < this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY() ||
+            vpravoHoreX > this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX() ||
+            vpravoHoreY > this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY())
         {
             throw new RuntimeException("Vkladany element je prilis velky!");
         }
@@ -395,30 +395,30 @@ public class Prezenter
     private void inicializujGenerator()
     {
         this.generator = new Generator(1, 1,
-                                       this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX(),
-                                       this.logika.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY(),
-                                       this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX(),
-                                       this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY(),
+                                       this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX(),
+                                       this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY(),
+                                       this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX(),
+                                       this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY(),
                                        5, 1);
     }
 
     public ArrayList<Polygon> getPolygony()
     {
-        return this.logika.getPolygony();
+        return this.databaza.getPolygony();
     }
 
     public ArrayList<Parcela> getParcely()
     {
-        return this.logika.getParcely();
+        return this.databaza.getParcely();
     }
 
     public ArrayList<Nehnutelnost> getNehnutelnosti()
     {
-        return this.logika.getNehnutelnosti();
+        return this.databaza.getNehnutelnosti();
     }
 
-    public Logika getLogika()
+    public Databaza getDatabaza()
     {
-        return this.logika;
+        return this.databaza;
     }
 }

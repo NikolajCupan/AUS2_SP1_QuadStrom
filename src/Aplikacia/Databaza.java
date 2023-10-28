@@ -8,13 +8,13 @@ import QuadStrom.Quad;
 
 import java.util.ArrayList;
 
-public class Logika
+public class Databaza
 {
     private QuadStrom<Nehnutelnost> nehnutelnosti;
     private QuadStrom<Parcela> parcely;
 
-    public Logika(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
-                  int maxUrovenNehnutelnosti, int maxUrovenParcely)
+    public Databaza(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
+                    int maxUrovenNehnutelnosti, int maxUrovenParcely)
     {
         this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti, maxUrovenParcely);
     }
