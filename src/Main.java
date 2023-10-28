@@ -1,4 +1,5 @@
 import GUI.*;
+import Testovanie.Tester;
 
 public class Main
 {
@@ -8,7 +9,7 @@ public class Main
         //aplikacia.vykonavaj();
 
         //Tester tester = new Tester();
-        //tester.replikacie(100);
+        //tester.replikacie(1000);
 
         GUI gui = new GUI();
     }
