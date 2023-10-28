@@ -27,7 +27,7 @@ public class GUI extends JFrame
 
         setTitle("Aplikácia - Nikolaj Cupan");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(750, 500);
+        setSize(750, 750);
         setLocationRelativeTo(null);
         setVisible(true);
 
