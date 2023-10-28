@@ -162,6 +162,24 @@ public class Prezenter
         }
     }
 
+    public ArrayList<Polygon> vyhladajPolygony(double x, double y)
+    {
+        ArrayList<Polygon> polygony = new ArrayList<>();
+        polygony.addAll(this.logika.vyhladajNehnutelnosti(x, y));
+        polygony.addAll(this.logika.vyhladajParcely(x, y));
+        return polygony;
+    }
+
+    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(double x, double y)
+    {
+        return this.logika.vyhladajNehnutelnosti(x, y);
+    }
+
+    public ArrayList<Parcela> vyhladajParcely(double x, double y)
+    {
+        return this.logika.vyhladajParcely(x, y);
+    }
+
     private void skontrolujVstupy(int cislo, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
         if (vlavoDoleX >= vpravoHoreX || vlavoDoleY >= vpravoHoreY)

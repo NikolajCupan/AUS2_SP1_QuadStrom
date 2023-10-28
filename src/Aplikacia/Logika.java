@@ -84,6 +84,26 @@ public class Logika
         vymazana.getNehnutelnosti().clear();
     }
 
+    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(double x, double y)
+    {
+        return this.nehnutelnosti.vyhladaj(x, y);
+    }
+
+    public ArrayList<Parcela> vyhladajParcely(double x, double y)
+    {
+        return this.parcely.vyhladaj(x, y);
+    }
+
+    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        return this.nehnutelnosti.vyhladaj(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+    }
+
+    public ArrayList<Parcela> vyhladajParcely(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        return this.parcely.vyhladaj(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+    }
+
     public ArrayList<Polygon> getPolygony()
     {
         ArrayList<Polygon> polygony = new ArrayList<>();

@@ -150,6 +150,13 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
         ArrayList<T> najdene = new ArrayList<>();
         Quad<T> curQuad = this.rootQuad;
 
+        if (!curQuad.leziVnutri(x, y))
+        {
+            // Specialna situacia, kedy zvolena suradnica lezi mimo najvacsi quad,
+            // v takomto pripade vyhladavanie moze skoncit okamzite
+            return najdene;
+        }
+
         while (true)
         {
             for (T element : curQuad.getData())

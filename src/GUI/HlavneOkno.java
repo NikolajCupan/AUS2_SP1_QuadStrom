@@ -47,9 +47,9 @@ public class HlavneOkno
         this.button_obnovPocet.addActionListener(e -> this.obnovPocet());
         this.button_pridajNehnutelnost.addActionListener(e -> gui.zobrazPridavanie(Nehnutelnost.class));
         this.button_pridajParcelu.addActionListener(e -> gui.zobrazPridavanie(Parcela.class));
-        this.button_zobrazNehnutelnosti.addActionListener(e -> gui.zobrazZoznamNehnutelnosti());
-        this.button_zobrazParcely.addActionListener(e -> gui.zobrazZoznamParciel());
-        this.button_zobrazPolygony.addActionListener(e -> gui.zobrazZoznamPolygonov());
+        this.button_zobrazNehnutelnosti.addActionListener(e -> gui.zobrazZoznamNehnutelnosti(prezenter.getNehnutelnosti()));
+        this.button_zobrazParcely.addActionListener(e -> gui.zobrazZoznamParciel(prezenter.getParcely()));
+        this.button_zobrazPolygony.addActionListener(e -> gui.zobrazZoznamPolygonov(prezenter.getPolygony()));
         this.button_obnovUrovenNehnutelnosti.addActionListener(e -> this.obnovMaxUrovenNehnutelnosti());
         this.button_obnovUrovenParcely.addActionListener(e -> this.obnovMaxUrovenParcely());
         this.button_vyhladajSuradnica.addActionListener(e -> gui.zobrazVyhladavanieSuradnica());

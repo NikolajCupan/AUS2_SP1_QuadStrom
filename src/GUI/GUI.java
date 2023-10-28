@@ -53,23 +53,20 @@ public class GUI extends JFrame
         this.zmenObsah(editovanie.getJpanel());
     }
 
-    public void zobrazZoznamPolygonov()
+    public void zobrazZoznamPolygonov(ArrayList<Polygon> polygony)
     {
-        ArrayList<Polygon> polygony = this.prezenter.getPolygony();
         Zoznam<Polygon> zoznam = new Zoznam<Polygon>(this.prezenter, this, polygony);
         this.zmenObsah(zoznam.getJPanel());
     }
 
-    public void zobrazZoznamParciel()
+    public void zobrazZoznamParciel(ArrayList<Parcela> parcely)
     {
-        ArrayList<Parcela> parcely = this.prezenter.getParcely();
         Zoznam<Parcela> zoznam = new Zoznam<Parcela>(this.prezenter, this, parcely);
         this.zmenObsah(zoznam.getJPanel());
     }
 
-    public void zobrazZoznamNehnutelnosti()
+    public void zobrazZoznamNehnutelnosti(ArrayList<Nehnutelnost> nehnutelnosti)
     {
-        ArrayList<Nehnutelnost> nehnutelnosti = this.prezenter.getNehnutelnosti();
         Zoznam<Nehnutelnost> zoznam = new Zoznam<Nehnutelnost>(this.prezenter, this, nehnutelnosti);
         this.zmenObsah(zoznam.getJPanel());
     }
