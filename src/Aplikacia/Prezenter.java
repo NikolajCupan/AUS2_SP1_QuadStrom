@@ -162,6 +162,34 @@ public class Prezenter
         }
     }
 
+    public ArrayList<Polygon> vyhladajPolygony(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        int dummyCislo = 0;
+        this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+
+        ArrayList<Polygon> polygony = new ArrayList<>();
+        polygony.addAll(this.logika.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
+        polygony.addAll(this.logika.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY));
+        return polygony;
+    }
+
+    public ArrayList<Nehnutelnost> vyhladajNehnutelnosti(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        int dummyCislo = 0;
+        this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+
+        return this.logika.vyhladajNehnutelnosti(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+    }
+
+    public ArrayList<Parcela> vyhladajParcely(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        int dummyCislo = 0;
+        this.skontrolujVstupy(dummyCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+
+        return this.logika.vyhladajParcely(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+    }
+
+
     public ArrayList<Polygon> vyhladajPolygony(double x, double y)
     {
         ArrayList<Polygon> polygony = new ArrayList<>();

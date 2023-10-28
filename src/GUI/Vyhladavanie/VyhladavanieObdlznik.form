@@ -67,7 +67,7 @@
           <text value="Vľavo dole y"/>
         </properties>
       </component>
-      <component id="1991a" class="javax.swing.JLabel" binding="input_vpravoHoreX">
+      <component id="1991a" class="javax.swing.JLabel">
         <constraints>
           <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -75,7 +75,7 @@
           <text value="Vpravo hore x"/>
         </properties>
       </component>
-      <component id="e702f" class="javax.swing.JLabel" binding="input_vpravoHoreY">
+      <component id="e702f" class="javax.swing.JLabel">
         <constraints>
           <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -99,7 +99,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="53711" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+      <component id="53711" class="javax.swing.JTextField" binding="input_vpravoHoreX">
         <constraints>
           <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -107,7 +107,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="92cf3" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+      <component id="92cf3" class="javax.swing.JTextField" binding="input_vpravoHoreY">
         <constraints>
           <grid row="6" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>

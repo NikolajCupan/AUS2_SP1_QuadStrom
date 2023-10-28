@@ -98,6 +98,14 @@ public class Zoznam<T extends IPolygon> extends JFrame
         });
 
         this.button_vymaz.addActionListener(e -> {
+            if (this.zobrazeny == null)
+            {
+                return;
+            }
+
+            prezenter.vymazPolygon((Polygon)zobrazeny);
+            JOptionPane.showMessageDialog(Zoznam.this, "Zmazanie bolo úspešné");
+            gui.zobrazHlavneOkno();
         });
     }
 
