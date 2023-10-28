@@ -5,8 +5,6 @@ import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class HlavneOkno
 {
@@ -32,6 +30,8 @@ public class HlavneOkno
     private JButton button_obnovUrovenNehnutelnosti;
     private JLabel maxUrovenParcely;
     private JButton button_obnovUrovenParcely;
+    private JButton button_vyhladajSuradnica;
+    private JButton button_vyhladajObdlznik;
 
     public HlavneOkno(Prezenter prezenter, GUI gui)
     {
@@ -52,6 +52,8 @@ public class HlavneOkno
         this.button_zobrazPolygony.addActionListener(e -> gui.zobrazZoznamPolygonov());
         this.button_obnovUrovenNehnutelnosti.addActionListener(e -> this.obnovMaxUrovenNehnutelnosti());
         this.button_obnovUrovenParcely.addActionListener(e -> this.obnovMaxUrovenParcely());
+        this.button_vyhladajSuradnica.addActionListener(e -> gui.zobrazVyhladavanieSuradnica());
+        this.button_vyhladajObdlznik.addActionListener(e -> gui.zobrazVyhladavanieObdlznik());
     }
 
     public void obnovMaxUrovenNehnutelnosti()

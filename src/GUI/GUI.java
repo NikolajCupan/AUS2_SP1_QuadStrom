@@ -3,6 +3,8 @@ package GUI;
 import Aplikacia.Prezenter;
 import GUI.Start.StartPrazdne;
 import GUI.Start.StartSubor;
+import GUI.Vyhladavanie.VyhladavanieObdlznik;
+import GUI.Vyhladavanie.VyhladavanieSuradnica;
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 import Objekty.Polygon;
@@ -31,6 +33,18 @@ public class GUI extends JFrame
 
         this.button_nacitajZoSuboru.addActionListener(e -> GUI.this.zobrazStartSubor());
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
+    }
+
+    public void zobrazVyhladavanieObdlznik()
+    {
+        VyhladavanieObdlznik vyhladavanieObdlznik = new VyhladavanieObdlznik(this.prezenter, this);
+        this.zmenObsah(vyhladavanieObdlznik.getJPanel());
+    }
+
+    public void zobrazVyhladavanieSuradnica()
+    {
+        VyhladavanieSuradnica vyhladavanieSuradnica = new VyhladavanieSuradnica(this.prezenter, this);
+        this.zmenObsah(vyhladavanieSuradnica.getJPanel());
     }
 
     public void zobrazEditovanie(Polygon polygon)
