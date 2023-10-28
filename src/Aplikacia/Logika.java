@@ -65,6 +65,7 @@ public class Logika
         {
             parcela.skusOdobratNehnutelnost(vymazana);
         }
+        vymazana.getParcely().clear();
     }
 
     public void vymazParcelu(double x, double y, int hladanyKluc)
@@ -80,6 +81,7 @@ public class Logika
         {
             nehnutelnosta.skusOdobratParcelu(vymazana);
         }
+        vymazana.getNehnutelnosti().clear();
     }
 
     public ArrayList<Polygon> getPolygony()

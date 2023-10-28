@@ -43,6 +43,16 @@ public class Nehnutelnost extends Polygon
         this.parcely.remove(parcela);
     }
 
+    public void setSupisneCislo(int supisneCislo)
+    {
+        this.supisneCislo = supisneCislo;
+    }
+
+    public void setPopis(String popis)
+    {
+        this.popis = popis;
+    }
+
     public ArrayList<Parcela> getParcely()
     {
         return this.parcely;
@@ -63,7 +73,7 @@ public class Nehnutelnost extends Polygon
     public String toString()
     {
         DecimalFormat formatovac = new DecimalFormat("#.##");
-        return "Nehnutelnost: " + this.supisneCislo + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
+        return "Nehnuteľnost: " + this.supisneCislo + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
                "}, {" + formatovac.format(this.getVpravoHoreX()) + ", " + formatovac.format(this.getVpravoHoreY()) + "}";
     }
 }

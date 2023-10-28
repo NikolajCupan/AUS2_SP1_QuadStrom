@@ -23,7 +23,7 @@ public class GUI extends JFrame
 
         setContentPane(this.panel);
 
-        setTitle("Aplikacia - Nikolaj Cupan");
+        setTitle("Aplikácia - Nikolaj Cupan");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(750, 500);
         setLocationRelativeTo(null);
@@ -31,6 +31,12 @@ public class GUI extends JFrame
 
         this.button_nacitajZoSuboru.addActionListener(e -> GUI.this.zobrazStartSubor());
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
+    }
+
+    public void zobrazEditovanie(Polygon polygon)
+    {
+        Editovanie editovanie = new Editovanie(this.prezenter, this, polygon);
+        this.zmenObsah(editovanie.getJpanel());
     }
 
     public void zobrazZoznamPolygonov()

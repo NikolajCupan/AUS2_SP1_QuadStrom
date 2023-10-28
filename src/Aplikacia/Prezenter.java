@@ -65,21 +65,6 @@ public class Prezenter
         this.logika = new Logika(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
     }
 
-    public ArrayList<Polygon> getPolygony()
-    {
-        return this.logika.getPolygony();
-    }
-
-    public ArrayList<Parcela> getParcely()
-    {
-        return this.logika.getParcely();
-    }
-
-    public ArrayList<Nehnutelnost> getNehnutelnosti()
-    {
-        return this.logika.getNehnutelnosti();
-    }
-
     public <T> void generujData(int zaciatocneCislo, int pocetGenerovanych, double faktorZmensenia, Class<T> typ)
     {
         if (this.generator == null)
@@ -124,6 +109,59 @@ public class Prezenter
         this.logika.vlozParcelu(parcela);
     }
 
+    public void editujPolygon(Polygon polygon, int noveCislo, String popis, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
+    {
+        this.skontrolujVstupy(noveCislo, vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY);
+
+        if (polygon instanceof Nehnutelnost nehnutelnost)
+        {
+            nehnutelnost.setPopis(popis);
+            nehnutelnost.setSupisneCislo(noveCislo);
+        }
+        else if (polygon instanceof Parcela parcela)
+        {
+            parcela.setPopis(popis);
+            parcela.setCisloParcely(noveCislo);
+        }
+
+        if (polygon.getVlavoDoleX() != vlavoDoleX ||
+            polygon.getVlavoDoleY() != vlavoDoleY ||
+            polygon.getVpravoHoreX() != vpravoHoreX ||
+            polygon.getVpravoHoreY() != vpravoHoreY)
+        {
+            // Meni sa pozicia polygonu
+            this.vymazPolygon(polygon);
+            Suradnica surVlavoDole = new Suradnica(vlavoDoleX, vlavoDoleY);
+            Suradnica surVpravoHore = new Suradnica(vpravoHoreX, vpravoHoreY);
+
+            if (polygon instanceof Nehnutelnost)
+            {
+                Nehnutelnost novaNehnutelnost = new Nehnutelnost(noveCislo, popis, surVlavoDole, surVpravoHore);
+                this.logika.vlozNehnutelnost(novaNehnutelnost);
+            }
+            else if (polygon instanceof Parcela)
+            {
+                Parcela novaParcela = new Parcela(noveCislo, popis, surVlavoDole, surVpravoHore);
+                this.logika.vlozParcelu(novaParcela);
+            }
+        }
+    }
+
+    public void vymazPolygon(Polygon polygon)
+    {
+        double stredX = (polygon.getVlavoDoleX() + polygon.getVpravoHoreX()) / 2;
+        double stredY = (polygon.getVlavoDoleY() + polygon.getVpravoHoreY()) / 2;
+
+        if (polygon instanceof Nehnutelnost nehnutelnost)
+        {
+            this.logika.vymazNehnutelnost(stredX, stredY, nehnutelnost.getKluc());
+        }
+        else if (polygon instanceof Parcela parcela)
+        {
+            this.logika.vymazParcelu(stredX, stredY, parcela.getKluc());
+        }
+    }
+
     private void skontrolujVstupy(int cislo, double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY)
     {
         if (vlavoDoleX >= vpravoHoreX || vlavoDoleY >= vpravoHoreY)
@@ -153,6 +191,21 @@ public class Prezenter
                                        this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX(),
                                        this.logika.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY(),
                                        5, 1);
+    }
+
+    public ArrayList<Polygon> getPolygony()
+    {
+        return this.logika.getPolygony();
+    }
+
+    public ArrayList<Parcela> getParcely()
+    {
+        return this.logika.getParcely();
+    }
+
+    public ArrayList<Nehnutelnost> getNehnutelnosti()
+    {
+        return this.logika.getNehnutelnosti();
     }
 
     public Logika getLogika()

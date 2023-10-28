@@ -56,12 +56,12 @@ public class HlavneOkno
 
     public void obnovMaxUrovenNehnutelnosti()
     {
-        this.maxUrovenNehnutelnosti.setText("Maximálna úroveň (hĺbka) N: " + prezenter.getLogika().getNehnutelnostiStrom().getMaxUroven());
+        this.maxUrovenNehnutelnosti.setText("Maximálna úroveň (hĺbka), strom nehnuteľností: " + prezenter.getLogika().getNehnutelnostiStrom().getMaxUroven());
     }
 
     public void obnovMaxUrovenParcely()
     {
-        this.maxUrovenParcely.setText("Maximálna úroveň (hĺbka) P: " + prezenter.getLogika().getParcelyStrom().getMaxUroven());
+        this.maxUrovenParcely.setText("Maximálna úroveň (hĺbka), strom parciel: " + prezenter.getLogika().getParcelyStrom().getMaxUroven());
     }
 
     public void obnovPocet()

@@ -5,8 +5,6 @@ import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Pridanie extends JFrame
 {
@@ -20,15 +18,18 @@ public class Pridanie extends JFrame
     private JTextField input_vpravoHoreY;
     private JButton button_potvrdPridanie;
     private JButton button_naHlavne;
+    private JLabel label_nadpis;
 
     public <T> Pridanie(Class<T> typ, Prezenter prezenter, GUI gui)
     {
         if (typ.equals(Nehnutelnost.class))
         {
+            this.label_nadpis.setText("Vytvorenie novej nehnuteľnosti");
             this.label_cisloNazov.setText("Súpisné číslo");
         }
         else if (typ.equals(Parcela.class))
         {
+            this.label_nadpis.setText("Vytvorenie novej parcely");
             this.label_cisloNazov.setText("Číslo parcely");
         }
 

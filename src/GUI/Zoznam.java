@@ -3,9 +3,12 @@ package GUI;
 import Aplikacia.Prezenter;
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
+import Objekty.Polygon;
 import Ostatne.IPolygon;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Zoznam<T extends IPolygon> extends JFrame
@@ -15,7 +18,10 @@ public class Zoznam<T extends IPolygon> extends JFrame
     private JButton button_detail;
     private JButton button_naHlavne;
     private JTextArea detail;
+    private JButton button_edituj;
+    private JButton button_vymaz;
     private DefaultListModel<T> model;
+    private T zobrazeny;
 
     public Zoznam(Prezenter prezenter, GUI gui, ArrayList<T> zoznam)
     {
@@ -34,17 +40,21 @@ public class Zoznam<T extends IPolygon> extends JFrame
                 return;
             }
 
+            this.zobrazeny = element;
+            this.button_edituj.setEnabled(true);
+            this.button_vymaz.setEnabled(true);
+
             StringBuilder builder = new StringBuilder();
 
             if (element instanceof Nehnutelnost)
             {
-                builder.append("Nehnuteľnosť: ").append(element.getKluc()).append("\n");
+                builder.append("Nehnuteľnosť: ").append("\n");
                 builder.append("Súpisné číslo: ").append(element.getKluc()).append("\n");
                 builder.append("Popis: ").append(((Nehnutelnost)element).getPopis()).append("\n");
             }
             else
             {
-                builder.append("Parcela: ").append(element.getKluc()).append("\n");
+                builder.append("Parcela: ").append("\n");
                 builder.append("Číslo parcely: ").append(element.getKluc()).append("\n");
                 builder.append("Popis: ").append(((Parcela)element).getPopis()).append("\n");
             }
@@ -77,6 +87,18 @@ public class Zoznam<T extends IPolygon> extends JFrame
         });
 
         this.button_naHlavne.addActionListener(e -> gui.zobrazHlavneOkno());
+
+        this.button_edituj.addActionListener(e -> {
+            if (this.zobrazeny == null)
+            {
+                return;
+            }
+
+            gui.zobrazEditovanie((Polygon)this.zobrazeny);
+        });
+
+        this.button_vymaz.addActionListener(e -> {
+        });
     }
 
     public JPanel getJPanel()

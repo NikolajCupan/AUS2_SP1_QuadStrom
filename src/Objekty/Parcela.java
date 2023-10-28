@@ -43,6 +43,16 @@ public class Parcela extends Polygon
         this.nehnutelnosti.remove(nehnutelnost);
     }
 
+    public void setCisloParcely(int cisloParcely)
+    {
+        this.cisloParcely = cisloParcely;
+    }
+
+    public void setPopis(String popis)
+    {
+        this.popis = popis;
+    }
+
     public ArrayList<Nehnutelnost> getNehnutelnosti()
     {
         return this.nehnutelnosti;
