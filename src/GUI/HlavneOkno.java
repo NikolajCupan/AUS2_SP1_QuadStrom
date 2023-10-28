@@ -32,6 +32,7 @@ public class HlavneOkno
     private JButton button_obnovUrovenParcely;
     private JButton button_vyhladajSuradnica;
     private JButton button_vyhladajObdlznik;
+    private JButton button_ulozDoSuborov;
 
     public HlavneOkno(Prezenter prezenter, GUI gui)
     {
@@ -54,6 +55,7 @@ public class HlavneOkno
         this.button_obnovUrovenParcely.addActionListener(e -> this.obnovMaxUrovenParcely());
         this.button_vyhladajSuradnica.addActionListener(e -> gui.zobrazVyhladavanieSuradnica());
         this.button_vyhladajObdlznik.addActionListener(e -> gui.zobrazVyhladavanieObdlznik());
+        this.button_ulozDoSuborov.addActionListener(e -> gui.zobrazUlozenieDoSuborov());
     }
 
     public void obnovMaxUrovenNehnutelnosti()

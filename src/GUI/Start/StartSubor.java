@@ -4,33 +4,32 @@ import Aplikacia.Prezenter;
 import GUI.GUI;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class StartSubor
+public class StartSubor extends JPanel
 {
     private JPanel panel;
-
-    private JLabel nazov;
-    private JTextField input_nazovSuboru;
+    private JTextField input_nazovSuboruNehnutelnosti;
     private JButton button_potvrd;
     private JButton button_naVyber;
+    private JTextField input_nazovSuboruParcely;
 
     public StartSubor(Prezenter prezenter, GUI gui)
     {
         this.button_potvrd.addActionListener(e -> {
-            String nazovSuboru = StartSubor.this.input_nazovSuboru.getText();
-            boolean uspesneNacitanie = prezenter.nacitajZoSoboru(nazovSuboru);
+            String nazovSuboruNehnutelnosti = StartSubor.this.input_nazovSuboruNehnutelnosti.getText();
+            String nazovSuboruParcely = StartSubor.this.input_nazovSuboruParcely.getText();
+            boolean uspesneNacitanie = prezenter.nacitajZoSoboru(nazovSuboruNehnutelnosti, nazovSuboruParcely);
 
-            if (nazovSuboru != null && !nazovSuboru.isEmpty())
+            if (nazovSuboruNehnutelnosti != null && !nazovSuboruNehnutelnosti.isEmpty() &&
+                nazovSuboruParcely != null && !nazovSuboruParcely.isEmpty())
             {
                 if (!uspesneNacitanie)
                 {
-                    JOptionPane.showMessageDialog(StartSubor.this.panel, "Súbor s daným názvom sa nenašiel alebo nie je validný!");
+                    JOptionPane.showMessageDialog(StartSubor.this, "Súbory sa nenašli, nie sú spoločne validné!");
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(StartSubor.this.panel, "Načítanie zo súboru bolo úspešné");
+                    JOptionPane.showMessageDialog(StartSubor.this, "Načítanie zo súboru bolo úspešné");
                     gui.zobrazHlavneOkno();
                 }
             }

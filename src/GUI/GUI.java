@@ -35,6 +35,12 @@ public class GUI extends JFrame
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
     }
 
+    public void zobrazUlozenieDoSuborov()
+    {
+        UlozenieSubor ulozenieSubor = new UlozenieSubor(this.prezenter, this);
+        this.zmenObsah(ulozenieSubor.getJPanel());
+    }
+
     public void zobrazVyhladavanieObdlznik()
     {
         VyhladavanieObdlznik vyhladavanieObdlznik = new VyhladavanieObdlznik(this.prezenter, this);

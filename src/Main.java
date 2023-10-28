@@ -3,14 +3,20 @@ import Testovanie.Tester;
 
 public class Main
 {
+    // G => GUI
+    // T => Testovanie
+    public static final char REZIM = 'G';
+
     public static void main(String[] args)
     {
-        //Aplikacia aplikacia = new Aplikacia();
-        //aplikacia.vykonavaj();
-
-        //Tester tester = new Tester();
-        //tester.replikacie(1000);
-
-        GUI gui = new GUI();
+        if (REZIM == 'G')
+        {
+            new GUI();
+        }
+        else if (REZIM == 'T')
+        {
+            Tester tester = new Tester();
+            tester.replikacie(1000);
+        }
     }
 }
