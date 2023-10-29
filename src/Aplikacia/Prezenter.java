@@ -51,16 +51,16 @@ public class Prezenter
                     if (typ.equals(Nehnutelnost.class))
                     {
                         Nehnutelnost nehnutelnost = (Nehnutelnost)element;
-                        zapisovac.println(nehnutelnost.getKluc() + "|" + nehnutelnost.getPopis() + "|" +
-                                        nehnutelnost.getVlavoDoleX() + "|" + nehnutelnost.getVlavoDoleY() + "|" +
-                                        nehnutelnost.getVpravoHoreX() + "|" + nehnutelnost.getVpravoHoreY());
+                        zapisovac.println(nehnutelnost.getKluc() + ";" + nehnutelnost.getPopis() + ";" +
+                                        nehnutelnost.getVlavoDoleX() + ";" + nehnutelnost.getVlavoDoleY() + ";" +
+                                        nehnutelnost.getVpravoHoreX() + ";" + nehnutelnost.getVpravoHoreY());
                     }
                     else if (typ.equals(Parcela.class))
                     {
                         Parcela parcela = (Parcela)element;
-                        zapisovac.println(parcela.getKluc() + "|" + parcela.getPopis() + "|" +
-                                        parcela.getVlavoDoleX() + "|" + parcela.getVlavoDoleY() + "|" +
-                                        parcela.getVpravoHoreX() + "|" + parcela.getVpravoHoreY());
+                        zapisovac.println(parcela.getKluc() + ";" + parcela.getPopis() + ";" +
+                                        parcela.getVlavoDoleX() + ";" + parcela.getVlavoDoleY() + ";" +
+                                        parcela.getVpravoHoreX() + ";" + parcela.getVpravoHoreY());
                     }
                 }
             }
@@ -179,7 +179,7 @@ public class Prezenter
                     break;
                 }
 
-                String[] casti = riadok.split("\\|", 6);
+                String[] casti = riadok.split(";", 6);
 
                 int cislo = Integer.parseInt(casti[0]);
                 String popis = casti[1];
