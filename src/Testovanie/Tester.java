@@ -12,10 +12,10 @@ import java.util.Random;
 public class Tester
 {
     // Hranice quad stromu a generovanych suradnic
-    private static final double GEN_X_MIN = -1;
-    private static final double GEN_Y_MIN = -1;
-    private static final double GEN_X_MAX = 1;
-    private static final double GEN_Y_MAX = 1;
+    private static final double GEN_X_MIN = -10000;
+    private static final double GEN_Y_MIN = -10000;
+    private static final double GEN_X_MAX = 10000;
+    private static final double GEN_Y_MAX = 10000;
 
     // Hranice pre faktor zmensenia vygenerovanych suradnic
     private static final double FAKTOR_ZMENSENIA_MIN = 1;
