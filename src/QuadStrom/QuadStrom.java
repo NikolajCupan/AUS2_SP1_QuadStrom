@@ -450,8 +450,8 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
         else
         {
             // V tomto pripade su quady na urovni maxUroven prilis plne,
-            // vytvorim si novy root quad s maxHlbka o 2 vacsou a presuniem
-            // tam vsetky data
+            // vytvorim si novy root quad s maxHlbka o ZVYS_MAX_UROVEN_O
+            // vacsou a presuniem tam vsetky data
 
             Quad<T> oldRootQuad = this.rootQuad;
             Suradnica surVlavoDole = new Suradnica(oldRootQuad.getVlavoDoleX(), oldRootQuad.getVlavoDoleY());
@@ -488,22 +488,22 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     // 0      => quady na urovni maxUroven su prilis prazdne
     // (0; 1) => quady na urovni maxUroven nie su ani prilis plne, ani prilis prazdne
     // 1      => quady na urovni maxUroven su prilis plne
-    public double getZdravie(double zdravie)
+    public double getZdravie(double naplnenost)
     {
-        if (zdravie <= PRILIS_PRAZDNE)
+        if (naplnenost <= PRILIS_PRAZDNE)
         {
             return 0.0;
         }
 
-        if (zdravie >= PRILIS_PLNE)
+        if (naplnenost >= PRILIS_PLNE)
         {
             return 1.0;
         }
 
         double rozsah = PRILIS_PLNE - PRILIS_PRAZDNE;
-        double zdravieShift = zdravie - PRILIS_PRAZDNE;
+        double naplnenostShift = naplnenost - PRILIS_PRAZDNE;
 
-        return zdravieShift / rozsah;
+        return naplnenostShift / rozsah;
     }
 
     // Metoda vrati kolko percent zo vsetkych dat
