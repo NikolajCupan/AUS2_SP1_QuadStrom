@@ -450,9 +450,9 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     }
 
     // Optimalizacia sa vykona za akychkolvek okolnosti,
-    // v pripade ak je zdravie z intervalu (0; 1> vykona sa
-    // optimalizacia PRILIS_PLNE, v opacnom pripade sa vykoana
-    // optimalizacia PRILIS_PRAZDNE
+    // v pripade ak zdravie patri do intervalu (0; 1> vykona sa
+    // optimalizacia ako pri PRILIS_PLNE, v opacnom pripade sa vykona
+    // optimalizacia ako pri PRILIS_PRAZDNE
     public void forceOptimalizuj()
     {
         double[] pomerUroven = this.getPomerUroven();
@@ -492,6 +492,11 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
     private void optimalizuj(double[] pomerUroven, double zdravie)
     {
+        if (Double.isNaN(pomerUroven[0]))
+        {
+            return;
+        }
+
         if (zdravie == 0.0)
         {
             // V tomto pripade su quady na urovni maxUroven prilis prazdne,
