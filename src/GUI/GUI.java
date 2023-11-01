@@ -35,6 +35,12 @@ public class GUI extends JFrame
         this.button_zacniPrazdny.addActionListener(e -> GUI.this.zobrazStartPrazdne());
     }
 
+    public void zobrazZdravie()
+    {
+        Zdravie zdravie = new Zdravie(this.prezenter, this);
+        this.zmenObsah(zdravie.getJPanel());
+    }
+
     public void zobrazUlozenieDoSuborov()
     {
         UlozenieSubor ulozenieSubor = new UlozenieSubor(this.prezenter, this);

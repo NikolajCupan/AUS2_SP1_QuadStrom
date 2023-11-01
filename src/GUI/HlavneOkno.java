@@ -33,6 +33,7 @@ public class HlavneOkno
     private JButton button_vyhladajSuradnica;
     private JButton button_vyhladajObdlznik;
     private JButton button_ulozDoSuborov;
+    private JButton input_zobrazZdravie;
 
     public HlavneOkno(Prezenter prezenter, GUI gui)
     {
@@ -56,6 +57,7 @@ public class HlavneOkno
         this.button_vyhladajSuradnica.addActionListener(e -> gui.zobrazVyhladavanieSuradnica());
         this.button_vyhladajObdlznik.addActionListener(e -> gui.zobrazVyhladavanieObdlznik());
         this.button_ulozDoSuborov.addActionListener(e -> gui.zobrazUlozenieDoSuborov());
+        this.input_zobrazZdravie.addActionListener(e -> gui.zobrazZdravie());
     }
 
     public void obnovMaxUrovenNehnutelnosti()

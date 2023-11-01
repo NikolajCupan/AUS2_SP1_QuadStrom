@@ -407,6 +407,32 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
         return najhlbsiaUroven;
     }
 
+    // Optimalizacia sa vykona za akychkolvek okolnosti,
+    // v pripade ak je zdravie z intervalu (0; 1> vykona sa
+    // optimalizacia PRILIS_PLNE, v opacnom pripade sa vykoana
+    // optimalizacia PRILIS_PRAZDNE
+    public void forceOptimalizuj()
+    {
+        double[] pomerUroven = this.getPomerUroven();
+        double zdravie = this.getZdravie(pomerUroven[this.maxUroven]);
+        this.pocitadloOperacii = 0;
+
+        if (zdravie == 0.0)
+        {
+            // Vykonavat tento typ optimalizacie, ked zdravie nie je rovne 0.0
+            // nema zmysel, pretoze v takom pripade ma najhlbsia uroven
+            // viac ako PRILIS_PRAZDNE percent dat, tym padom by optimalizacia
+            // nesposobila ziadnu zmenu
+            this.optimalizuj(pomerUroven, zdravie);
+        }
+        else
+        {
+            // Druhy parameter explicitne nastavim na 1.0,
+            // aby sa optimalizacia vykonala za akychkolvek okolnosti
+            this.optimalizuj(pomerUroven, 1.0);
+        }
+    }
+
     private void skusOptimalizovat()
     {
         if (this.pocitadloOperacii >= OPTIMALIZUJ_NA)
@@ -549,6 +575,26 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     public int getMaxUroven()
     {
         return this.maxUroven;
+    }
+
+    public int getPocitadloOperacii()
+    {
+        return this.pocitadloOperacii;
+    }
+
+    public int getOptimalizujNa()
+    {
+        return OPTIMALIZUJ_NA;
+    }
+
+    public double getPrilisPrazdne()
+    {
+        return PRILIS_PRAZDNE;
+    }
+
+    public double getPrilisPlne()
+    {
+        return PRILIS_PLNE;
     }
 
     public Iterator<Quad<T>> iterator()
