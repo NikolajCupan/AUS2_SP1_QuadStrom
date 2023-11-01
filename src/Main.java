@@ -16,7 +16,7 @@ public class Main
         else if (REZIM == 'T')
         {
             Tester tester = new Tester();
-            tester.replikacie(10000);
+            tester.replikacie(10);
         }
     }
 }

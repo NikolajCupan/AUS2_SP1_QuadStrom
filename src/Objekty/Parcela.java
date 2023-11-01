@@ -84,10 +84,11 @@ public class Parcela extends Polygon
             return false;
         }
 
-        if (this.getVlavoDoleX() == parcela.getVlavoDoleX() &&
-            this.getVlavoDoleY() == parcela.getVlavoDoleY() &&
-            this.getVpravoHoreX() == parcela.getVpravoHoreX() &&
-            this.getVpravoHoreY() == parcela.getVpravoHoreY() &&
+        final double epsilon = 0.00001;
+        if (Math.abs(this.getVlavoDoleX() - parcela.getVlavoDoleX()) < epsilon &&
+            Math.abs(this.getVlavoDoleY() - parcela.getVlavoDoleY()) < epsilon &&
+            Math.abs(this.getVpravoHoreX() - parcela.getVpravoHoreX()) < epsilon &&
+            Math.abs(this.getVpravoHoreY() - parcela.getVpravoHoreY()) < epsilon &&
             this.getKluc() == parcela.getKluc())
         {
             return true;

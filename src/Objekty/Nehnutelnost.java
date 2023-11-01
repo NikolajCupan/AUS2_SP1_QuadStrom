@@ -84,10 +84,11 @@ public class Nehnutelnost extends Polygon
             return false;
         }
 
-        if (this.getVlavoDoleX() == nehnutelnost.getVlavoDoleX() &&
-            this.getVlavoDoleY() == nehnutelnost.getVlavoDoleY() &&
-            this.getVpravoHoreX() == nehnutelnost.getVpravoHoreX() &&
-            this.getVpravoHoreY() == nehnutelnost.getVpravoHoreY() &&
+        final double epsilon = 0.00001;
+        if (Math.abs(this.getVlavoDoleX() - nehnutelnost.getVlavoDoleX()) < epsilon &&
+            Math.abs(this.getVlavoDoleY() - nehnutelnost.getVlavoDoleY()) < epsilon &&
+            Math.abs(this.getVpravoHoreX() - nehnutelnost.getVpravoHoreX()) < epsilon &&
+            Math.abs(this.getVpravoHoreY() - nehnutelnost.getVpravoHoreY()) < epsilon &&
             this.getKluc() == nehnutelnost.getKluc())
         {
             return true;
