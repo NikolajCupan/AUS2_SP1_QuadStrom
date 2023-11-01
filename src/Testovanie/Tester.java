@@ -316,18 +316,18 @@ public class Tester
         QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(0, 0, 100, 100, 5);
 
         Nehnutelnost nehnutelnost1 = new Nehnutelnost(1, "a",
-                                                      new Suradnica(51, 51),
-                                                      new Suradnica(74, 74));
-        Nehnutelnost nehnutelnost2 = new Nehnutelnost(1, "a",
                                                       new Suradnica(76, 76),
                                                       new Suradnica(99, 99));
-        Nehnutelnost nehnutelnost3 = new Nehnutelnost(1, "a",
+        Nehnutelnost nehnutelnost2 = new Nehnutelnost(1, "a",
                                                       new Suradnica(88, 88),
+                                                      new Suradnica(99, 99));
+        Nehnutelnost nehnutelnost3 = new Nehnutelnost(1, "a",
+                                                      new Suradnica(1, 1),
                                                       new Suradnica(99, 99));
         strom.vloz(nehnutelnost1);
         strom.vloz(nehnutelnost2);
         strom.vloz(nehnutelnost3);
-        strom.vymaz(90, 90, nehnutelnost2);
+        strom.vymaz(90, 90, nehnutelnost1);
 
         KontrolaStromu.prilisHlboko(strom);
     }

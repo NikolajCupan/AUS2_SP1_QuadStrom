@@ -274,9 +274,51 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
     private void vymazPrazdneQuady(Stack<Quad<T>> cesta)
     {
         Quad<T> dno = cesta.pop();
-        if (dno.jeRozdeleny() || dno.getData().size() > 1 || dno.getUrovenQuadu() == 0)
+        if (dno.getData().size() > 1 || dno.getUrovenQuadu() == 0)
         {
             return;
+        }
+
+        if (dno.jeRozdeleny() && dno.getData().isEmpty())
+        {
+            // V takejto situacii existuje moznost, ze sa v celom podstrome
+            // daneho quadu nachadza prave jeden prvok, v takom pripade
+            // mozem tento presunut plytsie
+
+            // Ak je ktorykolvek podQuad rozdeleny, tak nie je mozne mazat
+            int pocetPodQuady = 0;
+            boolean existujeRozdelenyPodQuad = false;
+            for (Quad<T> podQuad : dno.getPodQuady())
+            {
+                pocetPodQuady += podQuad.getData().size();
+
+                if (podQuad.jeRozdeleny())
+                {
+                    existujeRozdelenyPodQuad = true;
+                }
+            }
+
+            if (!existujeRozdelenyPodQuad)
+            {
+                if (pocetPodQuady == 0)
+                {
+                    throw new RuntimeException("Existuje prazdny podstrom!");
+                }
+                else if (pocetPodQuady == 1)
+                {
+                    T vytlacenyElement = null;
+                    for (Quad<T> podQuad : dno.getPodQuady())
+                    {
+                        if (!podQuad.getData().isEmpty())
+                        {
+                            vytlacenyElement = podQuad.getData().remove(0);
+                        }
+                    }
+
+                    dno.getData().add(vytlacenyElement);
+                    dno.forceVymazPodQuady();
+                }
+            }
         }
 
         while (!cesta.isEmpty())
