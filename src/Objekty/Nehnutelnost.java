@@ -63,7 +63,6 @@ public class Nehnutelnost extends Polygon
         return popis;
     }
 
-    @Override
     public int getKluc()
     {
         return this.supisneCislo;
@@ -75,5 +74,25 @@ public class Nehnutelnost extends Polygon
         DecimalFormat formatovac = new DecimalFormat("#.##");
         return "Nehnuteľnost: " + this.supisneCislo + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
                "}, {" + formatovac.format(this.getVpravoHoreX()) + ", " + formatovac.format(this.getVpravoHoreY()) + "}";
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof Nehnutelnost nehnutelnost))
+        {
+            return false;
+        }
+
+        if (this.getVlavoDoleX() == nehnutelnost.getVlavoDoleX() &&
+            this.getVlavoDoleY() == nehnutelnost.getVlavoDoleY() &&
+            this.getVpravoHoreX() == nehnutelnost.getVpravoHoreX() &&
+            this.getVpravoHoreY() == nehnutelnost.getVpravoHoreY() &&
+            this.getKluc() == nehnutelnost.getKluc())
+        {
+            return true;
+        }
+
+        return false;
     }
 }

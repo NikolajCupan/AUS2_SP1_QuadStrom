@@ -82,10 +82,4 @@ public class Polygon implements IPolygon
     {
         return this.surVpravoHore.getY();
     }
-
-    @Override
-    public int getKluc()
-    {
-        throw new RuntimeException("Trieda Polygon nema ziadny kluc!");
-    }
 }

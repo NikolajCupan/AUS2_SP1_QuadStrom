@@ -317,11 +317,11 @@ public class Prezenter
 
         if (polygon instanceof Nehnutelnost nehnutelnost)
         {
-            this.databaza.vymazNehnutelnost(stredX, stredY, nehnutelnost.getKluc());
+            this.databaza.vymazNehnutelnost(stredX, stredY, nehnutelnost);
         }
         else if (polygon instanceof Parcela parcela)
         {
-            this.databaza.vymazParcelu(stredX, stredY, parcela.getKluc());
+            this.databaza.vymazParcelu(stredX, stredY, parcela);
         }
     }
 

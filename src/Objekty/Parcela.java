@@ -63,7 +63,6 @@ public class Parcela extends Polygon
         return popis;
     }
 
-    @Override
     public int getKluc()
     {
         return this.cisloParcely;
@@ -75,5 +74,25 @@ public class Parcela extends Polygon
         DecimalFormat formatovac = new DecimalFormat("#.##");
         return "Parcela: " + this.cisloParcely + " {" + formatovac.format(this.getVlavoDoleX()) + ", " + formatovac.format(this.getVlavoDoleY()) +
                 "}, {" + formatovac.format(this.getVpravoHoreX()) + ", " + formatovac.format(this.getVpravoHoreY()) + "}";
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof Parcela parcela))
+        {
+            return false;
+        }
+
+        if (this.getVlavoDoleX() == parcela.getVlavoDoleX() &&
+            this.getVlavoDoleY() == parcela.getVlavoDoleY() &&
+            this.getVpravoHoreX() == parcela.getVpravoHoreX() &&
+            this.getVpravoHoreY() == parcela.getVpravoHoreY() &&
+            this.getKluc() == parcela.getKluc())
+        {
+            return true;
+        }
+
+        return false;
     }
 }

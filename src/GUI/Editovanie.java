@@ -23,20 +23,21 @@ public class Editovanie extends JFrame
 
     public Editovanie(Prezenter prezenter, GUI gui, Polygon polygon)
     {
-        if (polygon instanceof Nehnutelnost)
+        if (polygon instanceof Nehnutelnost nehnutelnost)
         {
             this.label_nadpis.setText("Editovanie nehnuteľnosti");
             this.label_cisloNazov.setText("Súpisné číslo");
-            this.text_popis.setText(((Nehnutelnost)polygon).getPopis());
+            this.text_popis.setText(nehnutelnost.getPopis());
+            this.input_cislo.setText("" + nehnutelnost.getKluc());
         }
-        else
+        else if (polygon instanceof Parcela parcela)
         {
             this.label_nadpis.setText("Editovanie parcely");
             this.label_cisloNazov.setText("Číslo parcely");
-            this.text_popis.setText(((Parcela)polygon).getPopis());
+            this.text_popis.setText(parcela.getPopis());
+            this.input_cislo.setText("" + parcela.getKluc());
         }
 
-        this.input_cislo.setText("" + polygon.getKluc());
         this.input_vlavoDoleX.setText("" + polygon.getVlavoDoleX());
         this.input_vlavoDoleY.setText("" + polygon.getVlavoDoleY());
         this.input_vpravoHoreX.setText("" + polygon.getVpravoHoreX());

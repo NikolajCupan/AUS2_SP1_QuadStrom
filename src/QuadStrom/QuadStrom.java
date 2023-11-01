@@ -18,7 +18,7 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
     // V pripade ak quady na urovni maxUroven obsahuju menej ako PRILIS_PRAZDNE
     // percent dat, tak su zrusene vsetky urovne az pokym sa nedosiahne aspon
-    // PRILIS_PRAZDNE percent dat na urovni maxUroven
+    // PRILIS_PRAZDNE percent dat na danej urovni
     // Naopak v pripade ak quady na urovni maxUroven obsahuju viac ako PRILIS_PLNE
     // percent dat, tak je pridanych dalsich ZVYS_MAX_UROVEN_O urovni
     private static final double PRILIS_PLNE = 0.20;
@@ -231,7 +231,7 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
     // Metoda vrati zmazany element
     // V pripade ak ziadny zmazany nebol, tak vrati null
-    public T vymaz(double x, double y, int hladanyKluc)
+    public T vymaz(double x, double y, T vymazavany)
     {
         this.pocitadloOperacii++;
         this.skusOptimalizovat();
@@ -245,7 +245,7 @@ public class QuadStrom<T extends IPolygon> implements Iterable<Quad<T>>
 
             for (T element : curQuad.getData())
             {
-                if (element.leziVnutri(x, y) && element.getKluc() == hladanyKluc)
+                if (element.leziVnutri(x, y) && element.equals(vymazavany))
                 {
                     curQuad.getData().remove(element);
                     this.vymazPrazdneQuady(cesta);

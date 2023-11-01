@@ -46,17 +46,17 @@ public class Zoznam<T extends IPolygon> extends JFrame
 
             StringBuilder builder = new StringBuilder();
 
-            if (element instanceof Nehnutelnost)
+            if (element instanceof Nehnutelnost nehnutelnost)
             {
                 builder.append("Nehnuteľnosť: ").append("\n");
-                builder.append("Súpisné číslo: ").append(element.getKluc()).append("\n");
-                builder.append("Popis: ").append(((Nehnutelnost)element).getPopis()).append("\n");
+                builder.append("Súpisné číslo: ").append(nehnutelnost.getKluc()).append("\n");
+                builder.append("Popis: ").append(nehnutelnost.getPopis()).append("\n");
             }
-            else
+            else if (element instanceof Parcela parcela)
             {
                 builder.append("Parcela: ").append("\n");
-                builder.append("Číslo parcely: ").append(element.getKluc()).append("\n");
-                builder.append("Popis: ").append(((Parcela)element).getPopis()).append("\n");
+                builder.append("Číslo parcely: ").append(parcela.getKluc()).append("\n");
+                builder.append("Popis: ").append(parcela.getPopis()).append("\n");
             }
 
             builder.append("Vľavo dole x: ").append(element.getVlavoDoleX()).append("\n");

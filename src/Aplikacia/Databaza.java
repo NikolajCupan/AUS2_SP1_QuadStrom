@@ -60,9 +60,9 @@ public class Databaza
         }
     }
 
-    public void vymazNehnutelnost(double x, double y, int hladanyKluc)
+    public void vymazNehnutelnost(double x, double y, Nehnutelnost vymazavana)
     {
-        Nehnutelnost vymazana = this.nehnutelnosti.vymaz(x, y, hladanyKluc);
+        Nehnutelnost vymazana = this.nehnutelnosti.vymaz(x, y, vymazavana);
 
         if (vymazana == null)
         {
@@ -76,9 +76,9 @@ public class Databaza
         vymazana.getParcely().clear();
     }
 
-    public void vymazParcelu(double x, double y, int hladanyKluc)
+    public void vymazParcelu(double x, double y, Parcela vymazavana)
     {
-        Parcela vymazana = this.parcely.vymaz(x, y, hladanyKluc);
+        Parcela vymazana = this.parcely.vymaz(x, y, vymazavana);
 
         if (vymazana == null)
         {
