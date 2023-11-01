@@ -177,6 +177,7 @@ public class Tester
 
         KontrolaStromu.prilisPlytko(strom);
         KontrolaStromu.prazdnePodStromy(strom);
+        KontrolaStromu.prilisHlboko(strom);
         KontrolaStromu.mimoQuad(strom, NAZOV_SUBORU);
     }
 
@@ -204,6 +205,7 @@ public class Tester
 
         KontrolaStromu.prilisPlytko(strom);
         KontrolaStromu.prazdnePodStromy(strom);
+        KontrolaStromu.prilisHlboko(strom);
         KontrolaStromu.mimoQuad(strom, NAZOV_SUBORU);
     }
 
@@ -245,6 +247,7 @@ public class Tester
 
         KontrolaStromu.prilisPlytko(strom);
         KontrolaStromu.prazdnePodStromy(strom);
+        KontrolaStromu.prilisHlboko(strom);
         KontrolaStromu.mimoQuad(strom, NAZOV_SUBORU);
     }
 
@@ -304,27 +307,29 @@ public class Tester
 
         KontrolaStromu.prilisPlytko(strom);
         KontrolaStromu.prazdnePodStromy(strom);
+        KontrolaStromu.prilisHlboko(strom);
         KontrolaStromu.mimoQuad(strom, NAZOV_SUBORU);
     }
 
     public void moje()
     {
-        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(-100, -100, 100, 100, 5);
-        Generator generator = new Generator(1, 1, -100, -100, 100, 100, 5, 10000, 420);
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(0, 0, 100, 100, 5);
 
-        for (int i = 0; i < 10000; i++)
-        {
-            Nehnutelnost nehnutelnost = generator.getNehnutelnost();
-            strom.vloz(nehnutelnost);
-        }
+        Nehnutelnost nehnutelnost1 = new Nehnutelnost(1, "a",
+                                                      new Suradnica(51, 51),
+                                                      new Suradnica(74, 74));
+        Nehnutelnost nehnutelnost2 = new Nehnutelnost(1, "a",
+                                                      new Suradnica(76, 76),
+                                                      new Suradnica(99, 99));
+        Nehnutelnost nehnutelnost3 = new Nehnutelnost(1, "a",
+                                                      new Suradnica(88, 88),
+                                                      new Suradnica(99, 99));
+        strom.vloz(nehnutelnost1);
+        strom.vloz(nehnutelnost2);
+        strom.vloz(nehnutelnost3);
+        strom.vymaz(90, 90, nehnutelnost2);
 
-        double[] pomer = strom.getPomerUroven();
-
-        System.out.println("Max uroven: " + strom.getMaxUroven());
-        for (int i = 0; i < strom.getMaxUroven() + 1; i++)
-        {
-            System.out.println("U: " + i + ", pomer: " + pomer[i]);
-        }
+        KontrolaStromu.prilisHlboko(strom);
     }
 
     private double randomDouble(double min, double max)

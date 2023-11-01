@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class KontrolaStromu
 {
-    // Kontroluje, ci elementy v strome by nemohli lezat hlbsie
+    // Kontroluje, ci by elementy v strome nemohli lezat hlbsie
     public static <T extends IPolygon> void prilisPlytko(QuadStrom<T> strom)
     {
         for (Quad<T> quad : strom)
@@ -49,6 +49,46 @@ public class KontrolaStromu
             if (rozdelenie)
             {
                 quad.vymazPodQuady();
+            }
+        }
+    }
+
+    // Kontroluje, ci by elementy v strome nemali lezat plytsie
+    public static <T extends IPolygon> void prilisHlboko(QuadStrom<T> strom)
+    {
+        for (Quad<T> quad : strom)
+        {
+            if (!quad.jeRozdeleny())
+            {
+                continue;
+            }
+
+            boolean rozdelenyPodQuad = false;
+            for (Quad<T> podQuad : quad.getPodQuady())
+            {
+                if (podQuad.jeRozdeleny())
+                {
+                    rozdelenyPodQuad = true;
+                    break;
+                }
+            }
+
+            if (rozdelenyPodQuad)
+            {
+                continue;
+            }
+
+            int pocetQuad = quad.getData().size();
+
+            int pocetPodQuady = 0;
+            for (Quad<T> podQuad : quad.getPodQuady())
+            {
+                pocetPodQuady += podQuad.getData().size();
+            }
+
+            if (pocetQuad == 0 && pocetPodQuady <= 1)
+            {
+                throw new RuntimeException("Existuje element, ktory by mal lezat plytsie!");
             }
         }
     }
