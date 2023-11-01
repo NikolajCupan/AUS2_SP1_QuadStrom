@@ -3,6 +3,7 @@ package Aplikacia;
 import Objekty.Nehnutelnost;
 import Objekty.Parcela;
 import Objekty.Polygon;
+import Ostatne.IPolygon;
 import QuadStrom.QuadStrom;
 import QuadStrom.Quad;
 
@@ -13,17 +14,17 @@ public class Databaza
     private QuadStrom<Nehnutelnost> nehnutelnosti;
     private QuadStrom<Parcela> parcely;
 
-    public Databaza(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
-                    int maxUrovenNehnutelnosti, int maxUrovenParcely)
+    public <T extends IPolygon> void vytvorStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
+                                                 int maxUroven, Class<T> typ)
     {
-        this.inicializujStromy(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti, maxUrovenParcely);
-    }
-
-    private void inicializujStromy(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
-                                   int maxUrovenNehnutelnosti, int maxUrovenParcely)
-    {
-        this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti);
-        this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenParcely);
+        if (typ.equals(Nehnutelnost.class))
+        {
+            this.nehnutelnosti = new QuadStrom<Nehnutelnost>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
+        }
+        else if (typ.equals(Parcela.class))
+        {
+            this.parcely = new QuadStrom<Parcela>(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven);
+        }
     }
 
     public void resetujStromy()

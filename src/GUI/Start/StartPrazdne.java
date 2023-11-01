@@ -2,6 +2,8 @@ package GUI.Start;
 
 import Aplikacia.Prezenter;
 import GUI.GUI;
+import Objekty.Nehnutelnost;
+import Objekty.Parcela;
 
 import javax.swing.*;
 
@@ -34,7 +36,9 @@ public class StartPrazdne extends JFrame
                 int maxUrovenNehnutelnosti = Integer.parseInt(this.input_maxUrovenNehnutelnosti.getText());
                 int maxUrovenParcely = Integer.parseInt(this.input_maxUrovenParcely.getText());
 
-                prezenter.inicializujDatabazu(minX, minY, maxX, maxY, maxUrovenNehnutelnosti, maxUrovenParcely);
+                prezenter.inicializujStrom(minX, minY, maxX, maxY, maxUrovenNehnutelnosti, Nehnutelnost.class);
+                prezenter.inicializujStrom(minX, minY, maxX, maxY, maxUrovenParcely, Parcela.class);
+
                 gui.zobrazHlavneOkno();
             }
             catch (Exception ex)

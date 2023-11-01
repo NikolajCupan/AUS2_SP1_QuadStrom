@@ -25,7 +25,7 @@ public class StartSubor extends JPanel
             {
                 if (!uspesneNacitanie)
                 {
-                    JOptionPane.showMessageDialog(StartSubor.this, "Súbory sa nenašli, nie sú spoločne validné!");
+                    JOptionPane.showMessageDialog(StartSubor.this, "Súbory sa nenašli alebo nie sú validné!");
                 }
                 else
                 {

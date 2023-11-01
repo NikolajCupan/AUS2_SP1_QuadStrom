@@ -89,8 +89,20 @@ public class Prezenter
         }
 
         // Informacie o velkosti a hlbke
-        if (!this.nacitajParametreZoSuboru(suborNehnutelnosti, suborParcely))
+        if (!this.nacitajParametreZoSuboru(suborNehnutelnosti, Nehnutelnost.class) ||
+            !this.nacitajParametreZoSuboru(suborParcely, Parcela.class))
         {
+            // Pri nacitavani nastal problem
+            this.databaza.resetujStromy();
+            return false;
+        }
+
+        // Oba stromu musia mat rovnake rozmery, v pripade ak tomu
+        // tak nie je, tak subory (stromy) nie su kompatibilne,
+        // tym padom ich musim zrusit
+        if (!this.stromySuKompatibilne())
+        {
+            this.databaza.resetujStromy();
             return false;
         }
 
@@ -102,53 +114,46 @@ public class Prezenter
             // Pri nacitavani samotnych dat nastal problem,
             // data, ktore som nacital vymazem
             this.databaza.resetujStromy();
+            return false;
         }
 
         return true;
     }
 
-    private boolean nacitajParametreZoSuboru(File suborNehnutelnosti, File suborParcely)
+    private boolean stromySuKompatibilne()
+    {
+        if (this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleX() != this.databaza.getParcelyStrom().getRootQuad().getVlavoDoleX() ||
+            this.databaza.getNehnutelnostiStrom().getRootQuad().getVlavoDoleY() != this.databaza.getParcelyStrom().getRootQuad().getVlavoDoleY() ||
+            this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreX() != this.databaza.getParcelyStrom().getRootQuad().getVpravoHoreX() ||
+            this.databaza.getNehnutelnostiStrom().getRootQuad().getVpravoHoreY() != this.databaza.getParcelyStrom().getRootQuad().getVpravoHoreY())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private <T extends IPolygon> boolean nacitajParametreZoSuboru(File subor, Class<T> typ)
     {
         try
         {
-            FileReader fCitacNehnutelnosti = new FileReader(suborNehnutelnosti);
-            FileReader fCitacParcely = new FileReader(suborParcely);
+            FileReader fCitac = new FileReader(subor);
+            BufferedReader bCitac = new BufferedReader(fCitac);
 
-            BufferedReader bCitacNehnutelnosti = new BufferedReader(fCitacNehnutelnosti);
-            BufferedReader bCitacParcely = new BufferedReader(fCitacParcely);
+            double vlavoDoleX = Double.parseDouble(bCitac.readLine());
+            double vlavoDoleY = Double.parseDouble(bCitac.readLine());
+            double vpravoHoreX = Double.parseDouble(bCitac.readLine());
+            double vpravoHoreY = Double.parseDouble(bCitac.readLine());
 
-            double vlavoDoleXNehnutelnosti = Double.parseDouble(bCitacNehnutelnosti.readLine());
-            double vlavoDoleYNehnutelnosti = Double.parseDouble(bCitacNehnutelnosti.readLine());
-            double vpravoHoreXNehnutelnosti = Double.parseDouble(bCitacNehnutelnosti.readLine());
-            double vpravoHoreYNehnutelnosti = Double.parseDouble(bCitacNehnutelnosti.readLine());
+            int maxUroven = Integer.parseInt(bCitac.readLine());
 
-            double vlavoDoleXParcely = Double.parseDouble(bCitacParcely.readLine());
-            double vlavoDoleYParcely = Double.parseDouble(bCitacParcely.readLine());
-            double vpravoHoreXParcely = Double.parseDouble(bCitacParcely.readLine());
-            double vpravoHoreYParcely = Double.parseDouble(bCitacParcely.readLine());
+            // Vytvorim strom
+            this.inicializujStrom(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven, typ);
 
-            if (vlavoDoleXNehnutelnosti != vlavoDoleXParcely ||
-                vlavoDoleYNehnutelnosti != vlavoDoleYParcely ||
-                vpravoHoreXNehnutelnosti != vpravoHoreXParcely ||
-                vpravoHoreYNehnutelnosti != vpravoHoreYParcely)
-            {
-                return false;
-            }
+            bCitac.close();
+            fCitac.close();
 
-            int maxUrovenNehnutelnosti = Integer.parseInt(bCitacNehnutelnosti.readLine());
-            int maxUrovenParcely = Integer.parseInt(bCitacParcely.readLine());
-
-            // Vytvorim stormy
-            this.inicializujDatabazu(vlavoDoleXNehnutelnosti, vlavoDoleYNehnutelnosti, vpravoHoreXNehnutelnosti, vpravoHoreYNehnutelnosti,
-                                   maxUrovenNehnutelnosti, maxUrovenParcely);
-
-            bCitacNehnutelnosti.close();
-            bCitacParcely.close();
-
-            fCitacNehnutelnosti.close();
-            fCitacParcely.close();
-
-            // Vytvorenie stromov bolo uspesne
+            // Vytvorenie stromu bolo uspesne
             return true;
         }
         catch (Exception ex)
@@ -212,10 +217,9 @@ public class Prezenter
         }
     }
 
-    public void inicializujDatabazu(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY,
-                                    int maxUrovenNehnutelnosti, int maxUrovenParcely)
+    public <T extends IPolygon> void inicializujStrom(double vlavoDoleX, double vlavoDoleY, double vpravoHoreX, double vpravoHoreY, int maxUroven, Class<T> typ)
     {
-        if (maxUrovenNehnutelnosti < 0 || maxUrovenParcely < 0)
+        if (maxUroven < 0)
         {
             throw new RuntimeException("Maximalna uroven nemoze byt zaporna!");
         }
@@ -225,7 +229,12 @@ public class Prezenter
             throw new RuntimeException("Neplatne zadane rozmery najvacsieho quadu!");
         }
 
-        this.databaza = new Databaza(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUrovenNehnutelnosti, maxUrovenParcely);
+        if (this.databaza == null)
+        {
+            this.databaza = new Databaza();
+        }
+
+        this.databaza.vytvorStrom(vlavoDoleX, vlavoDoleY, vpravoHoreX, vpravoHoreY, maxUroven, typ);
     }
 
     public <T> void generujData(int zaciatocneCislo, int pocetGenerovanych, double faktorZmensenia, Class<T> typ)
