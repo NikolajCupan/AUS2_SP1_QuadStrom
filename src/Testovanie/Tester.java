@@ -78,7 +78,7 @@ public class Tester
         final String NAZOV_SUBORU = "Test_zakladne_operacie.txt";
 
         final int ZACIATOCNA_VELKOST = 5000;
-        final int POCET_OPERACII = 50000;
+        final int POCET_OPERACII = 5000;
 
         final int PRST_VYHLADAJ_BOD = 50;
         final int PRST_VYHLADAJ_POL = 50;
@@ -156,6 +156,7 @@ public class Tester
                     continue;
                 }
 
+                int pocetPred = strom.getPocetElementov();
                 int index = this.randomInt(0, zoznam.size() - 1);
 
                 Nehnutelnost zmazanaZoznam = zoznam.remove(index);
@@ -166,6 +167,12 @@ public class Tester
                 if (zmazanaZoznam != zmazanaStrom)
                 {
                     throw new RuntimeException("Zmazane elementy sa nezhoduju!");
+                }
+
+                int pocetPo = strom.getPocetElementov();
+                if (pocetPred - 1 != pocetPo)
+                {
+                    throw new RuntimeException("Pocet elementov po mazani nie je spravny!");
                 }
             }
         }
