@@ -37,7 +37,7 @@ public class Tester
         this.random.setSeed(seed);
     }
 
-    public void replikacie(int opakovania)
+    public void replikacie(int opakovania, char rezim)
     {
         for (int i = 0; i < opakovania; i++)
         {
@@ -62,12 +62,133 @@ public class Tester
             System.out.println("Spusta sa replikacia cislo: " + i + ", seed: " + seedReplikacia);
 
             // Semotne testy
-            this.testZakladneOperacie(minX, minY, maxX, maxY, maxUroven, generator);
-            this.testPocetElementov(minX, minY, maxX, maxY, maxUroven, generator);
-            this.testPresunPlytsie(minX, minY, maxX, maxY, generator);
-            this.testPomerUroven(minX, minY, maxX, maxY, generator);
+            if (rezim == 'T')
+            {
+                this.testZakladneOperacie(minX, minY, maxX, maxY, maxUroven, generator);
+                this.testPocetElementov(minX, minY, maxX, maxY, maxUroven, generator);
+                this.testPresunPlytsie(minX, minY, maxX, maxY, generator);
+                this.testPomerUroven(minX, minY, maxX, maxY, generator);
+            }
+            else if (rezim == 'R')
+            {
+                //this.experiment01(minX, minY, maxX, maxY, maxUroven, generator);
+                //this.experiment02(minX, minY, maxX, maxY, maxUroven, generator);
+                this.experiment03(minX, minY, maxX, maxY, maxUroven, generator);
+            }
 
             System.gc();
+        }
+    }
+
+    private void experiment01(double minX, double minY, double maxX, double maxY, int maxUroven, Generator generator)
+    {
+        // Vlastne parametre testu
+        final int ZACIATOCNA_VELKOST = 10000;
+        final int POCET_OPERACII = 50000;
+
+        final int PRST_VYHLADAJ_BOD = 50;
+        final int PRST_VYHLADAJ_POL = 50;
+
+        final double PRST_VYHLADAJ = 33.33;
+        final double PRST_VLOZ = 33.33;
+        final double PRST_VYMAZ = 33.33;
+
+        ArrayList<Nehnutelnost> zoznam = new ArrayList<>();
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(minX, minY, maxX, maxY, maxUroven);
+
+        for (int i = 0; i < ZACIATOCNA_VELKOST; i++)
+        {
+            Nehnutelnost nehnutelnost = generator.getNehnutelnost();
+            strom.vloz(nehnutelnost);
+            zoznam.add(nehnutelnost);
+        }
+
+        for (int i = 0; i < POCET_OPERACII; i++)
+        {
+            double nahoda = this.randomDouble(0, PRST_VYHLADAJ + PRST_VLOZ + PRST_VYMAZ);
+
+            if (nahoda < PRST_VYHLADAJ)
+            {
+                // Vyhladavanie
+                int sposobHladania = this.randomInt(0, PRST_VYHLADAJ_BOD + PRST_VYHLADAJ_POL);
+
+                if (sposobHladania < PRST_VYHLADAJ_BOD)
+                {
+                    double x = this.randomDouble(minX, maxX);
+                    double y = this.randomDouble(minY, maxY);
+                    strom.vyhladaj(x, y);
+                }
+                else
+                {
+                    double x1 = this.randomDouble(minX, maxX);
+                    double y1 = this.randomDouble(minY, maxY);
+                    double x2 = this.randomDouble(minX, maxX);
+                    double y2 = this.randomDouble(minY, maxY);
+                    strom.vyhladaj(x1, y1, x2, y2);
+                }
+            }
+            else if (nahoda < (PRST_VYHLADAJ + PRST_VLOZ))
+            {
+                // Vkladanie
+                Nehnutelnost nehnutelnost = generator.getNehnutelnost();
+                strom.vloz(nehnutelnost);
+                zoznam.add(nehnutelnost);
+            }
+            else
+            {
+                // Vymazavanie
+                if (zoznam.isEmpty())
+                {
+                    continue;
+                }
+
+                int index = this.randomInt(0, zoznam.size() - 1);
+
+                Nehnutelnost zmazanaZoznam = zoznam.remove(index);
+                double stredX = (zmazanaZoznam.getVlavoDoleX() + zmazanaZoznam.getVpravoHoreX()) / 2;
+                double stredY = (zmazanaZoznam.getVlavoDoleY() + zmazanaZoznam.getVpravoHoreY()) / 2;
+                strom.vymaz(stredX, stredY, zmazanaZoznam);
+            }
+        }
+    }
+
+    private void experiment02(double minX, double minY, double maxX, double maxY, int maxUroven, Generator generator)
+    {
+        // Vlastne parametre testu
+        final int ZACIATOCNA_VELKOST = 50000;
+        final int POCET_OPERACII = 50000;
+
+        ArrayList<Nehnutelnost> zoznam = new ArrayList<>();
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(minX, minY, maxX, maxY, maxUroven);
+
+        for (int i = 0; i < ZACIATOCNA_VELKOST; i++)
+        {
+            Nehnutelnost nehnutelnost = generator.getNehnutelnost();
+            strom.vloz(nehnutelnost);
+            zoznam.add(nehnutelnost);
+        }
+
+        for (int i = 0; i < POCET_OPERACII; i++)
+        {
+            int index = this.randomInt(0, zoznam.size() - 1);
+
+            Nehnutelnost zmazanaZoznam = zoznam.remove(index);
+            double stredX = (zmazanaZoznam.getVlavoDoleX() + zmazanaZoznam.getVpravoHoreX()) / 2;
+            double stredY = (zmazanaZoznam.getVlavoDoleY() + zmazanaZoznam.getVpravoHoreY()) / 2;
+            strom.vymaz(stredX, stredY, zmazanaZoznam);
+        }
+    }
+
+    private void experiment03(double minX, double minY, double maxX, double maxY, int maxUroven, Generator generator)
+    {
+        // Vlastne parametre testu
+        final int POCET_OPERACII = 100000;
+
+        QuadStrom<Nehnutelnost> strom = new QuadStrom<Nehnutelnost>(minX, minY, maxX, maxY, maxUroven);
+
+        for (int i = 0; i < POCET_OPERACII; i++)
+        {
+            strom.vloz(generator.getNehnutelnost());
         }
     }
 
