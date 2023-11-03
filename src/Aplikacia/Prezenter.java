@@ -108,8 +108,8 @@ public class Prezenter
 
         // Ak som sa dostal sem, tak stromy su uspesne vytvorene,
         // teraz ich naplnim datamy zo suborov
-        if (!this.nacitajDataZoSuboru(suborNehnutelnosti, this.databaza, Nehnutelnost.class) ||
-            !this.nacitajDataZoSuboru(suborParcely, this.databaza, Parcela.class))
+        if (!this.nacitajDataZoSuboru(suborNehnutelnosti, Nehnutelnost.class) ||
+            !this.nacitajDataZoSuboru(suborParcely, Parcela.class))
         {
             // Pri nacitavani samotnych dat nastal problem,
             // data, ktore som nacital vymazem
@@ -162,7 +162,7 @@ public class Prezenter
         }
     }
 
-    private <T extends IPolygon> boolean nacitajDataZoSuboru(File subor, Databaza databaza, Class<T> typ)
+    private <T extends IPolygon> boolean nacitajDataZoSuboru(File subor, Class<T> typ)
     {
         try
         {
