@@ -49,6 +49,8 @@ public class Editovanie extends JFrame
             {
                 int noveCislo = Integer.parseInt(Editovanie.this.input_cislo.getText());
                 String novyPopis = Editovanie.this.text_popis.getText();
+                novyPopis = novyPopis.replace(";", ",");
+
                 double vlavoDoleX = Double.parseDouble(Editovanie.this.input_vlavoDoleX.getText());
                 double vlavoDoleY = Double.parseDouble(Editovanie.this.input_vlavoDoleY.getText());
                 double vpravoHoreX = Double.parseDouble(Editovanie.this.input_vpravoHoreX.getText());

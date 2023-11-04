@@ -38,6 +38,7 @@ public class Pridanie extends JFrame
             {
                 int cislo = Integer.parseInt(Pridanie.this.input_cislo.getText());
                 String popis = Pridanie.this.text_popis.getText();
+                popis = popis.replace(";", ",");
 
                 double vlavoDoleX =  Double.parseDouble(Pridanie.this.input_vlavoDoleX.getText());
                 double vlavoDoleY =  Double.parseDouble(Pridanie.this.input_vlavoDoleY.getText());
