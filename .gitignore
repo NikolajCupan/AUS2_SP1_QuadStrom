@@ -27,3 +27,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/.idea/artifacts/AUS2SP1_jar.xml
+/src/META-INF/MANIFEST.MF
